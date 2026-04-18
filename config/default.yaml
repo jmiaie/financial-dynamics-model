@@ -1,0 +1,36 @@
+features:
+  volatility_span: 20
+  trend_window: 14
+  drawdown_window: 60
+  correlation_window: 20
+  shock_threshold: 2.0
+  normalization_method: zscore
+  normalization_window: 252
+  feature_weights: [1.0, 1.0, 1.0, 1.0, 1.0]
+
+regimes:
+  temperature: 1.0
+  centroids:
+    CALM_TREND:     [0.1, 0.8, 0.05, 0.1, 0.1]
+    VOLATILE_TREND: [0.8, 0.7, 0.3,  0.5, 0.6]
+    CHOP:           [0.4, 0.2, 0.15, 0.3, 0.3]
+    RISK_OFF:       [0.9, 0.3, 0.8,  0.9, 0.9]
+
+transitions:
+  prior_strength: 10.0
+  learning_rate: 0.05
+
+stabilization:
+  hysteresis_threshold: 0.15
+  min_persistence_bars: 5
+  majority_vote_window: 10
+
+risk:
+  drawdown_threshold: 0.5
+  correlation_stress_threshold: 0.6
+  shock_threshold: 0.7
+  riskoff_confirmation_count: 3
+  overextension_window: 50
+  overextension_decay: 0.02
+  chop_penalty_window: 30
+  chop_penalty_factor: 0.1
