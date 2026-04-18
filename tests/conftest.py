@@ -10,9 +10,6 @@ import pytest
 # Ensure src is importable
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from financial_dynamics.types import Regime
-
-
 @pytest.fixture
 def synthetic_ohlcv():
     """Generate a full synthetic OHLCV DataFrame with 4 regime segments."""

@@ -6,10 +6,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
-from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import fit_pca_projection
 
 
 class TrajectoryPlotter:
@@ -36,12 +36,7 @@ class TrajectoryPlotter:
         else:
             fig = ax.figure
 
-        combined = np.vstack([feature_history, centroids])
-        pca = PCA(n_components=2)
-        pca.fit(combined)
-
-        projected = pca.transform(feature_history)
-        centroid_proj = pca.transform(centroids)
+        projected, centroid_proj, _ = fit_pca_projection(feature_history, centroids)
 
         # Draw trajectory segments colored by regime
         for i in range(len(projected) - 1):

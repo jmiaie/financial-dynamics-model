@@ -10,6 +10,7 @@ from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import fit_pca_projection
 
 
 class VectorFieldPlotter:

@@ -7,6 +7,7 @@ from collections import Counter
 import numpy as np
 
 from financial_dynamics.types import Regime, NUM_REGIMES
+from financial_dynamics.phase4_risk._utils import safe_renormalize
 
 
 class OverextensionRebalancer:
@@ -43,14 +44,7 @@ class OverextensionRebalancer:
                 suppression = max(1.0 - self.decay * excess * self.window, 0.1)
                 adjusted[int(regime)] *= suppression
 
-        # Renormalize
-        total = adjusted.sum()
-        if total > 1e-10:
-            adjusted /= total
-        else:
-            adjusted = np.full(NUM_REGIMES, 1.0 / NUM_REGIMES)
-
-        return adjusted
+        return safe_renormalize(adjusted)
 
     def record(self, regime: Regime) -> None:
         """Record a regime observation."""

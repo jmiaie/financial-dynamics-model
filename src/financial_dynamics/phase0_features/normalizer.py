@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy import stats
 
 from financial_dynamics.config import FeatureConfig
 

@@ -6,6 +6,7 @@ import numpy as np
 
 from financial_dynamics.config import RiskConfig
 from financial_dynamics.types import BarState, Regime, RegimeProbabilities, NUM_REGIMES
+from financial_dynamics.phase4_risk._utils import safe_renormalize
 from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
 from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
 
@@ -53,11 +54,8 @@ class RiskConditioningEngine:
         overlays["riskoff_confirmed"] = riskoff_confirmed
 
         if bar_state.stabilized_regime == Regime.RISK_OFF and not riskoff_confirmed:
-            # Demote Risk-Off if not confirmed by stressors
             adjusted_probs[int(Regime.RISK_OFF)] *= 0.3
-            total = adjusted_probs.sum()
-            if total > 1e-10:
-                adjusted_probs /= total
+            adjusted_probs = safe_renormalize(adjusted_probs)
 
         # 2. Overextension rebalancing
         adjusted_probs = self._overextension.compute_suppression(adjusted_probs)

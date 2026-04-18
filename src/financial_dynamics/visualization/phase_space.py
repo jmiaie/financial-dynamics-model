@@ -6,9 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
-from sklearn.decomposition import PCA
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import Regime, REGIME_NAMES
+from financial_dynamics.visualization._utils import fit_pca_projection
 
 REGIME_COLORS = {
     Regime.CALM_TREND: "#2ecc71",
@@ -26,7 +26,7 @@ class PhaseSpacePlotter:
             centroids: shape (4, 5) centroid matrix.
         """
         self.centroids = centroids
-        self._pca: PCA | None = None
+        self._pca = None
 
     def plot(
         self,
@@ -46,13 +46,9 @@ class PhaseSpacePlotter:
         else:
             fig = ax.figure
 
-        # Fit PCA on combined data (features + centroids)
-        combined = np.vstack([feature_history, self.centroids])
-        self._pca = PCA(n_components=2)
-        self._pca.fit(combined)
-
-        projected = self._pca.transform(feature_history)
-        centroid_proj = self._pca.transform(self.centroids)
+        projected, centroid_proj, self._pca = fit_pca_projection(
+            feature_history, self.centroids
+        )
 
         # Plot feature points colored by regime
         for regime in Regime:

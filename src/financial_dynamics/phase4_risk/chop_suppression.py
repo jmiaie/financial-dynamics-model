@@ -7,6 +7,7 @@ from collections import deque
 import numpy as np
 
 from financial_dynamics.types import Regime, NUM_REGIMES
+from financial_dynamics.phase4_risk._utils import safe_renormalize
 
 
 class ChopDominanceSuppressor:
@@ -47,14 +48,7 @@ class ChopDominanceSuppressor:
         # Boost Volatile Trend slightly to encourage structural movement
         adjusted[int(Regime.VOLATILE_TREND)] *= (1.0 + self.penalty * 2)
 
-        # Renormalize
-        total = adjusted.sum()
-        if total > 1e-10:
-            adjusted /= total
-        else:
-            adjusted = np.full(NUM_REGIMES, 1.0 / NUM_REGIMES)
-
-        return adjusted
+        return safe_renormalize(adjusted)
 
     def record(self, regime: Regime) -> None:
         self._history.append(regime)
