@@ -10,7 +10,6 @@ from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
-from financial_dynamics.visualization._utils import fit_pca_projection
 
 
 class VectorFieldPlotter:
@@ -58,9 +57,6 @@ class VectorFieldPlotter:
                 prob = transition_matrix[i, j]
                 if prob < 0.05:
                     continue
-
-                dx = centroid_proj[j, 0] - centroid_proj[i, 0]
-                dy = centroid_proj[j, 1] - centroid_proj[i, 1]
 
                 ax.annotate(
                     "",

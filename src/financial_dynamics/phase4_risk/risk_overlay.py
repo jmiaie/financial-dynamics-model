@@ -49,7 +49,6 @@ class RiskConditioningEngine:
         adjusted_probs = probs.probs.copy()
         overlays = {}
 
-        # 1. Risk-Off confirmation: require multiple stressors
         riskoff_confirmed = self._check_riskoff_confirmation(bar_state)
         overlays["riskoff_confirmed"] = riskoff_confirmed
 
@@ -57,11 +56,9 @@ class RiskConditioningEngine:
             adjusted_probs[int(Regime.RISK_OFF)] *= 0.3
             adjusted_probs = safe_renormalize(adjusted_probs)
 
-        # 2. Overextension rebalancing
         adjusted_probs = self._overextension.compute_suppression(adjusted_probs)
         self._overextension.record(bar_state.stabilized_regime)
 
-        # 3. Chop dominance suppression
         adjusted_probs = self._chop_suppressor.compute_penalty(adjusted_probs)
         self._chop_suppressor.record(bar_state.stabilized_regime)
 

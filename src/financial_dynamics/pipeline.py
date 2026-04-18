@@ -37,7 +37,7 @@ class FinancialDynamicsPipeline:
     def warmup_bars(self) -> int:
         return self._feature_engine.warmup_bars
 
-    def step(self, bar: dict, timestamp: Any = None) -> BarState:
+    def step(self, bar: dict[str, float], timestamp: int | float | str | None = None) -> BarState:
         """Process a single OHLCV bar through the full pipeline.
 
         Args:

@@ -68,8 +68,8 @@ def main():
         output_path = Path("financial_dynamics_dashboard.png")
         dashboard.save(str(output_path))
         print(f"  Dashboard saved to {output_path}")
-    except Exception as e:
-        print(f"  Visualization skipped: {e}")
+    except ImportError as e:
+        print(f"  Visualization skipped (missing dependency): {e}")
 
     print("\nDone.")
 

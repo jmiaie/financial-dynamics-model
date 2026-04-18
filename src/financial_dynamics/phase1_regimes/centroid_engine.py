@@ -51,5 +51,8 @@ class CentroidEngine:
 
     def set_centroids(self, centroids: np.ndarray) -> None:
         """Allow dynamic centroid updates for recalibration."""
-        assert centroids.shape == (NUM_REGIMES, 5)
+        if centroids.shape != (NUM_REGIMES, 5):
+            raise ValueError(
+                f"Expected centroid shape ({NUM_REGIMES}, 5), got {centroids.shape}"
+            )
         self.centroids = centroids.copy()

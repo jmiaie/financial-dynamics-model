@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import IntEnum
-from typing import Any
 
 import numpy as np
 
@@ -77,8 +76,8 @@ class RegimeProbabilities:
 class BarState:
     """Accumulated state for a single bar flowing through the pipeline.
     Each phase populates its corresponding field."""
-    timestamp: Any = None
-    ohlcv: dict = field(default_factory=dict)
+    timestamp: int | float | str | None = None
+    ohlcv: dict[str, float] = field(default_factory=dict)
 
     # Phase 0 output
     features: FeatureVector | None = None
@@ -87,7 +86,7 @@ class BarState:
     raw_probabilities: RegimeProbabilities | None = None
 
     # Phase 2 output
-    transition_matrix: np.ndarray | None = None
+    transition_matrix: np.ndarray | None = None  # shape (4, 4), row-stochastic
     posterior_probabilities: RegimeProbabilities | None = None
 
     # Phase 3 output
@@ -95,4 +94,4 @@ class BarState:
 
     # Phase 4 output
     risk_adjusted_regime: Regime | None = None
-    risk_overlays: dict = field(default_factory=dict)
+    risk_overlays: dict[str, bool] = field(default_factory=dict)

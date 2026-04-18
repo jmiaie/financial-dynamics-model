@@ -32,13 +32,8 @@ class StabilizationEngine:
         if probs is None:
             return bar_state
 
-        # Step 1: Hysteresis -- resist weak flips
         after_hysteresis = self._hysteresis.apply(self._current_regime, probs)
-
-        # Step 2: Persistence -- require N consecutive bars
         after_persistence = self._persistence.apply(after_hysteresis)
-
-        # Step 3: Majority vote -- rolling mode smoothing
         after_majority = self._majority.apply(after_persistence)
 
         self._current_regime = after_majority

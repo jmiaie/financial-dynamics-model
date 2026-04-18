@@ -7,12 +7,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 import matplotlib.gridspec as gridspec
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
-from financial_dynamics.visualization.phase_space import PhaseSpacePlotter, REGIME_COLORS
+from financial_dynamics.visualization.phase_space import REGIME_COLORS
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
 
@@ -63,7 +64,7 @@ class SystemDashboard:
         if self._fig is not None:
             self._fig.savefig(path, dpi=dpi, bbox_inches="tight")
 
-    def _plot_price_chart(self, df: pd.DataFrame, results: pd.DataFrame, ax) -> None:
+    def _plot_price_chart(self, df: pd.DataFrame, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 1: Price with regime-colored background bands."""
         ax.plot(df.index, df["close"], color="black", linewidth=0.8, alpha=0.9)
 
@@ -91,7 +92,7 @@ class SystemDashboard:
         ax.set_ylabel("Price")
         ax.grid(True, alpha=0.3)
 
-    def _plot_phase_space(self, results: pd.DataFrame, ax) -> None:
+    def _plot_phase_space(self, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 2: Phase-space projection with trajectory."""
         feat_cols = ["feat_volatility", "feat_trend", "feat_drawdown",
                      "feat_corr_stress", "feat_shock"]
@@ -109,14 +110,14 @@ class SystemDashboard:
         plotter = TrajectoryPlotter()
         plotter.plot(features, regimes, centroids, ax=ax)
 
-    def _plot_vector_field(self, ax) -> None:
+    def _plot_vector_field(self, ax: Axes) -> None:
         """Panel 3: Transition probability vector field."""
         centroids = self.pipeline._centroid_engine.centroids
         tm = self.pipeline._transition_engine.get_transition_matrix()
         plotter = VectorFieldPlotter()
         plotter.plot(centroids, tm, ax=ax)
 
-    def _plot_probability_series(self, results: pd.DataFrame, ax) -> None:
+    def _plot_probability_series(self, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 4: Regime probability time series (stacked area)."""
         prob_cols = [f"post_prob_{r.name}" for r in Regime]
         valid = results.dropna(subset=prob_cols)
@@ -142,7 +143,7 @@ class SystemDashboard:
         ax.legend(loc="upper right", fontsize=7)
         ax.grid(True, alpha=0.3)
 
-    def _plot_transition_heatmap(self, ax) -> None:
+    def _plot_transition_heatmap(self, ax: Axes) -> None:
         """Panel 5: Transition matrix heatmap."""
         tm = self.pipeline._transition_engine.get_transition_matrix()
         labels = [REGIME_NAMES[r] for r in Regime]

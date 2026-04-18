@@ -22,11 +22,7 @@ class PhaseSpacePlotter:
     """2D PCA projection of feature history with centroid attractors."""
 
     def __init__(self, centroids: np.ndarray):
-        """Args:
-            centroids: shape (4, 5) centroid matrix.
-        """
         self.centroids = centroids
-        self._pca = None
 
     def plot(
         self,
@@ -46,7 +42,7 @@ class PhaseSpacePlotter:
         else:
             fig = ax.figure
 
-        projected, centroid_proj, self._pca = fit_pca_projection(
+        projected, centroid_proj, _ = fit_pca_projection(
             feature_history, self.centroids
         )
 

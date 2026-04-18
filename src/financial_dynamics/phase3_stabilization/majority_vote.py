@@ -31,7 +31,7 @@ class MajorityVoteFilter:
         for r in reversed(self._buffer):
             if r in candidates:
                 return r
-        return regime  # fallback
+        raise RuntimeError("Unreachable: buffer contains candidates but none found in reverse scan")
 
     def reset(self) -> None:
         self._buffer.clear()

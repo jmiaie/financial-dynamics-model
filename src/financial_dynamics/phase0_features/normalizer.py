@@ -56,7 +56,6 @@ class FeatureNormalizer:
         std = history.std(axis=0)
         std = np.where(std < 1e-10, 1.0, std)
         z = (x - mean) / std
-        # Sigmoid squash: 1 / (1 + exp(-z))
         return 1.0 / (1.0 + np.exp(-z))
 
     def _minmax_normalize(self, x: np.ndarray, history: np.ndarray) -> np.ndarray:
