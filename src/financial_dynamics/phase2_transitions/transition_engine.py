@@ -38,7 +38,6 @@ class MarkovTransitionEngine:
 
         current_dominant = bar_state.raw_probabilities.dominant
 
-        # Update transition counts if we have a previous state
         if self._prev_regime is not None:
             self.counts = bayesian_update(
                 self.counts,
@@ -56,7 +55,6 @@ class MarkovTransitionEngine:
                 transition_row,
             )
         else:
-            # No previous state: posterior = raw
             posterior = bar_state.raw_probabilities.probs.copy()
 
         bar_state.transition_matrix = self._transition_matrix.copy()

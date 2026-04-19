@@ -32,8 +32,6 @@ class CentroidEngine:
         """
         distances = np.linalg.norm(self.centroids - feature_vector, axis=1)
         logits = -distances / self.temperature
-
-        # Numerical stability: subtract max
         logits -= logits.max()
         exp_logits = np.exp(logits)
         probs = exp_logits / exp_logits.sum()

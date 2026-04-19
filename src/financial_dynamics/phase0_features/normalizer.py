@@ -33,12 +33,10 @@ class FeatureNormalizer:
             shape (5,) normalized and weighted feature vector in [0, 1].
         """
         self._history.append(raw_features.copy())
-        # Keep only the most recent window
         if len(self._history) > self.window:
             self._history = self._history[-self.window:]
 
         if len(self._history) < 2:
-            # Not enough history; return raw clipped to [0, 1]
             return np.clip(raw_features, 0.0, 1.0) * self.weights
 
         history = np.array(self._history)
