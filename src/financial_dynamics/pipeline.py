@@ -49,22 +49,14 @@ class FinancialDynamicsPipeline:
         """
         state = BarState(timestamp=timestamp, ohlcv=bar)
 
-        # Phase 0: Feature Engineering
         self._feature_engine.update(state)
         if state.features is None:
             self._bar_count += 1
             return state
 
-        # Phase 1: Regime Probabilities
         self._centroid_engine.update(state)
-
-        # Phase 2: Transition Matrix
         self._transition_engine.update(state)
-
-        # Phase 3: Stabilization
         self._stabilization_engine.update(state)
-
-        # Phase 4: Risk Conditioning
         self._risk_engine.update(state)
 
         self._bar_count += 1

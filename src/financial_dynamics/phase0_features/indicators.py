@@ -43,7 +43,6 @@ def compute_trend_strength(close: pd.Series, window: int = 14) -> pd.Series:
         if denom == 0:
             return 0.0
         slope = np.sum((x - x_mean) * (y - y_mean)) / denom
-        # Normalize by mean price
         return abs(slope / y_mean) if y_mean != 0 else 0.0
 
     return close.rolling(window, min_periods=window).apply(_regression_slope, raw=True)
@@ -71,7 +70,7 @@ def compute_correlation_stress(returns: pd.Series, window: int = 20) -> pd.Serie
         Series of rolling excess kurtosis values.
     """
     kurt = returns.rolling(window, min_periods=window).kurt()
-    # Clip negative kurtosis (platykurtic) to 0 -- only interested in fat tails
+    # Fat tails only; platykurtic values are not meaningful here
     return kurt.clip(lower=0.0)
 
 

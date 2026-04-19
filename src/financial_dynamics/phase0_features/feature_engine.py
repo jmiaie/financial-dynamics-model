@@ -28,7 +28,6 @@ class FeatureEngine:
     def __init__(self, config: FeatureConfig | None = None):
         self.config = config or FeatureConfig()
         self.normalizer = FeatureNormalizer(self.config)
-        # Internal buffer for streaming mode
         self._close_buffer: deque[float] = deque(
             maxlen=max(
                 self.config.volatility_span,
@@ -68,7 +67,6 @@ class FeatureEngine:
             "shock_intensity": compute_shock_intensity(returns, self.config.correlation_window),
         }, index=df.index)
 
-        # Normalize each row incrementally
         normalized_rows = []
         self.normalizer.reset()
         for _, row in raw.iterrows():
