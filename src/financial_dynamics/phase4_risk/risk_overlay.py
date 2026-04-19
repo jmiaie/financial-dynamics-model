@@ -62,10 +62,8 @@ class RiskConditioningEngine:
         adjusted_probs = self._chop_suppressor.compute_penalty(adjusted_probs)
         self._chop_suppressor.record(bar_state.stabilized_regime)
 
-        # Final regime from risk-adjusted probabilities
         final_regime = Regime(int(np.argmax(adjusted_probs)))
 
-        # Override: if Risk-Off IS confirmed by stressors, force it
         if riskoff_confirmed and probs[Regime.RISK_OFF] > 0.2:
             final_regime = Regime.RISK_OFF
             overlays["forced_riskoff"] = True

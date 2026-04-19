@@ -23,15 +23,13 @@ class MajorityVoteFilter:
         self._buffer.append(regime)
         counts = Counter(self._buffer)
         max_count = max(counts.values())
-        # If tie, prefer the most recent entry among the tied regimes
         candidates = [r for r, c in counts.items() if c == max_count]
         if len(candidates) == 1:
             return candidates[0]
-        # Tie-break: return the one that appeared most recently
         for r in reversed(self._buffer):
             if r in candidates:
                 return r
-        raise RuntimeError("Unreachable: buffer contains candidates but none found in reverse scan")
+        return candidates[0]
 
     def reset(self) -> None:
         self._buffer.clear()

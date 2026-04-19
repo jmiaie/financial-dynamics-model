@@ -28,7 +28,6 @@ class PersistenceFilter:
             return candidate_regime
 
         if candidate_regime == self._confirmed_regime:
-            # Already in this regime; reset any pending candidate
             self._candidate = candidate_regime
             self._candidate_count = 0
             return self._confirmed_regime
