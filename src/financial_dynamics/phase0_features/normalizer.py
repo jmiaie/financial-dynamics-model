@@ -17,7 +17,14 @@ class FeatureNormalizer:
     Maintains rolling statistics for online normalization.
     """
 
+    _VALID_METHODS = {"zscore", "minmax"}
+
     def __init__(self, config: FeatureConfig):
+        if config.normalization_method not in self._VALID_METHODS:
+            raise ValueError(
+                f"Unsupported normalization_method '{config.normalization_method}'. "
+                f"Valid options: {sorted(self._VALID_METHODS)}"
+            )
         self.method = config.normalization_method
         self.window = config.normalization_window
         self.weights = np.array(config.feature_weights, dtype=float)
@@ -43,8 +50,10 @@ class FeatureNormalizer:
 
         if self.method == "zscore":
             normalized = self._zscore_normalize(raw_features, history)
-        else:
+        elif self.method == "minmax":
             normalized = self._minmax_normalize(raw_features, history)
+        else:
+            raise ValueError(f"Unsupported normalization_method '{self.method}'")
 
         return normalized * self.weights
 

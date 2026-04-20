@@ -46,7 +46,6 @@ class PhaseSpacePlotter:
             feature_history, self.centroids
         )
 
-        # Plot feature points colored by regime
         for regime in Regime:
             mask = [r == regime for r in regimes]
             if any(mask):
@@ -58,7 +57,6 @@ class PhaseSpacePlotter:
                     label=REGIME_NAMES[regime],
                 )
 
-        # Plot centroids as large markers
         for i, regime in enumerate(Regime):
             ax.scatter(
                 centroid_proj[i, 0], centroid_proj[i, 1],

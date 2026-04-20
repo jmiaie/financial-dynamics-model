@@ -3,6 +3,7 @@
 import numpy as np
 
 from financial_dynamics.types import NUM_REGIMES
+from financial_dynamics._utils import safe_renormalize
 
 
 def initialize_count_matrix(prior_strength: float) -> np.ndarray:
@@ -57,7 +58,4 @@ def compute_posterior(
         shape (4,) posterior probabilities summing to 1.0.
     """
     posterior = raw_probs * transition_row
-    total = posterior.sum()
-    if total < 1e-10:
-        return np.full(NUM_REGIMES, 1.0 / NUM_REGIMES)
-    return posterior / total
+    return safe_renormalize(posterior)

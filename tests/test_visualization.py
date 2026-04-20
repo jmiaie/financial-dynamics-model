@@ -7,6 +7,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from financial_dynamics.types import Regime
+from financial_dynamics.phase1_regimes.regime_definitions import get_default_centroids
 from financial_dynamics.visualization.phase_space import PhaseSpacePlotter
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
@@ -15,24 +16,19 @@ from financial_dynamics.pipeline import FinancialDynamicsPipeline
 
 
 @pytest.fixture
-def sample_features():
+def sample_features() -> np.ndarray:
     rng = np.random.default_rng(42)
     return rng.random((50, 5))
 
 
 @pytest.fixture
-def sample_regimes():
+def sample_regimes() -> list[Regime]:
     return [Regime(i % 4) for i in range(50)]
 
 
 @pytest.fixture
-def sample_centroids():
-    return np.array([
-        [0.1, 0.8, 0.05, 0.1, 0.1],
-        [0.8, 0.7, 0.3, 0.5, 0.6],
-        [0.4, 0.2, 0.15, 0.3, 0.3],
-        [0.9, 0.3, 0.8, 0.9, 0.9],
-    ])
+def sample_centroids() -> np.ndarray:
+    return get_default_centroids()
 
 
 class TestPhaseSpacePlotter:

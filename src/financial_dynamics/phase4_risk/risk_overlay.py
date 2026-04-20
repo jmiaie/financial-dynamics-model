@@ -47,7 +47,7 @@ class RiskConditioningEngine:
             return bar_state
 
         adjusted_probs = probs.probs.copy()
-        overlays = {}
+        overlays: dict[str, bool] = {}
 
         riskoff_confirmed = self._check_riskoff_confirmation(bar_state)
         overlays["riskoff_confirmed"] = riskoff_confirmed

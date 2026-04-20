@@ -18,8 +18,12 @@ def get_centroids(config: RegimeConfig) -> np.ndarray:
     centroids = np.zeros((NUM_REGIMES, 5))
     name_to_regime = {r.name: r for r in Regime}
     for name, vector in config.centroids.items():
-        regime = name_to_regime[name]
-        centroids[int(regime)] = vector
+        if name not in name_to_regime:
+            raise ValueError(
+                f"Unknown regime name '{name}' in centroid config. "
+                f"Valid names: {sorted(name_to_regime.keys())}"
+            )
+        centroids[int(name_to_regime[name])] = vector
     return centroids
 
 

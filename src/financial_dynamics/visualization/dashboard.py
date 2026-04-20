@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import warnings
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,11 +46,11 @@ class SystemDashboard:
         fig = plt.figure(figsize=(20, 16))
         gs = gridspec.GridSpec(3, 2, figure=fig, hspace=0.35, wspace=0.3)
 
-        ax1 = fig.add_subplot(gs[0, :])   # Price chart (full width)
-        ax2 = fig.add_subplot(gs[1, 0])   # Phase-space projection
-        ax3 = fig.add_subplot(gs[1, 1])   # Transition vector field
-        ax4 = fig.add_subplot(gs[2, 0])   # Regime probability time series
-        ax5 = fig.add_subplot(gs[2, 1])   # Transition matrix heatmap
+        ax1 = fig.add_subplot(gs[0, :])
+        ax2 = fig.add_subplot(gs[1, 0])
+        ax3 = fig.add_subplot(gs[1, 1])
+        ax4 = fig.add_subplot(gs[2, 0])
+        ax5 = fig.add_subplot(gs[2, 1])
 
         self._plot_price_chart(df, results, ax1)
         self._plot_phase_space(results, ax2)
@@ -61,8 +63,9 @@ class SystemDashboard:
         return fig
 
     def save(self, path: str, dpi: int = 150) -> None:
-        if self._fig is not None:
-            self._fig.savefig(path, dpi=dpi, bbox_inches="tight")
+        if self._fig is None:
+            raise RuntimeError("No figure to save. Call plot() before save().")
+        self._fig.savefig(path, dpi=dpi, bbox_inches="tight")
 
     def _plot_price_chart(self, df: pd.DataFrame, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 1: Price with regime-colored background bands."""
@@ -73,15 +76,19 @@ class SystemDashboard:
 
         if len(valid) > 0:
             for i in range(len(valid) - 1):
+                regime_str = valid.iloc[i]
                 try:
-                    regime = Regime[valid.iloc[i]]
-                    color = REGIME_COLORS[regime]
-                    ax.axvspan(
-                        valid.index[i], valid.index[i + 1],
-                        alpha=0.15, color=color,
+                    regime = Regime[regime_str]
+                except KeyError:
+                    warnings.warn(
+                        f"Unknown regime '{regime_str}' at index {valid.index[i]}",
+                        stacklevel=2,
                     )
-                except (KeyError, ValueError):
                     continue
+                ax.axvspan(
+                    valid.index[i], valid.index[i + 1],
+                    alpha=0.15, color=REGIME_COLORS[regime],
+                )
 
         legend_patches = [
             Patch(facecolor=REGIME_COLORS[r], alpha=0.3, label=REGIME_NAMES[r])

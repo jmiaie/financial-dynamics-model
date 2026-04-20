@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -69,8 +70,25 @@ class PipelineConfig:
     @classmethod
     def from_yaml(cls, path: str | Path) -> PipelineConfig:
         """Load configuration from YAML, merging with defaults."""
-        with open(path) as f:
-            data = yaml.safe_load(f) or {}
+        path = Path(path)
+        try:
+            with open(path) as f:
+                raw = yaml.safe_load(f)
+        except FileNotFoundError:
+            raise FileNotFoundError(
+                f"Pipeline config not found: {path.resolve()}"
+            ) from None
+        except yaml.YAMLError as exc:
+            raise ValueError(
+                f"Invalid YAML in {path.resolve()}: {exc}"
+            ) from exc
+
+        if raw is not None and not isinstance(raw, dict):
+            raise ValueError(
+                f"Expected YAML mapping at top level of {path.resolve()}, "
+                f"got {type(raw).__name__}"
+            )
+        data = raw or {}
 
         config = cls()
         section_map = {
@@ -85,4 +103,10 @@ class PipelineConfig:
                 for key, value in data[section_name].items():
                     if hasattr(section_obj, key):
                         setattr(section_obj, key, value)
+                    else:
+                        warnings.warn(
+                            f"Unknown config key '{key}' in section "
+                            f"'{section_name}'; ignoring.",
+                            stacklevel=2,
+                        )
         return config

@@ -22,10 +22,6 @@ from financial_dynamics.phase4_risk._utils import safe_renormalize
 from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
 
 
-# ---------------------------------------------------------------------------
-# 1. NUMERICAL STABILITY -- extreme values, NaN, inf, zeros
-# ---------------------------------------------------------------------------
-
 class TestNumericalStability:
     def test_softmax_with_very_large_distances(self):
         """Centroid engine should not overflow with extreme feature vectors."""
@@ -118,10 +114,6 @@ class TestNumericalStability:
         assert np.isfinite(result).all()
 
 
-# ---------------------------------------------------------------------------
-# 2. PRESSURE TESTS -- rapid transitions, adversarial sequences
-# ---------------------------------------------------------------------------
-
 class TestPressure:
     def test_rapid_regime_alternation(self):
         """Pipeline should handle rapid alternation between regimes without crashing."""
@@ -182,10 +174,6 @@ class TestPressure:
             assert (row >= 0).all()
             assert np.isfinite(row).all()
 
-
-# ---------------------------------------------------------------------------
-# 3. SHOCK TESTS -- sudden market crashes, flash events
-# ---------------------------------------------------------------------------
 
 class TestShock:
     def test_flash_crash(self):
@@ -270,10 +258,6 @@ class TestShock:
             if state.raw_probabilities is not None:
                 assert np.isfinite(state.raw_probabilities.probs).all()
 
-
-# ---------------------------------------------------------------------------
-# 4. STRESS TESTS -- long-running, extreme configurations
-# ---------------------------------------------------------------------------
 
 class TestStress:
     def test_extremely_long_calm_period(self):

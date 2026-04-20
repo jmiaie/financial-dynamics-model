@@ -40,7 +40,6 @@ class ChopDominanceSuppressor:
         if ratio < 0.8:
             return probs.copy()
 
-        # Strong Calm-Chop loop detected: penalize both
         adjusted = probs.copy()
         adjusted[int(Regime.CHOP)] *= max(1.0 - self.penalty * 3, 0.05)
         adjusted[int(Regime.CALM_TREND)] *= max(1.0 - self.penalty, 0.2)

@@ -12,7 +12,7 @@ from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import REGIME_NAMES, Regime
 
 
-def main():
+def main() -> None:
     # Generate synthetic data
     from scripts.generate_synthetic_data import generate_synthetic_ohlcv
 
@@ -63,13 +63,17 @@ def main():
     print("\nGenerating dashboard...")
     try:
         from financial_dynamics.visualization.dashboard import SystemDashboard
+    except ImportError as e:
+        print(f"  Visualization skipped (missing dependency): {e}")
+    else:
         dashboard = SystemDashboard(pipeline)
         fig = dashboard.plot(df, results)
         output_path = Path("financial_dynamics_dashboard.png")
-        dashboard.save(str(output_path))
-        print(f"  Dashboard saved to {output_path}")
-    except ImportError as e:
-        print(f"  Visualization skipped (missing dependency): {e}")
+        try:
+            dashboard.save(str(output_path))
+            print(f"  Dashboard saved to {output_path}")
+        except OSError as e:
+            print(f"  Warning: could not save dashboard to {output_path}: {e}")
 
     print("\nDone.")
 

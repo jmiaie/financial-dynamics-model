@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 import numpy as np
 import pandas as pd
 
@@ -71,6 +69,13 @@ class FinancialDynamicsPipeline:
         Returns:
             DataFrame with all intermediate and final results.
         """
+        required = {"open", "high", "low", "close", "volume"}
+        missing = required - set(df.columns)
+        if missing:
+            raise ValueError(
+                f"DataFrame missing required OHLCV columns: {sorted(missing)}"
+            )
+
         self.reset()
 
         results = []
@@ -81,7 +86,7 @@ class FinancialDynamicsPipeline:
 
         return pd.DataFrame(results, index=df.index)
 
-    def get_state_report(self) -> dict:
+    def get_state_report(self) -> dict[str, object]:
         """Return current system state summary."""
         return {
             "bar_count": self._bar_count,
@@ -98,9 +103,9 @@ class FinancialDynamicsPipeline:
         self._bar_count = 0
 
     @staticmethod
-    def _state_to_record(state: BarState) -> dict:
+    def _state_to_record(state: BarState) -> dict[str, object]:
         """Convert a BarState to a flat dict for DataFrame construction."""
-        record: dict[str, Any] = {}
+        record: dict[str, object] = {}
 
         if state.features is not None:
             f = state.features

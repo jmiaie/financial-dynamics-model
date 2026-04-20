@@ -63,7 +63,6 @@ class TestMarkovTransitionEngine:
         state = BarState()
         state.raw_probabilities = RegimeProbabilities(probs=np.array([0.6, 0.2, 0.1, 0.1]))
 
-        # First update: no previous state, posterior = raw
         engine.update(state)
         assert state.posterior_probabilities is not None
         np.testing.assert_array_almost_equal(
@@ -96,8 +95,6 @@ class TestMarkovTransitionEngine:
             engine.update(state)
 
         tm = engine.get_transition_matrix()
-        # Row 0 should eventually favor column 1
-        # (though it depends on what the dominant regime is)
         assert tm[0].sum() == pytest.approx(1.0)
 
     def test_predict_next(self):

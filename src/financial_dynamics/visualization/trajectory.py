@@ -38,7 +38,6 @@ class TrajectoryPlotter:
 
         projected, centroid_proj, _ = fit_pca_projection(feature_history, centroids)
 
-        # Draw trajectory segments colored by regime
         for i in range(len(projected) - 1):
             color = REGIME_COLORS[regimes[i]]
             ax.plot(
@@ -46,13 +45,11 @@ class TrajectoryPlotter:
                 color=color, alpha=0.5, linewidth=0.8,
             )
 
-        # Mark start and end
         ax.scatter(projected[0, 0], projected[0, 1],
                    marker="o", s=100, c="green", zorder=10, label="Start")
         ax.scatter(projected[-1, 0], projected[-1, 1],
                    marker="s", s=100, c="red", zorder=10, label="End")
 
-        # Draw centroids
         for i, regime in enumerate(Regime):
             ax.scatter(
                 centroid_proj[i, 0], centroid_proj[i, 1],

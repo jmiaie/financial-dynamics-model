@@ -40,7 +40,6 @@ class VectorFieldPlotter:
         pca = PCA(n_components=2)
         centroid_proj = pca.fit_transform(centroids)
 
-        # Draw centroids
         for i, regime in enumerate(Regime):
             ax.scatter(
                 centroid_proj[i, 0], centroid_proj[i, 1],
@@ -49,7 +48,6 @@ class VectorFieldPlotter:
                 zorder=10, label=REGIME_NAMES[regime],
             )
 
-        # Draw transition arrows
         for i in range(NUM_REGIMES):
             for j in range(NUM_REGIMES):
                 if i == j:
@@ -70,7 +68,6 @@ class VectorFieldPlotter:
                         connectionstyle="arc3,rad=0.15",
                     ),
                 )
-                # Label with probability
                 mid_x = (centroid_proj[i, 0] + centroid_proj[j, 0]) / 2
                 mid_y = (centroid_proj[i, 1] + centroid_proj[j, 1]) / 2
                 if prob > 0.15:

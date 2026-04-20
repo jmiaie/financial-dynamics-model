@@ -37,7 +37,6 @@ class OverextensionRebalancer:
 
         for regime in Regime:
             fraction = counts.get(regime, 0) / self.window
-            # Expected fraction under uniform regime distribution
             expected = 1.0 / NUM_REGIMES
             if fraction > expected * 2:
                 excess = fraction - expected

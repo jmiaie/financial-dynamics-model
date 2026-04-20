@@ -11,7 +11,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 @pytest.fixture
-def synthetic_ohlcv():
+def synthetic_ohlcv() -> tuple[pd.DataFrame, pd.Series]:
     """Generate a full synthetic OHLCV DataFrame with 4 regime segments."""
     from scripts.generate_synthetic_data import generate_synthetic_ohlcv
     df, labels = generate_synthetic_ohlcv(seed=42)
@@ -19,7 +19,7 @@ def synthetic_ohlcv():
 
 
 @pytest.fixture
-def calm_trend_data():
+def calm_trend_data() -> pd.DataFrame:
     """Small DataFrame that looks like a calm uptrend."""
     rng = np.random.default_rng(100)
     n = 100
@@ -34,7 +34,7 @@ def calm_trend_data():
 
 
 @pytest.fixture
-def volatile_trend_data():
+def volatile_trend_data() -> pd.DataFrame:
     """Small DataFrame that looks like a volatile uptrend."""
     rng = np.random.default_rng(200)
     n = 100
@@ -49,7 +49,7 @@ def volatile_trend_data():
 
 
 @pytest.fixture
-def chop_data():
+def chop_data() -> pd.DataFrame:
     """Small DataFrame that looks like a choppy, directionless market."""
     rng = np.random.default_rng(300)
     n = 100
@@ -67,7 +67,7 @@ def chop_data():
 
 
 @pytest.fixture
-def riskoff_data():
+def riskoff_data() -> pd.DataFrame:
     """Small DataFrame that looks like a market crash."""
     rng = np.random.default_rng(400)
     n = 100

@@ -29,23 +29,21 @@ class FeatureEngine:
         self.config = config or FeatureConfig()
         self.normalizer = FeatureNormalizer(self.config)
         self._close_buffer: deque[float] = deque(
-            maxlen=max(
-                self.config.volatility_span,
-                self.config.trend_window,
-                self.config.drawdown_window,
-                self.config.correlation_window,
-            ) + 10
+            maxlen=self._max_window + 10
         )
 
     @property
-    def warmup_bars(self) -> int:
-        """Number of bars required before features are valid."""
+    def _max_window(self) -> int:
         return max(
             self.config.volatility_span,
             self.config.trend_window,
             self.config.drawdown_window,
             self.config.correlation_window,
-        ) + 1
+        )
+
+    @property
+    def warmup_bars(self) -> int:
+        return self._max_window + 1
 
     def compute_batch(self, df: pd.DataFrame) -> pd.DataFrame:
         """Compute all features for a historical DataFrame.
@@ -90,7 +88,12 @@ class FeatureEngine:
         Reads bar_state.ohlcv, computes features, writes bar_state.features.
         Returns None for features if not enough warmup data.
         """
-        close = bar_state.ohlcv.get("close", 0.0)
+        if "close" not in bar_state.ohlcv:
+            raise KeyError(
+                f"Bar is missing required key 'close'. "
+                f"Got keys: {sorted(bar_state.ohlcv.keys())}"
+            )
+        close = bar_state.ohlcv["close"]
         self._close_buffer.append(close)
 
         if len(self._close_buffer) < self.warmup_bars:
