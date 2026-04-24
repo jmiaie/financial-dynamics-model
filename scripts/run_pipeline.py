@@ -1,9 +1,11 @@
 """CLI entry point for running the Financial Dynamics Pipeline."""
 
+import argparse
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import numpy as np
 
@@ -12,16 +14,53 @@ from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import REGIME_NAMES, Regime
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Run the Financial Dynamics Model pipeline."
+    )
+    parser.add_argument(
+        "--symbol",
+        type=str,
+        default=None,
+        help="Ticker symbol to fetch live data (e.g. SPY, AAPL). "
+             "If omitted, uses synthetic data.",
+    )
+    parser.add_argument(
+        "--period",
+        type=str,
+        default="1y",
+        help="Lookback period for live data (default: 1y). "
+             "Examples: 6mo, 1y, 2y, 5y.",
+    )
+    parser.add_argument(
+        "--interval",
+        type=str,
+        default="1d",
+        help="Bar interval for live data (default: 1d). "
+             "Examples: 1d, 1h, 5m.",
+    )
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Path to YAML config file. Defaults to config/default.yaml if it exists.",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
-    # Generate synthetic data
-    from scripts.generate_synthetic_data import generate_synthetic_ohlcv
+    args = parse_args()
 
     print("=" * 70)
     print("  Financial Dynamics Model -- System Dynamics Pipeline")
     print("=" * 70)
 
     # Load config
-    config_path = Path(__file__).parent.parent / "config" / "default.yaml"
+    if args.config:
+        config_path = Path(args.config)
+    else:
+        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
+
     if config_path.exists():
         config = PipelineConfig.from_yaml(config_path)
         print(f"\nLoaded config from {config_path}")
@@ -29,12 +68,24 @@ def main() -> None:
         config = PipelineConfig()
         print("\nUsing default config")
 
-    # Generate data
-    print("\nGenerating synthetic OHLCV data...")
-    df, true_labels = generate_synthetic_ohlcv()
-    print(f"  {len(df)} bars generated")
-    print(f"  Price range: {df['close'].min():.2f} - {df['close'].max():.2f}")
-    print(f"  True regime distribution:\n{true_labels.value_counts().to_string()}")
+    # Load data
+    if args.symbol:
+        from financial_dynamics.data_loader import fetch_ohlcv
+
+        print(f"\nFetching live data for {args.symbol} "
+              f"(period={args.period}, interval={args.interval})...")
+        df = fetch_ohlcv(args.symbol, period=args.period, interval=args.interval)
+        print(f"  {len(df)} bars fetched")
+        print(f"  Date range: {df.index[0]} - {df.index[-1]}")
+        print(f"  Price range: {df['close'].min():.2f} - {df['close'].max():.2f}")
+    else:
+        from scripts.generate_synthetic_data import generate_synthetic_ohlcv
+
+        print("\nGenerating synthetic OHLCV data...")
+        df, true_labels = generate_synthetic_ohlcv()
+        print(f"  {len(df)} bars generated")
+        print(f"  Price range: {df['close'].min():.2f} - {df['close'].max():.2f}")
+        print(f"  True regime distribution:\n{true_labels.value_counts().to_string()}")
 
     # Run pipeline
     print("\nRunning pipeline...")
