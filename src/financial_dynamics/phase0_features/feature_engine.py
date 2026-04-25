@@ -10,6 +10,7 @@ import pandas as pd
 from financial_dynamics.config import FeatureConfig
 from financial_dynamics.types import BarState, FeatureVector
 from financial_dynamics.phase0_features.indicators import (
+    compute_cross_asset_stress,
     compute_drawdown_pressure,
     compute_correlation_stress,
     compute_ewma_volatility,
@@ -23,6 +24,8 @@ class FeatureEngine:
     """Phase 0: Transforms raw OHLCV bars into normalized 5D feature vectors.
 
     Supports both batch and incremental (streaming) operation.
+    When reference asset data is available (columns named ref_*_close),
+    uses cross-asset correlation stress instead of single-asset kurtosis.
     """
 
     def __init__(self, config: FeatureConfig | None = None):
@@ -31,6 +34,7 @@ class FeatureEngine:
         self._close_buffer: deque[float] = deque(
             maxlen=self._max_window + 10
         )
+        self._ref_buffers: dict[str, deque[float]] = {}
 
     @property
     def _max_window(self) -> int:
@@ -57,11 +61,24 @@ class FeatureEngine:
         close = df["close"]
         returns = close.pct_change()
 
+        ref_cols = [c for c in df.columns if c.startswith("ref_") and c.endswith("_close")]
+        if ref_cols:
+            ref_returns = {
+                col: df[col].pct_change() for col in ref_cols
+            }
+            corr_stress = compute_cross_asset_stress(
+                returns, ref_returns, self.config.correlation_window
+            )
+        else:
+            corr_stress = compute_correlation_stress(
+                returns, self.config.correlation_window
+            )
+
         raw = pd.DataFrame({
             "volatility": compute_ewma_volatility(returns, self.config.volatility_span),
             "trend_strength": compute_trend_strength(close, self.config.trend_window),
             "drawdown_pressure": compute_drawdown_pressure(close, self.config.drawdown_window),
-            "correlation_stress": compute_correlation_stress(returns, self.config.correlation_window),
+            "correlation_stress": corr_stress,
             "shock_intensity": compute_shock_intensity(returns, self.config.correlation_window),
         }, index=df.index)
 
@@ -96,6 +113,12 @@ class FeatureEngine:
         close = bar_state.ohlcv["close"]
         self._close_buffer.append(close)
 
+        for key, value in bar_state.ohlcv.items():
+            if key.startswith("ref_") and key.endswith("_close"):
+                if key not in self._ref_buffers:
+                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
+                self._ref_buffers[key].append(value)
+
         if len(self._close_buffer) < self.warmup_bars:
             bar_state.features = None
             return bar_state
@@ -103,11 +126,30 @@ class FeatureEngine:
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
 
+        if self._ref_buffers:
+            ref_returns = {}
+            for ref_key, buf in self._ref_buffers.items():
+                if len(buf) >= self.warmup_bars:
+                    ref_series = pd.Series(list(buf))
+                    ref_returns[ref_key] = ref_series.pct_change().dropna()
+            if ref_returns:
+                corr_stress_val = float(compute_cross_asset_stress(
+                    returns, ref_returns, self.config.correlation_window
+                ).iloc[-1])
+            else:
+                corr_stress_val = float(compute_correlation_stress(
+                    returns, self.config.correlation_window
+                ).iloc[-1])
+        else:
+            corr_stress_val = float(compute_correlation_stress(
+                returns, self.config.correlation_window
+            ).iloc[-1])
+
         raw = np.array([
             float(compute_ewma_volatility(returns, self.config.volatility_span).iloc[-1]),
             float(compute_trend_strength(close_series, self.config.trend_window).iloc[-1]),
             float(compute_drawdown_pressure(close_series, self.config.drawdown_window).iloc[-1]),
-            float(compute_correlation_stress(returns, self.config.correlation_window).iloc[-1]),
+            corr_stress_val,
             float(compute_shock_intensity(returns, self.config.correlation_window).iloc[-1]),
         ])
 
@@ -121,4 +163,5 @@ class FeatureEngine:
 
     def reset(self) -> None:
         self._close_buffer.clear()
+        self._ref_buffers.clear()
         self.normalizer.reset()

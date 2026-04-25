@@ -21,6 +21,7 @@ class FeatureConfig:
     feature_weights: list[float] = field(
         default_factory=lambda: [1.0, 1.0, 1.0, 1.0, 1.0]
     )
+    reference_symbols: list[str] = field(default_factory=list)
 
 
 @dataclass

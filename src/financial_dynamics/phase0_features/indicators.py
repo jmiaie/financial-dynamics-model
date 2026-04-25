@@ -74,6 +74,43 @@ def compute_correlation_stress(returns: pd.Series, window: int = 20) -> pd.Serie
     return kurt.clip(lower=0.0)
 
 
+def compute_cross_asset_stress(
+    returns: pd.Series,
+    reference_returns: dict[str, pd.Series],
+    window: int = 20,
+) -> pd.Series:
+    """Rolling cross-asset correlation stress.
+
+    Measures how strongly the primary asset co-moves with reference assets.
+    High absolute correlation across references signals systemic stress
+    (contagion / flight-to-safety).
+
+    Args:
+        returns: Primary asset returns.
+        reference_returns: Dict mapping reference name to its returns Series.
+        window: Rolling correlation window.
+
+    Returns:
+        Series of mean absolute rolling correlation across all references.
+    """
+    if not reference_returns:
+        return compute_correlation_stress(returns, window)
+
+    corrs = []
+    for ref_returns in reference_returns.values():
+        aligned = pd.DataFrame({"primary": returns, "ref": ref_returns}).dropna()
+        if len(aligned) < window:
+            continue
+        rolling_corr = aligned["primary"].rolling(window, min_periods=window).corr(aligned["ref"])
+        corrs.append(rolling_corr.abs().reindex(returns.index))
+
+    if not corrs:
+        return compute_correlation_stress(returns, window)
+
+    stacked = pd.concat(corrs, axis=1)
+    return stacked.mean(axis=1).clip(lower=0.0)
+
+
 def compute_shock_intensity(returns: pd.Series, window: int = 20) -> pd.Series:
     """Standardized residual: |r_t| / rolling_std.
 
