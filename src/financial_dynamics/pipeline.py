@@ -12,6 +12,12 @@ from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
 from financial_dynamics.phase3_stabilization.stabilizer import StabilizationEngine
 from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
+from financial_dynamics.forecasting import (
+    RegimeForecast,
+    forecast_regimes,
+    compute_expected_duration,
+    compute_stationary_distribution,
+)
 
 
 class FinancialDynamicsPipeline:
@@ -94,6 +100,19 @@ class FinancialDynamicsPipeline:
             "is_warmed_up": self._bar_count >= self.warmup_bars,
             "transition_matrix": self._transition_engine.get_transition_matrix(),
         }
+
+    def forecast(self, horizon: int = 10) -> RegimeForecast | None:
+        """Forecast regime probabilities k steps ahead from current state.
+
+        Returns None if the pipeline hasn't processed enough data yet.
+        """
+        prev = self._transition_engine._prev_regime
+        if prev is None:
+            return None
+
+        tm = self._transition_engine.get_transition_matrix()
+        current_probs = RegimeProbabilities(probs=tm[int(prev)])
+        return forecast_regimes(tm, prev, current_probs, horizon=horizon)
 
     def reset(self) -> None:
         self._feature_engine.reset()
