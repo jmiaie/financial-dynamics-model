@@ -267,14 +267,6 @@ docker run -p 8501:8501 financial-dynamics
 
 ---
 
-## 📄 Marketing Materials
-
-- **RESUME_FINAL.txt** — One-liner for CV
-- **LINKEDIN_FINAL.md** — LinkedIn launch post
-- **HIGHLIGHTS_FOR_RECRUITERS.md** — Portfolio block (hedge funds, quant firms, fintech)
-
----
-
 ## 📚 Documentation
 
 - `DEPLOYMENT_GUIDE.md` — How to deploy (Streamlit Cloud, Vercel, Docker)
@@ -284,8 +276,12 @@ docker run -p 8501:8501 financial-dynamics
 
 ---
 
-**Status:** Production-ready (219 tests passing, live deployment verified) ✅
+## License
+
+MIT
+
+---
+
+**Author:** Jeff Milam & Micap AI LLC
 
 Built with Python, NumPy, Pandas, SciPy, scikit-learn, Streamlit, Plotly, yfinance, Bayesian inference, Markov chains, and system dynamics.
-
-🚀 **Ready to deploy!**

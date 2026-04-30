@@ -139,8 +139,6 @@ Edit any parameter, reload the app, and re-run to see impact.
 
 1. **Test locally:** `streamlit run app.py`
 2. **Deploy to Streamlit Cloud:** [share.streamlit.io](https://share.streamlit.io)
-3. **Share on LinkedIn:** Use LINKEDIN_FINAL.md
-4. **Send to recruiters:** Use HIGHLIGHTS_FOR_RECRUITERS.md
 
 ---
 
