@@ -1,4 +1,0 @@
-RESUME ONE-LINER
-================
-
-Financial Dynamics Model | Engineered 5-phase Bayesian regime classification pipeline (57.8% → 80.6% accuracy post-calibration) with live data integration, k-step forecasting, and signal layer; 219 unit tests, production-ready. Tech: Python, NumPy, Markov chains, system dynamics.
