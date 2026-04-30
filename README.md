@@ -2,7 +2,7 @@
 
 A production-grade, transparent Bayesian system-dynamics pipeline for market regime classification. Transforms raw OHLCV data into explainable regime probabilities for quantitative trading and risk management.
 
-**Author:** Jeff Milam & Micap AI LLC
+**Author:** Jeff Milam & [Micap.AI](https://micap.ai)
 
 ---
 
@@ -267,25 +267,23 @@ docker run -p 8501:8501 financial-dynamics
 
 ---
 
-## 📄 Marketing Materials
-
-- **RESUME_FINAL.txt** — One-liner for CV
-- **LINKEDIN_FINAL.md** — LinkedIn launch post
-- **HIGHLIGHTS_FOR_RECRUITERS.md** — Portfolio block (hedge funds, quant firms, fintech)
-
----
-
 ## 📚 Documentation
 
 - `DEPLOYMENT_GUIDE.md` — How to deploy (Streamlit Cloud, Vercel, Docker)
+- `LOGO_SETUP.md` — Customize the Micap.AI logo
+- `STREAMLIT_QUICK_START.md` — Running the interactive dashboard locally
 - `scripts/run_pipeline.py --help` — CLI options
 - `tests/` — Usage examples in unit tests
 - `config/default.yaml` — All tunable parameters
 
 ---
 
-**Status:** Production-ready (219 tests passing, live deployment verified) ✅
+## License
+
+MIT
+
+---
+
+**Author:** Jeff Milam & [Micap.AI](https://micap.ai)
 
 Built with Python, NumPy, Pandas, SciPy, scikit-learn, Streamlit, Plotly, yfinance, Bayesian inference, Markov chains, and system dynamics.
-
-🚀 **Ready to deploy!**

@@ -9,5 +9,6 @@ build/
 .eggs/
 *.csv
 *.png
+!assets/micap_logo.*
 .env
 config/calibrated.yaml
