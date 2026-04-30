@@ -131,11 +131,21 @@ def setup_page():
     """, unsafe_allow_html=True)
 
 
-def _encode_logo(path: str) -> str:
-    """Base64-encode a logo image for inline HTML rendering."""
-    import base64
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
+def _get_logo_html(base_path: str) -> str:
+    """Load logo as HTML, supporting SVG and base64 PNG."""
+    import os
+    svg_path = base_path + ".svg"
+    png_path = base_path + ".png"
+
+    if os.path.exists(svg_path):
+        with open(svg_path, "r") as f:
+            return f.read()
+    elif os.path.exists(png_path):
+        import base64
+        with open(png_path, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+            return f'<img src="data:image/png;base64,{b64}" width="120">'
+    return ""
 
 
 @st.cache_data(ttl=3600)
@@ -403,12 +413,11 @@ def main():
 
         st.divider()
         import os
-        logo_path = os.path.join(os.path.dirname(__file__), "assets", "micap_logo.png")
-        if os.path.exists(logo_path):
+        logo_base = os.path.join(os.path.dirname(__file__), "assets", "micap_logo")
+        logo_html = _get_logo_html(logo_base)
+        if logo_html:
             st.markdown(
-                '<a href="https://micap.ai" target="_blank">'
-                f'<img src="data:image/png;base64,{_encode_logo(logo_path)}" width="120">'
-                '</a>',
+                f'<a href="https://micap.ai" target="_blank">{logo_html}</a>',
                 unsafe_allow_html=True,
             )
         st.markdown(
