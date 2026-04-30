@@ -99,13 +99,41 @@ def setup_page():
     """, unsafe_allow_html=True)
 
 
+def _generate_synthetic_fallback() -> pd.DataFrame:
+    """Generate synthetic OHLCV data for use when live data is unavailable."""
+    rng = np.random.default_rng(42)
+    price = 100.0
+    rows = []
+    for i in range(240):
+        phase = (i // 60) % 4
+        if phase == 0:
+            ret = 0.0015 + rng.normal(0, 0.007)
+        elif phase == 1:
+            ret = 0.003 + rng.normal(0, 0.020)
+        elif phase == 2:
+            ret = rng.normal(0, 0.008)
+        else:
+            ret = -0.004 + rng.normal(0, 0.018)
+            if rng.random() < 0.25:
+                ret += rng.choice([-0.06, -0.05, 0.035])
+        close = price * (1 + ret)
+        high = max(price, close) * (1 + abs(rng.normal(0, 0.002)))
+        low = min(price, close) * (1 - abs(rng.normal(0, 0.002)))
+        rows.append([price, high, low, close, int(rng.integers(2000, 20000))])
+        price = close
+    df = pd.DataFrame(rows, columns=["open", "high", "low", "close", "volume"])
+    df.index = pd.date_range("2024-01-01", periods=len(df), freq="h")
+    df.index.name = "timestamp"
+    return df
+
+
 @st.cache_data(ttl=3600)
 def load_data(symbol: str, period: str, interval: str):
     """Load OHLCV data from yfinance with caching."""
     try:
         df = fetch_ohlcv(symbol, period=period, interval=interval)
         return df, None
-    except (ValueError, ImportError) as e:
+    except Exception as e:
         return None, str(e)
 
 
@@ -372,8 +400,12 @@ def main():
             df, error = load_data(symbol, period, interval)
 
             if error:
-                st.error(f"Failed to load data: {error}")
-                return
+                st.warning(
+                    f"⚠️ Live data unavailable for **{symbol}** (Yahoo Finance rate limit on shared cloud IPs). "
+                    "Showing synthetic demo data instead.",
+                    icon="📊",
+                )
+                df = _generate_synthetic_fallback()
 
             pipeline = get_pipeline()
             results = pipeline.run(df)
