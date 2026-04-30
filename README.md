@@ -2,7 +2,7 @@
 
 A production-grade, transparent Bayesian system-dynamics pipeline for market regime classification. Transforms raw OHLCV data into explainable regime probabilities for quantitative trading and risk management.
 
-**Author:** Jeff Milam & Micap AI LLC
+**Author:** Jeff Milam & [Micap.AI](https://micap.ai)
 
 ---
 
@@ -282,6 +282,6 @@ MIT
 
 ---
 
-**Author:** Jeff Milam & Micap AI LLC
+**Author:** Jeff Milam & [Micap.AI](https://micap.ai)
 
 Built with Python, NumPy, Pandas, SciPy, scikit-learn, Streamlit, Plotly, yfinance, Bayesian inference, Markov chains, and system dynamics.

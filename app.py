@@ -91,8 +91,51 @@ def setup_page():
         color: #f1f5f9;
         margin-top: 0.5em;
     }
+    .ticker-bar {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 1em 1.5em;
+        text-align: center;
+    }
+    .ticker-symbol {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #14919b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.3em;
+    }
+    .ticker-price {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #f1f5f9;
+    }
+    .ticker-label {
+        font-size: 0.75em;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .ticker-change-up {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #10b981;
+    }
+    .ticker-change-down {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #ef4444;
+    }
     </style>
     """, unsafe_allow_html=True)
+
+
+def _encode_logo(path: str) -> str:
+    """Base64-encode a logo image for inline HTML rendering."""
+    import base64
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
 
 @st.cache_data(ttl=3600)
@@ -355,8 +398,22 @@ def main():
             "2. **Centroid Classification** — Softmax probability mapping\n"
             "3. **Markov Transitions** — Learned transition matrix\n"
             "4. **Temporal Stabilization** — Noise filtering\n"
-            "5. **Risk Overlays** — Risk-Off confirmation & rebalancing\n\n"
-            "**Authors:** Jeff Milam & Micap AI LLC"
+            "5. **Risk Overlays** — Risk-Off confirmation & rebalancing"
+        )
+
+        st.divider()
+        import os
+        logo_path = os.path.join(os.path.dirname(__file__), "assets", "micap_logo.png")
+        if os.path.exists(logo_path):
+            st.markdown(
+                '<a href="https://micap.ai" target="_blank">'
+                f'<img src="data:image/png;base64,{_encode_logo(logo_path)}" width="120">'
+                '</a>',
+                unsafe_allow_html=True,
+            )
+        st.markdown(
+            '**Authors:** Jeff Milam & <a href="https://micap.ai" target="_blank">Micap.AI</a>',
+            unsafe_allow_html=True,
         )
 
     # Main content
@@ -373,6 +430,59 @@ def main():
 
             pipeline = get_pipeline()
             results = pipeline.run(df)
+
+        # Stock ticker info bar
+        latest = df.iloc[-1]
+        prev_close = df["close"].iloc[-2] if len(df) > 1 else latest["close"]
+        day_change = latest["close"] - prev_close
+        day_change_pct = (day_change / prev_close) * 100 if prev_close != 0 else 0
+        change_class = "ticker-change-up" if day_change >= 0 else "ticker-change-down"
+        change_arrow = "▲" if day_change >= 0 else "▼"
+        change_sign = "+" if day_change >= 0 else ""
+
+        tc1, tc2, tc3, tc4, tc5, tc6 = st.columns(6)
+        with tc1:
+            st.markdown(f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Ticker</div>
+                <div class="ticker-symbol">{symbol}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tc2:
+            st.markdown(f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Open</div>
+                <div class="ticker-price">${latest['open']:.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tc3:
+            st.markdown(f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">High</div>
+                <div class="ticker-price">${latest['high']:.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tc4:
+            st.markdown(f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Low</div>
+                <div class="ticker-price">${latest['low']:.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tc5:
+            st.markdown(f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Prev Close</div>
+                <div class="ticker-price">${prev_close:.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tc6:
+            st.markdown(f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Day Change</div>
+                <div class="{change_class}">{change_arrow} {change_sign}{day_change_pct:.2f}%</div>
+            </div>
+            """, unsafe_allow_html=True)
 
         # Metrics row
         st.divider()
