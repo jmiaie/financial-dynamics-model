@@ -270,6 +270,8 @@ docker run -p 8501:8501 financial-dynamics
 ## 📚 Documentation
 
 - `DEPLOYMENT_GUIDE.md` — How to deploy (Streamlit Cloud, Vercel, Docker)
+- `LOGO_SETUP.md` — Customize the Micap.AI logo
+- `STREAMLIT_QUICK_START.md` — Running the interactive dashboard locally
 - `scripts/run_pipeline.py --help` — CLI options
 - `tests/` — Usage examples in unit tests
 - `config/default.yaml` — All tunable parameters
