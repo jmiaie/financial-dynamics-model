@@ -1,0 +1,7 @@
+# Resume Line
+
+**Financial Dynamics Model** — Built a full-stack system-dynamics pipeline for market regime classification (Calm Trend, Volatile Trend, Chop, Risk-Off) from raw OHLCV data. Engineered 5-phase architecture with Bayesian-updated Markov transitions, multi-feature normalization, and risk overlays. Calibrated model from 57.8% → 80.6% accuracy via data-driven centroid fitting and hyperparameter grid search. Shipped with live data integration (yfinance), backtesting framework, k-step forecasting, signal/alert layer, and 219 unit tests. Authors: Jeff Milam & Micap AI LLC.
+
+---
+
+**Tech**: Python (NumPy, Pandas, SciPy, scikit-learn), Bayesian inference, Markov chains, system dynamics, backtesting frameworks
