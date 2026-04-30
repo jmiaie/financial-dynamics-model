@@ -94,7 +94,7 @@ def fetch_multi_asset(
                 ref_df.columns = [c.lower() for c in ref_df.columns]
                 col_name = f"ref_{ref_sym.replace('^', '')}_close"
                 df[col_name] = ref_df["close"].reindex(df.index)
-        except Exception:
-            pass
+        except (KeyError, ValueError, AttributeError):
+            continue
 
     return df

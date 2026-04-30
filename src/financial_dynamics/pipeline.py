@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import TypedDict
+
 import numpy as np
 import pandas as pd
 
@@ -18,6 +20,34 @@ from financial_dynamics.forecasting import (
     compute_expected_duration,
     compute_stationary_distribution,
 )
+
+
+class StateReport(TypedDict):
+    """System state summary returned by get_state_report()."""
+    bar_count: int
+    warmup_bars: int
+    is_warmed_up: bool
+    transition_matrix: np.ndarray
+
+
+class BarRecord(TypedDict, total=False):
+    """Flat record for DataFrame construction from BarState."""
+    feat_volatility: float
+    feat_trend: float
+    feat_drawdown: float
+    feat_corr_stress: float
+    feat_shock: float
+    raw_prob_CALM_TREND: float
+    raw_prob_VOLATILE_TREND: float
+    raw_prob_CHOP: float
+    raw_prob_RISK_OFF: float
+    post_prob_CALM_TREND: float
+    post_prob_VOLATILE_TREND: float
+    post_prob_CHOP: float
+    post_prob_RISK_OFF: float
+    stabilized_regime: str | None
+    risk_adjusted_regime: str | None
+    risk_overlays: dict | None
 
 
 class FinancialDynamicsPipeline:
@@ -92,7 +122,7 @@ class FinancialDynamicsPipeline:
 
         return pd.DataFrame(results, index=df.index)
 
-    def get_state_report(self) -> dict[str, object]:
+    def get_state_report(self) -> StateReport:
         """Return current system state summary."""
         return {
             "bar_count": self._bar_count,
@@ -122,9 +152,9 @@ class FinancialDynamicsPipeline:
         self._bar_count = 0
 
     @staticmethod
-    def _state_to_record(state: BarState) -> dict[str, object]:
+    def _state_to_record(state: BarState) -> BarRecord:
         """Convert a BarState to a flat dict for DataFrame construction."""
-        record: dict[str, object] = {}
+        record: BarRecord = {}
 
         if state.features is not None:
             f = state.features

@@ -11,7 +11,8 @@ import plotly.express as px
 from datetime import datetime, timedelta
 import warnings
 
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
 
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
@@ -100,7 +101,7 @@ def load_data(symbol: str, period: str, interval: str):
     try:
         df = fetch_ohlcv(symbol, period=period, interval=interval)
         return df, None
-    except Exception as e:
+    except (ValueError, ImportError) as e:
         return None, str(e)
 
 
@@ -163,7 +164,11 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
                     line_width=0,
                 )
             except KeyError:
-                pass
+                import warnings
+                warnings.warn(
+                    f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
+                    stacklevel=2,
+                )
 
     fig.update_layout(
         title="Market Price with Regime Classification",

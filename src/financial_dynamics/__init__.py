@@ -9,6 +9,8 @@ from financial_dynamics.types import (
     BarState,
 )
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
+from financial_dynamics.signals import Signal, SignalDetector, SignalType
+from financial_dynamics.forecasting import RegimeForecast
 
 __all__ = [
     "Regime",
@@ -18,4 +20,8 @@ __all__ = [
     "RegimeProbabilities",
     "BarState",
     "FinancialDynamicsPipeline",
+    "Signal",
+    "SignalDetector",
+    "SignalType",
+    "RegimeForecast",
 ]

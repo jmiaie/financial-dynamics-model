@@ -66,16 +66,3 @@ def chop_data() -> pd.DataFrame:
     })
 
 
-@pytest.fixture
-def riskoff_data() -> pd.DataFrame:
-    """Small DataFrame that looks like a market crash."""
-    rng = np.random.default_rng(400)
-    n = 100
-    prices = 100 + np.cumsum(np.full(n, -0.5) + rng.normal(0, 2.0, n))
-    return pd.DataFrame({
-        "open": prices + 0.5,
-        "high": prices + abs(rng.normal(0, 1.5, n)),
-        "low": prices - abs(rng.normal(0, 2.0, n)),
-        "close": prices,
-        "volume": rng.integers(15000, 40000, n),
-    })

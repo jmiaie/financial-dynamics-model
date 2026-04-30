@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -43,7 +44,7 @@ def load_state(path: str | Path) -> FinancialDynamicsPipeline:
     return pipeline
 
 
-def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict:
+def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
     """Extract all mutable state from the pipeline into a serializable dict."""
     fe = pipeline._feature_engine
     te = pipeline._transition_engine
@@ -85,7 +86,7 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict:
     }
 
 
-def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict) -> None:
+def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -> None:
     """Restore mutable state into an existing pipeline instance."""
     pipeline._bar_count = state["bar_count"]
 
