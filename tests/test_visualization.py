@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from financial_dynamics.types import Regime
 from financial_dynamics.phase1_regimes.regime_definitions import get_default_centroids
 from financial_dynamics.visualization.phase_space import PhaseSpacePlotter
+from financial_dynamics.visualization.phase_space_3d import build_phase_space_3d
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
 from financial_dynamics.visualization.dashboard import SystemDashboard
@@ -44,6 +45,21 @@ class TestPhaseSpacePlotter:
         result_fig = plotter.plot(sample_features, sample_regimes, ax=ax)
         assert result_fig is fig
         plt.close(fig)
+
+
+class TestPhaseSpace3D:
+    def test_builds_figure(self, sample_features, sample_regimes, sample_centroids):
+        fig = build_phase_space_3d(sample_features, sample_regimes, sample_centroids)
+        assert fig is not None
+        assert len(fig.data) >= 5
+        for trace in fig.data:
+            assert trace.type == "scatter3d"
+
+    def test_animation_frames(self, sample_features, sample_regimes, sample_centroids):
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids, animate=True
+        )
+        assert len(fig.frames) > 0
 
 
 class TestTrajectoryPlotter:

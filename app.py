@@ -24,6 +24,7 @@ from financial_dynamics.data_loader import fetch_ohlcv
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.signals.detector import SignalDetector, SignalType
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization.phase_space_3d import build_phase_space_3d
 
 # Color scheme: slate and teal
 COLOR_SCHEME = {
@@ -605,6 +606,37 @@ def main():
         fig_features = plot_features(results)
         if fig_features:
             st.plotly_chart(fig_features, use_container_width=True)
+
+        # 3D phase-space attractor field
+        st.divider()
+        st.subheader("🌌 Phase-Space Attractor Field (3D)")
+        st.caption(
+            "Live trajectory of the market through its 5D feature space, "
+            "projected to 3D via PCA. Drag to rotate, scroll to zoom. "
+            "Diamond markers are regime attractors; line color encodes time."
+        )
+
+        feat_cols = [
+            "feat_volatility", "feat_trend", "feat_drawdown",
+            "feat_corr_stress", "feat_shock",
+        ]
+        valid_3d = results.dropna(subset=feat_cols + ["risk_adjusted_regime"])
+        if len(valid_3d) >= 10:
+            feature_history = valid_3d[feat_cols].to_numpy()
+            regime_seq = [Regime[r] for r in valid_3d["risk_adjusted_regime"]]
+            animate = st.checkbox(
+                "Animate trajectory through time", value=False,
+                help="Replay the market's path through state space.",
+            )
+            fig_3d = build_phase_space_3d(
+                feature_history=feature_history,
+                regimes=regime_seq,
+                centroids=pipeline._centroid_engine.centroids,
+                animate=animate,
+            )
+            st.plotly_chart(fig_3d, use_container_width=True)
+        else:
+            st.info("Need at least 10 valid bars for the 3D phase-space view.")
 
         # Forecast section
         st.divider()
