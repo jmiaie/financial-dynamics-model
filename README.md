@@ -10,8 +10,9 @@ A production-grade, transparent Bayesian system-dynamics pipeline for market reg
 
 ✅ **80.6% accuracy** on calibrated datasets (vs 57.8% baseline)  
 ✅ **Fully explainable** — no black-box neural networks  
-✅ **Production-ready** — 219 unit tests, live deployment verified  
+✅ **Production-ready** — 229 unit tests, live deployment verified  
 ✅ **Interactive demo** — Streamlit app with live data, forecasts, signals  
+✅ **3D phase-space visualization** — regime basins, Markov flow arrows, PCA loading vectors  
 ✅ **Multi-asset capable** — cross-asset correlation stress detection  
 ✅ **Regime forecasting** — k-step-ahead probabilities via matrix exponentiation  
 
@@ -122,7 +123,7 @@ src/financial_dynamics/
 ├── phase2_transitions/            # Markov transition learning
 ├── phase3_stabilization/          # Hysteresis, persistence, majority-vote
 ├── phase4_risk/                   # Risk overlays
-├── visualization/                 # Dashboard, phase-space, trajectory
+├── visualization/                 # Dashboard, 2D/3D phase-space, trajectory
 ├── calibration/                   # Centroid fitting, hyperparameter tuning
 ├── backtesting/                   # Evaluator, metrics, rolling windows
 ├── benchmarks/                    # Baseline classifiers
@@ -157,7 +158,7 @@ DEPLOYMENT_GUIDE.md                # Deployment instructions
 ## 🧪 Testing
 
 ```bash
-# Run all 219 tests
+# Run all 229 tests
 pytest tests/ -v
 
 # Specific suite
@@ -207,10 +208,20 @@ risk:
 ## 📱 Interactive Dashboard
 
 **Live Streamlit app** with:
+- Stock ticker info bar (Open, High, Low, Close, Day Change %)
 - Real-time price chart with regime-colored bands
 - Stacked area chart of regime probabilities
 - Transition matrix heatmap
 - 5D feature time series
+- **3D Phase-Space Attractor Field** — interactive Plotly 3D chart with:
+  - Regime basins of attraction (convex hulls / covariance ellipsoids)
+  - Markov transition flow arrows between centroids
+  - PCA loading vectors showing what each axis means
+  - Velocity-encoded trajectory (teal=stable, red=transitioning)
+  - Regime shift markers at exact transition points
+  - Stationary-distribution halos around attractors
+  - Confidence-weighted marker sizing
+  - 10 interactive toggles for each layer
 - Current regime badge + confidence score
 - k-step regime forecast
 - Signal feed (regime changes, Risk-Off warnings, confidence drops, stabilization)

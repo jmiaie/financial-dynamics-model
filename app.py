@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
-from datetime import datetime, timedelta
 import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -23,7 +22,6 @@ from financial_dynamics.config import PipelineConfig
 from financial_dynamics.data_loader import fetch_ohlcv
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.signals.detector import SignalDetector, SignalType
-from financial_dynamics.visualization.phase_space import REGIME_COLORS
 from financial_dynamics.visualization.phase_space_3d import build_phase_space_3d
 
 # Color scheme: slate and teal
