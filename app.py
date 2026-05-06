@@ -611,11 +611,10 @@ def main():
         st.divider()
         st.subheader("🌌 Phase-Space Attractor Field (3D)")
         st.caption(
-            "5D feature space projected to 3D via PCA. "
-            "Translucent surfaces = regime basins of attraction · "
-            "Arrows = Markov transition flows · "
-            "Marker size/opacity = posterior confidence · "
-            "Halos = stationary distribution weight. "
+            "5D feature space → 3D PCA. "
+            "Basins = regime regions · Arrows = Markov flows · "
+            "Marker size = confidence · Loading arrows = feature axes · "
+            "✕ markers = regime shifts · Trajectory color = velocity. "
             "Drag to rotate · scroll to zoom · hover for details."
         )
 
@@ -634,37 +633,38 @@ def main():
             else:
                 conf_3d = None
 
-            ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6 = st.columns(6)
-            with ctrl1:
-                show_basins = st.checkbox(
-                    "Basins", value=True,
-                    help="Convex-hull surfaces showing each regime's basin of attraction.",
-                )
-            with ctrl2:
-                show_arrows = st.checkbox(
-                    "Flows", value=True,
-                    help="Markov transition arrows weighted by learned probabilities.",
-                )
-            with ctrl3:
-                show_traj = st.checkbox(
-                    "Trajectory", value=True,
-                    help="Time-decayed line through state space.",
-                )
-            with ctrl4:
-                show_vol = st.checkbox(
-                    "Vol surface", value=False,
-                    help="Isosurface showing the high-volatility danger zone.",
-                )
-            with ctrl5:
-                show_halos = st.checkbox(
-                    "Eq. halos", value=True,
-                    help="Stationary-distribution halos around attractors.",
-                )
-            with ctrl6:
-                animate = st.checkbox(
-                    "Animate", value=False,
-                    help="Replay the market's path through state space.",
-                )
+            row1 = st.columns(5)
+            with row1[0]:
+                show_basins = st.checkbox("Basins", value=True,
+                    help="Convex-hull surfaces per regime.")
+            with row1[1]:
+                show_ellipsoids = st.checkbox("Ellipsoids", value=False,
+                    help="1.5σ covariance ellipsoids (smoother than hulls).")
+            with row1[2]:
+                show_arrows = st.checkbox("Flows", value=True,
+                    help="Markov transition arrows.")
+            with row1[3]:
+                show_loadings = st.checkbox("Loadings", value=True,
+                    help="PCA loading vectors (feature axis labels).")
+            with row1[4]:
+                show_shifts = st.checkbox("Shifts", value=True,
+                    help="✕ markers at regime transitions.")
+
+            row2 = st.columns(5)
+            with row2[0]:
+                show_traj = st.checkbox("Trajectory", value=True,
+                    help="Velocity-colored trajectory.")
+            with row2[1]:
+                show_halos = st.checkbox("Eq. halos", value=True,
+                    help="Stationary-distribution halos.")
+            with row2[2]:
+                show_vol = st.checkbox("Vol surface", value=False,
+                    help="High-vol danger zone isosurface.")
+            with row2[3]:
+                animate = st.checkbox("Animate", value=False,
+                    help="Replay through time.")
+            with row2[4]:
+                st.empty()
 
             fig_3d = build_phase_space_3d(
                 feature_history=feature_history,
@@ -674,9 +674,12 @@ def main():
                 transition_matrix=pipeline._transition_engine.get_transition_matrix(),
                 show_trajectory=show_traj,
                 show_basins=show_basins,
+                show_ellipsoids=show_ellipsoids,
                 show_transition_arrows=show_arrows,
                 show_vol_surface=show_vol,
                 show_stationary_halos=show_halos,
+                show_loadings=show_loadings,
+                show_transitions_markers=show_shifts,
                 animate=animate,
             )
             st.plotly_chart(fig_3d, use_container_width=True)

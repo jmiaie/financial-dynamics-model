@@ -52,7 +52,7 @@ class TestPhaseSpace3D:
         fig = build_phase_space_3d(sample_features, sample_regimes, sample_centroids)
         assert fig is not None
         assert len(fig.data) >= 5
-        allowed_types = {"scatter3d", "mesh3d", "cone"}
+        allowed_types = {"scatter3d", "mesh3d", "cone", "isosurface"}
         for trace in fig.data:
             assert trace.type in allowed_types
 
@@ -89,7 +89,8 @@ class TestPhaseSpace3D:
             sample_features, sample_regimes, sample_centroids,
             transition_matrix=T,
             show_basins=False, show_transition_arrows=False,
-            show_stationary_halos=False,
+            show_stationary_halos=False, show_loadings=False,
+            show_ellipsoids=False,
         )
         types = {t.type for t in fig.data}
         assert "mesh3d" not in types
@@ -118,6 +119,49 @@ class TestPhaseSpace3D:
         )
         types = [t.type for t in fig.data]
         assert "mesh3d" in types
+
+    def test_pca_loadings(self, sample_features, sample_regimes, sample_centroids):
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids,
+            show_loadings=True, show_basins=False,
+            show_stationary_halos=False,
+        )
+        loading_names = [t.name for t in fig.data if t.name and "Loading" in t.name]
+        assert len(loading_names) == 5
+
+    def test_regime_transition_markers(self, sample_centroids):
+        rng = np.random.default_rng(99)
+        features = rng.random((60, 5))
+        regimes = ([Regime.CALM_TREND] * 20
+                   + [Regime.RISK_OFF] * 20
+                   + [Regime.CHOP] * 20)
+        fig = build_phase_space_3d(
+            features, regimes, sample_centroids,
+            show_transitions_markers=True, show_basins=False,
+            show_stationary_halos=False, show_loadings=False,
+        )
+        shift_traces = [t for t in fig.data if t.name and "Regime shifts" in t.name]
+        assert len(shift_traces) == 1
+        assert len(shift_traces[0].x) == 2  # two transitions
+
+    def test_covariance_ellipsoids(self, sample_features, sample_regimes, sample_centroids):
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids,
+            show_ellipsoids=True, show_basins=False,
+            show_stationary_halos=False, show_loadings=False,
+        )
+        ellipsoid_traces = [t for t in fig.data if t.name and "1σ" in t.name]
+        assert len(ellipsoid_traces) >= 1
+
+    def test_velocity_trajectory(self, sample_features, sample_regimes, sample_centroids):
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids,
+            show_trajectory=True, show_basins=False,
+            show_stationary_halos=False, show_loadings=False,
+        )
+        vel_traces = [t for t in fig.data if t.name and "velocity" in t.name]
+        assert len(vel_traces) == 1
+        assert vel_traces[0].line.showscale is True  # has colorbar
 
 
 class TestTrajectoryPlotter:

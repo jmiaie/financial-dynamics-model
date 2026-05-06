@@ -2,8 +2,13 @@
 
 Renders the 5D feature space as an interactive 3D dynamical-systems chart with:
 - Regime basins of attraction (convex-hull mesh surfaces)
+- Covariance ellipsoids (1σ confidence regions)
 - Markov transition flow arrows between centroids
 - Confidence-weighted marker sizing and opacity
+- PCA loading vectors (feature interpretability axes)
+- Regime transition event markers
+- Velocity-encoded trajectory (speed of movement through state space)
+- Nearest-centroid distance colorbar
 - Volatility isosurface underlay (high-vol danger zones)
 - Exponential-decay comet trail (recent bars glow)
 - Stationary-distribution halos around attractors
@@ -16,6 +21,7 @@ import numpy as np
 import plotly.graph_objects as go
 from scipy.spatial import ConvexHull, QhullError
 from scipy.interpolate import griddata
+from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization._utils import fit_pca_projection
@@ -34,6 +40,8 @@ REGIME_COLORS_RGB = {
     Regime.RISK_OFF: (239, 68, 68),
 }
 
+FEATURE_NAMES = ["Volatility", "Trend", "Drawdown", "Stress", "Shock"]
+
 
 def build_phase_space_3d(
     feature_history: np.ndarray,
@@ -43,33 +51,27 @@ def build_phase_space_3d(
     transition_matrix: np.ndarray | None = None,
     show_trajectory: bool = True,
     show_basins: bool = True,
+    show_ellipsoids: bool = False,
     show_transition_arrows: bool = True,
     show_vol_surface: bool = False,
     show_stationary_halos: bool = True,
+    show_loadings: bool = True,
+    show_transitions_markers: bool = True,
     animate: bool = False,
 ) -> go.Figure:
-    """Build an institutional-grade 3D phase-space plot.
-
-    Args:
-        feature_history: shape (N, 5) feature vectors.
-            Columns: [volatility, trend, drawdown, corr_stress, shock]
-        regimes: list of N regime assignments.
-        centroids: shape (4, 5) centroid matrix.
-        confidences: optional shape (N,) posterior probabilities [0,1].
-        transition_matrix: optional (4,4) Markov matrix for arrows + halos.
-        show_trajectory: draw the time-ordered path through state space.
-        show_basins: render translucent convex-hull basins.
-        show_transition_arrows: render flow arrows from the transition matrix.
-        show_vol_surface: render volatility isosurface (high-vol danger zone).
-        show_stationary_halos: render equilibrium halos around attractors.
-        animate: emit time-slider animation frames.
-    """
+    """Build an institutional-grade 3D phase-space plot."""
     projected, centroid_proj, pca = fit_pca_projection(
         feature_history, centroids, n_components=3
     )
 
     if confidences is None:
         confidences = np.full(len(feature_history), 0.6)
+
+    # Nearest-centroid distance for each point
+    centroid_dists = np.array([
+        np.min(np.linalg.norm(centroid_proj - p, axis=1))
+        for p in projected
+    ])
 
     fig = go.Figure()
 
@@ -82,9 +84,14 @@ def build_phase_space_3d(
         if vol_trace is not None:
             fig.add_trace(vol_trace)
 
-    # Layer 3: Regime basins
+    # Layer 3: Regime basins (convex hull)
     if show_basins:
         for trace in _build_basins(projected, regimes):
+            fig.add_trace(trace)
+
+    # Layer 3b: Covariance ellipsoids (1σ confidence)
+    if show_ellipsoids:
+        for trace in _build_covariance_ellipsoids(projected, regimes):
             fig.add_trace(trace)
 
     # Layer 4: Stationary distribution halos
@@ -96,25 +103,36 @@ def build_phase_space_3d(
     for trace in _build_points(projected, regimes, confidences):
         fig.add_trace(trace)
 
-    # Layer 6: Time-decay trajectory
+    # Layer 6: Velocity-encoded trajectory
     if show_trajectory and len(projected) > 1:
-        fig.add_trace(_build_trajectory(projected))
+        fig.add_trace(_build_velocity_trajectory(projected, centroid_dists))
 
-    # Layer 7: Comet trail (last 20 bars with exponential decay)
+    # Layer 7: Comet trail
     if len(projected) > 3:
         fig.add_trace(_build_comet_trail(projected, confidences))
 
-    # Layer 8: Transition flow arrows
+    # Layer 8: Regime transition event markers
+    if show_transitions_markers and len(regimes) > 1:
+        tr_trace = _build_transition_markers(projected, regimes)
+        if tr_trace is not None:
+            fig.add_trace(tr_trace)
+
+    # Layer 9: Transition flow arrows
     if show_transition_arrows and transition_matrix is not None:
         for trace in _build_transition_arrows(centroid_proj, transition_matrix):
             fig.add_trace(trace)
 
-    # Layer 9: Centroid attractor markers
+    # Layer 10: PCA loading vectors (feature interpretability)
+    if show_loadings:
+        for trace in _build_pca_loadings(pca, projected):
+            fig.add_trace(trace)
+
+    # Layer 11: Centroid attractor markers
     for trace in _build_centroid_markers(centroid_proj, transition_matrix):
         fig.add_trace(trace)
 
-    # Layer 10: Current position highlight
-    fig.add_trace(_build_current_position(projected, regimes))
+    # Layer 12: Current position highlight
+    fig.add_trace(_build_current_position(projected, regimes, confidences))
 
     if animate and len(projected) > 1:
         fig.frames = _build_animation_frames(projected, regimes, confidences)
@@ -183,7 +201,206 @@ def _scene_layout(var_explained: np.ndarray) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 4. Volatility isosurface
+# 1. PCA loading vectors (feature interpretability)
+# ─────────────────────────────────────────────────────────────────────────────
+
+LOADING_COLORS = ["#ef4444", "#f59e0b", "#8b5cf6", "#06b6d4", "#ec4899"]
+
+
+def _build_pca_loadings(
+    pca: PCA,
+    projected: np.ndarray,
+) -> list[go.Scatter3d | go.Cone]:
+    """Arrows from the origin showing how each original feature maps into 3D PCA space."""
+    traces = []
+    components = pca.components_  # (3, 5)
+    scale = np.std(projected, axis=0).mean() * 1.8
+
+    for j, name in enumerate(FEATURE_NAMES):
+        direction = components[:, j] * scale
+        color = LOADING_COLORS[j]
+
+        traces.append(go.Scatter3d(
+            x=[0, direction[0]], y=[0, direction[1]], z=[0, direction[2]],
+            mode="lines+text",
+            line=dict(color=color, width=4),
+            text=["", name],
+            textposition="top center",
+            textfont=dict(color=color, size=10,
+                          family="Inter, system-ui, sans-serif"),
+            showlegend=False,
+            hovertemplate=(
+                f"<b>{name} loading</b><br>"
+                f"PC1: {components[0, j]:.2f} · "
+                f"PC2: {components[1, j]:.2f} · "
+                f"PC3: {components[2, j]:.2f}"
+                "<extra></extra>"
+            ),
+            name=f"Loading: {name}",
+        ))
+
+        tip = direction * 0.85
+        traces.append(go.Cone(
+            x=[tip[0]], y=[tip[1]], z=[tip[2]],
+            u=[direction[0] * 0.15],
+            v=[direction[1] * 0.15],
+            w=[direction[2] * 0.15],
+            colorscale=[[0, color], [1, color]],
+            showscale=False,
+            sizemode="absolute",
+            sizeref=0.3,
+            anchor="tail",
+            showlegend=False,
+            hoverinfo="skip",
+            lighting=dict(ambient=0.9, diffuse=0.2),
+        ))
+    return traces
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. Regime transition event markers
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _build_transition_markers(
+    projected: np.ndarray,
+    regimes: list[Regime],
+) -> go.Scatter3d | None:
+    """'X' markers at exact bars where a regime change occurred."""
+    changes = []
+    for i in range(1, len(regimes)):
+        if regimes[i] != regimes[i - 1]:
+            changes.append(i)
+    if not changes:
+        return None
+    pts = projected[changes]
+    new_regimes = [regimes[i] for i in changes]
+    colors = [REGIME_COLORS_3D[r] for r in new_regimes]
+    labels = [
+        f"{REGIME_NAMES[regimes[i-1]]} → {REGIME_NAMES[regimes[i]]}"
+        for i in changes
+    ]
+    return go.Scatter3d(
+        x=pts[:, 0], y=pts[:, 1], z=pts[:, 2],
+        mode="markers",
+        name="Regime shifts",
+        marker=dict(
+            size=7,
+            color=colors,
+            symbol="x",
+            line=dict(color="rgba(241, 245, 249, 0.8)", width=1.5),
+        ),
+        customdata=labels,
+        hovertemplate="<b>%{customdata}</b><extra></extra>",
+        showlegend=True,
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. Covariance ellipsoids (1σ confidence regions)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _build_covariance_ellipsoids(
+    projected: np.ndarray,
+    regimes: list[Regime],
+    n_std: float = 1.5,
+    resolution: int = 16,
+) -> list[go.Mesh3d]:
+    """1σ ellipsoid for each regime fitted from the covariance of its points."""
+    traces = []
+    u = np.linspace(0, 2 * np.pi, resolution)
+    v = np.linspace(0, np.pi, resolution)
+    sphere_x = np.outer(np.cos(u), np.sin(v))
+    sphere_y = np.outer(np.sin(u), np.sin(v))
+    sphere_z = np.outer(np.ones_like(u), np.cos(v))
+    sphere = np.column_stack([sphere_x.ravel(), sphere_y.ravel(), sphere_z.ravel()])
+
+    for regime in Regime:
+        mask = np.array([r == regime for r in regimes])
+        pts = projected[mask]
+        if len(pts) < 5:
+            continue
+        mean = pts.mean(axis=0)
+        cov = np.cov(pts.T)
+        try:
+            eigenvalues, eigenvectors = np.linalg.eigh(cov)
+        except np.linalg.LinAlgError:
+            continue
+        eigenvalues = np.maximum(eigenvalues, 1e-10)
+        radii = n_std * np.sqrt(eigenvalues)
+        ellipsoid = sphere * radii @ eigenvectors.T + mean
+        rgb = REGIME_COLORS_RGB[regime]
+        traces.append(go.Mesh3d(
+            x=ellipsoid[:, 0], y=ellipsoid[:, 1], z=ellipsoid[:, 2],
+            alphahull=0,
+            color=f"rgba({rgb[0]}, {rgb[1]}, {rgb[2]}, 0.08)",
+            opacity=0.08,
+            flatshading=False,
+            showlegend=False,
+            hoverinfo="skip",
+            name=f"{REGIME_NAMES[regime]} 1σ",
+        ))
+    return traces
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. Velocity-encoded trajectory
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _build_velocity_trajectory(
+    projected: np.ndarray,
+    centroid_dists: np.ndarray,
+) -> go.Scatter3d:
+    """Trajectory colored by speed (inter-bar distance) through state space.
+
+    Also encodes nearest-centroid distance as line width so uncertain
+    regions (far from any attractor) appear thicker.
+    """
+    n = len(projected)
+    speeds = np.zeros(n)
+    speeds[1:] = np.linalg.norm(np.diff(projected, axis=0), axis=1)
+    speeds[0] = speeds[1]
+
+    color_vals = speeds / (speeds.max() + 1e-10)
+
+    return go.Scatter3d(
+        x=projected[:, 0], y=projected[:, 1], z=projected[:, 2],
+        mode="lines",
+        name="Trajectory (velocity)",
+        line=dict(
+            color=color_vals,
+            colorscale=[
+                [0.0, "rgba(20, 184, 166, 0.6)"],   # slow: calm teal
+                [0.3, "rgba(13, 115, 119, 0.75)"],
+                [0.6, "rgba(245, 158, 11, 0.85)"],   # medium: amber
+                [1.0, "rgba(239, 68, 68, 0.95)"],    # fast: red (transition)
+            ],
+            width=4,
+            showscale=True,
+            colorbar=dict(
+                title=dict(text="Speed", font=dict(size=10, color="#94a3b8")),
+                len=0.3, thickness=10,
+                x=0.98, y=0.85,
+                tickfont=dict(size=8, color="#64748b"),
+                bgcolor="rgba(15, 23, 42, 0.8)",
+                bordercolor="rgb(51, 65, 85)",
+                borderwidth=1,
+                tickvals=[],
+                ticktext=[],
+            ),
+        ),
+        customdata=np.column_stack([speeds, centroid_dists]),
+        hovertemplate=(
+            "Speed: %{customdata[0]:.3f}<br>"
+            "Dist to attractor: %{customdata[1]:.2f}"
+            "<extra></extra>"
+        ),
+        showlegend=True,
+        legendgroup="trail",
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4b. Volatility isosurface
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _build_vol_isosurface(
@@ -431,31 +648,7 @@ def _build_points(
     return traces
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Trajectory line (enhanced time-decay)
-# ─────────────────────────────────────────────────────────────────────────────
-
-def _build_trajectory(projected: np.ndarray) -> go.Scatter3d:
-    """Time-decayed trajectory — recent segments brightest."""
-    n = len(projected)
-    decay = np.linspace(0.0, 1.0, n)
-    return go.Scatter3d(
-        x=projected[:, 0], y=projected[:, 1], z=projected[:, 2],
-        mode="lines",
-        name="Trajectory",
-        line=dict(
-            color=decay,
-            colorscale=[[0, "rgba(71, 85, 105, 0.0)"],
-                        [0.3, "rgba(71, 85, 105, 0.15)"],
-                        [0.7, "rgba(13, 115, 119, 0.5)"],
-                        [1.0, "rgba(20, 184, 166, 0.9)"]],
-            width=3.5,
-            showscale=False,
-        ),
-        hoverinfo="skip",
-        showlegend=True,
-        legendgroup="trail",
-    )
+# (Trajectory is now velocity-encoded — see _build_velocity_trajectory above)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -574,12 +767,14 @@ def _build_centroid_markers(
 def _build_current_position(
     projected: np.ndarray,
     regimes: list[Regime],
+    confidences: np.ndarray | None = None,
 ) -> go.Scatter3d:
     """'You are here' pulse ring at the latest bar."""
     if len(projected) == 0:
         return go.Scatter3d(x=[], y=[], z=[], mode="markers", showlegend=False)
     last = projected[-1]
     current_regime = regimes[-1]
+    conf = float(confidences[-1]) if confidences is not None else 0.0
     rgb = REGIME_COLORS_RGB[current_regime]
     return go.Scatter3d(
         x=[last[0]], y=[last[1]], z=[last[2]],
@@ -595,7 +790,8 @@ def _build_current_position(
             symbol="circle",
         ),
         hovertemplate=(
-            f"<b>CURRENT: {REGIME_NAMES[current_regime]}</b>"
+            f"<b>CURRENT: {REGIME_NAMES[current_regime]}</b><br>"
+            f"Confidence: {conf:.1%}"
             "<extra></extra>"
         ),
         showlegend=True,
