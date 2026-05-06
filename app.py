@@ -612,8 +612,10 @@ def main():
         st.subheader("🌌 Phase-Space Attractor Field (3D)")
         st.caption(
             "Live trajectory of the market through its 5D feature space, "
-            "projected to 3D via PCA. Drag to rotate, scroll to zoom. "
-            "Diamond markers are regime attractors; line color encodes time."
+            "projected to 3D via PCA. Translucent surfaces are regime basins of "
+            "attraction; arrows show learned Markov transition flows; marker "
+            "size and opacity encode posterior confidence. "
+            "Drag to rotate · scroll to zoom · hover for details."
         )
 
         feat_cols = [
@@ -624,14 +626,44 @@ def main():
         if len(valid_3d) >= 10:
             feature_history = valid_3d[feat_cols].to_numpy()
             regime_seq = [Regime[r] for r in valid_3d["risk_adjusted_regime"]]
-            animate = st.checkbox(
-                "Animate trajectory through time", value=False,
-                help="Replay the market's path through state space.",
-            )
+
+            prob_cols_3d = [f"post_prob_{r.name}" for r in Regime]
+            if all(c in valid_3d.columns for c in prob_cols_3d):
+                conf_3d = valid_3d[prob_cols_3d].max(axis=1).to_numpy()
+            else:
+                conf_3d = None
+
+            ctrl1, ctrl2, ctrl3, ctrl4 = st.columns(4)
+            with ctrl1:
+                show_basins = st.checkbox(
+                    "Regime basins", value=True,
+                    help="Convex-hull surfaces showing each regime's basin of attraction.",
+                )
+            with ctrl2:
+                show_arrows = st.checkbox(
+                    "Transition flows", value=True,
+                    help="Markov transition arrows weighted by learned probabilities.",
+                )
+            with ctrl3:
+                show_traj = st.checkbox(
+                    "Trajectory", value=True,
+                    help="Time-decayed line through state space.",
+                )
+            with ctrl4:
+                animate = st.checkbox(
+                    "Animate", value=False,
+                    help="Replay the market's path through state space.",
+                )
+
             fig_3d = build_phase_space_3d(
                 feature_history=feature_history,
                 regimes=regime_seq,
                 centroids=pipeline._centroid_engine.centroids,
+                confidences=conf_3d,
+                transition_matrix=pipeline._transition_engine.get_transition_matrix(),
+                show_trajectory=show_traj,
+                show_basins=show_basins,
+                show_transition_arrows=show_arrows,
                 animate=animate,
             )
             st.plotly_chart(fig_3d, use_container_width=True)

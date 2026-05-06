@@ -52,14 +52,47 @@ class TestPhaseSpace3D:
         fig = build_phase_space_3d(sample_features, sample_regimes, sample_centroids)
         assert fig is not None
         assert len(fig.data) >= 5
+        allowed_types = {"scatter3d", "mesh3d", "cone"}
         for trace in fig.data:
-            assert trace.type == "scatter3d"
+            assert trace.type in allowed_types
 
     def test_animation_frames(self, sample_features, sample_regimes, sample_centroids):
         fig = build_phase_space_3d(
             sample_features, sample_regimes, sample_centroids, animate=True
         )
         assert len(fig.frames) > 0
+
+    def test_with_basins_and_arrows(
+        self, sample_features, sample_regimes, sample_centroids
+    ):
+        confidences = np.linspace(0.4, 0.95, len(sample_features))
+        T = np.array([
+            [0.85, 0.10, 0.04, 0.01],
+            [0.15, 0.70, 0.10, 0.05],
+            [0.20, 0.10, 0.65, 0.05],
+            [0.05, 0.15, 0.10, 0.70],
+        ])
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids,
+            confidences=confidences, transition_matrix=T,
+            show_basins=True, show_transition_arrows=True,
+        )
+        types = [t.type for t in fig.data]
+        assert "mesh3d" in types  # regime basins
+        assert "cone" in types  # transition arrowheads
+
+    def test_disable_basins_and_arrows(
+        self, sample_features, sample_regimes, sample_centroids
+    ):
+        T = np.eye(4)
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids,
+            transition_matrix=T,
+            show_basins=False, show_transition_arrows=False,
+        )
+        types = {t.type for t in fig.data}
+        assert "mesh3d" not in types
+        assert "cone" not in types
 
 
 class TestTrajectoryPlotter:
