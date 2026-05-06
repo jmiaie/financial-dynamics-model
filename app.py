@@ -611,10 +611,11 @@ def main():
         st.divider()
         st.subheader("🌌 Phase-Space Attractor Field (3D)")
         st.caption(
-            "Live trajectory of the market through its 5D feature space, "
-            "projected to 3D via PCA. Translucent surfaces are regime basins of "
-            "attraction; arrows show learned Markov transition flows; marker "
-            "size and opacity encode posterior confidence. "
+            "5D feature space projected to 3D via PCA. "
+            "Translucent surfaces = regime basins of attraction · "
+            "Arrows = Markov transition flows · "
+            "Marker size/opacity = posterior confidence · "
+            "Halos = stationary distribution weight. "
             "Drag to rotate · scroll to zoom · hover for details."
         )
 
@@ -633,15 +634,15 @@ def main():
             else:
                 conf_3d = None
 
-            ctrl1, ctrl2, ctrl3, ctrl4 = st.columns(4)
+            ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6 = st.columns(6)
             with ctrl1:
                 show_basins = st.checkbox(
-                    "Regime basins", value=True,
+                    "Basins", value=True,
                     help="Convex-hull surfaces showing each regime's basin of attraction.",
                 )
             with ctrl2:
                 show_arrows = st.checkbox(
-                    "Transition flows", value=True,
+                    "Flows", value=True,
                     help="Markov transition arrows weighted by learned probabilities.",
                 )
             with ctrl3:
@@ -650,6 +651,16 @@ def main():
                     help="Time-decayed line through state space.",
                 )
             with ctrl4:
+                show_vol = st.checkbox(
+                    "Vol surface", value=False,
+                    help="Isosurface showing the high-volatility danger zone.",
+                )
+            with ctrl5:
+                show_halos = st.checkbox(
+                    "Eq. halos", value=True,
+                    help="Stationary-distribution halos around attractors.",
+                )
+            with ctrl6:
                 animate = st.checkbox(
                     "Animate", value=False,
                     help="Replay the market's path through state space.",
@@ -664,6 +675,8 @@ def main():
                 show_trajectory=show_traj,
                 show_basins=show_basins,
                 show_transition_arrows=show_arrows,
+                show_vol_surface=show_vol,
+                show_stationary_halos=show_halos,
                 animate=animate,
             )
             st.plotly_chart(fig_3d, use_container_width=True)

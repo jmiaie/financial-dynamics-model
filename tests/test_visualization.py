@@ -89,10 +89,35 @@ class TestPhaseSpace3D:
             sample_features, sample_regimes, sample_centroids,
             transition_matrix=T,
             show_basins=False, show_transition_arrows=False,
+            show_stationary_halos=False,
         )
         types = {t.type for t in fig.data}
         assert "mesh3d" not in types
         assert "cone" not in types
+
+    def test_vol_surface(self, sample_features, sample_regimes, sample_centroids):
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids,
+            show_vol_surface=True, show_basins=False,
+            show_stationary_halos=False,
+        )
+        types = [t.type for t in fig.data]
+        assert "isosurface" in types
+
+    def test_stationary_halos(self, sample_features, sample_regimes, sample_centroids):
+        T = np.array([
+            [0.85, 0.10, 0.04, 0.01],
+            [0.15, 0.70, 0.10, 0.05],
+            [0.20, 0.10, 0.65, 0.05],
+            [0.05, 0.15, 0.10, 0.70],
+        ])
+        fig = build_phase_space_3d(
+            sample_features, sample_regimes, sample_centroids,
+            transition_matrix=T, show_basins=False,
+            show_stationary_halos=True,
+        )
+        types = [t.type for t in fig.data]
+        assert "mesh3d" in types
 
 
 class TestTrajectoryPlotter:
