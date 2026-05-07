@@ -14,7 +14,7 @@ class ChopDominanceSuppressor:
     """Detects prolonged Calm-Chop oscillation patterns and penalizes
     Chop probability to break the loop and force structural movement."""
 
-    def __init__(self, window: int = 30, penalty: float = 0.1):
+    def __init__(self, window: int = 30, penalty: float = 0.1) -> None:
         self.window = window
         self.penalty = penalty
         self._history: deque[Regime] = deque(maxlen=window)
@@ -44,7 +44,9 @@ class ChopDominanceSuppressor:
         adjusted[int(Regime.CHOP)] *= max(1.0 - self.penalty * 3, 0.05)
         adjusted[int(Regime.CALM_TREND)] *= max(1.0 - self.penalty, 0.2)
 
-        # Boost Volatile Trend slightly to encourage structural movement
+        # VOLATILE_TREND is boosted so that mass removed from Calm/Chop has
+        # somewhere to flow — preventing the renormalization from simply
+        # re-inflating those two regimes and breaking the loop.
         adjusted[int(Regime.VOLATILE_TREND)] *= (1.0 + self.penalty * 2)
 
         return safe_renormalize(adjusted)

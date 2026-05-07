@@ -94,7 +94,12 @@ def fetch_multi_asset(
                 ref_df.columns = [c.lower() for c in ref_df.columns]
                 col_name = f"ref_{ref_sym.replace('^', '')}_close"
                 df[col_name] = ref_df["close"].reindex(df.index)
-        except (KeyError, ValueError, AttributeError):
-            continue
+        except (KeyError, ValueError, AttributeError) as exc:
+            import warnings
+            warnings.warn(
+                f"Could not fetch reference symbol '{ref_sym}': {exc}. "
+                "This column will be omitted from cross-asset correlation stress.",
+                stacklevel=2,
+            )
 
     return df

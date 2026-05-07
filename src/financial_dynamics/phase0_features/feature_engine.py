@@ -28,7 +28,7 @@ class FeatureEngine:
     uses cross-asset correlation stress instead of single-asset kurtosis.
     """
 
-    def __init__(self, config: FeatureConfig | None = None):
+    def __init__(self, config: FeatureConfig | None = None) -> None:
         self.config = config or FeatureConfig()
         self.normalizer = FeatureNormalizer(self.config)
         self._close_buffer: deque[float] = deque(
@@ -137,7 +137,7 @@ class FeatureEngine:
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
 
-        ref_returns = None
+        ref_returns: dict[str, pd.Series] | None = None
         if self._ref_buffers:
             ref_returns = {}
             for ref_key, buf in self._ref_buffers.items():

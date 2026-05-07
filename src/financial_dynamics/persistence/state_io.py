@@ -36,6 +36,13 @@ def load_state(path: str | Path) -> FinancialDynamicsPipeline:
     with open(path) as f:
         state = json.load(f)
 
+    if "config" not in state:
+        import warnings
+        warnings.warn(
+            "Saved state file is missing the 'config' section; "
+            "pipeline will be restored with default configuration values.",
+            stacklevel=2,
+        )
     config = PipelineConfig()
     _restore_config(config, state.get("config", {}))
 
@@ -125,7 +132,7 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
 
 
-def _extract_config(config: PipelineConfig) -> dict:
+def _extract_config(config: PipelineConfig) -> dict[str, Any]:
     """Serialize config to a plain dict."""
     return {
         "features": {

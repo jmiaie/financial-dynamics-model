@@ -70,7 +70,8 @@ def compute_correlation_stress(returns: pd.Series, window: int = 20) -> pd.Serie
         Series of rolling excess kurtosis values.
     """
     kurt = returns.rolling(window, min_periods=window).kurt()
-    # Fat tails only; platykurtic values are not meaningful here
+    # Clip at zero: negative (platykurtic) kurtosis signals thinner-than-normal
+    # tails, which is not a stress indicator and would mislead the centroid engine.
     return kurt.clip(lower=0.0)
 
 

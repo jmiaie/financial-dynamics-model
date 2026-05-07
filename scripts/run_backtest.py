@@ -63,7 +63,6 @@ def main() -> None:
     print("  Financial Dynamics Model -- Backtest Evaluation")
     print("=" * 70)
 
-    # Load config
     if args.config:
         config = PipelineConfig.from_yaml(args.config)
         print(f"\nLoaded config from {args.config}")
@@ -76,7 +75,6 @@ def main() -> None:
             config = PipelineConfig()
             print("\nUsing default config")
 
-    # Load data
     if args.data and args.labels:
         print(f"\nLoading data from {args.data}")
         df = pd.read_csv(args.data, index_col=0, parse_dates=True)
@@ -91,7 +89,6 @@ def main() -> None:
 
     print(f"  True regime distribution:\n  {true_labels.value_counts().to_string()}")
 
-    # Run backtest
     evaluator = BacktestEvaluator(config)
 
     print("\nRunning backtest...")
@@ -108,7 +105,6 @@ def main() -> None:
     print(f"\n  Classification Report:")
     print(f"  {result.classification_report.to_string()}")
 
-    # Rolling evaluation
     if args.rolling:
         print(f"\n  Rolling evaluation (window={args.window_size}, step={args.step_size}):")
         rolling = evaluator.evaluate_rolling(

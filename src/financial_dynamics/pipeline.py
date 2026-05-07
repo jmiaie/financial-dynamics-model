@@ -47,7 +47,7 @@ class BarRecord(TypedDict, total=False):
     post_prob_RISK_OFF: float
     stabilized_regime: str | None
     risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+    risk_overlays: dict[str, bool] | None
 
 
 class FinancialDynamicsPipeline:
@@ -58,7 +58,7 @@ class FinancialDynamicsPipeline:
     and risk conditioning.
     """
 
-    def __init__(self, config: PipelineConfig | None = None):
+    def __init__(self, config: PipelineConfig | None = None) -> None:
         self.config = config or PipelineConfig()
         self._feature_engine = FeatureEngine(self.config.features)
         self._centroid_engine = CentroidEngine(self.config.regimes)
@@ -165,12 +165,16 @@ class FinancialDynamicsPipeline:
             record["feat_shock"] = f.shock_intensity
 
         if state.raw_probabilities is not None:
-            for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
+            record["raw_prob_CALM_TREND"] = state.raw_probabilities[Regime.CALM_TREND]
+            record["raw_prob_VOLATILE_TREND"] = state.raw_probabilities[Regime.VOLATILE_TREND]
+            record["raw_prob_CHOP"] = state.raw_probabilities[Regime.CHOP]
+            record["raw_prob_RISK_OFF"] = state.raw_probabilities[Regime.RISK_OFF]
 
         if state.posterior_probabilities is not None:
-            for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
+            record["post_prob_CALM_TREND"] = state.posterior_probabilities[Regime.CALM_TREND]
+            record["post_prob_VOLATILE_TREND"] = state.posterior_probabilities[Regime.VOLATILE_TREND]
+            record["post_prob_CHOP"] = state.posterior_probabilities[Regime.CHOP]
+            record["post_prob_RISK_OFF"] = state.posterior_probabilities[Regime.RISK_OFF]
 
         record["stabilized_regime"] = (
             state.stabilized_regime.name if state.stabilized_regime is not None else None

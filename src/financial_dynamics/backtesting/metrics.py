@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pandas as pd
 
@@ -40,11 +42,23 @@ def regime_confusion_matrix(
     matrix = np.zeros((NUM_REGIMES, NUM_REGIMES), dtype=int)
     name_to_idx = {r.name: int(r) for r in Regime}
 
+    unknown_labels: set[str] = set()
     for true_val, pred_val in zip(t, p):
         ti = name_to_idx.get(true_val)
         pi = name_to_idx.get(pred_val)
+        if ti is None:
+            unknown_labels.add(str(true_val))
+        if pi is None:
+            unknown_labels.add(str(pred_val))
         if ti is not None and pi is not None:
             matrix[ti, pi] += 1
+    if unknown_labels:
+        warnings.warn(
+            f"regime_confusion_matrix: unrecognized regime label(s) "
+            f"{sorted(unknown_labels)} were skipped. "
+            f"Valid labels: {sorted(name_to_idx)}",
+            stacklevel=2,
+        )
 
     return pd.DataFrame(matrix, index=regime_names, columns=regime_names)
 
