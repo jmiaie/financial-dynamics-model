@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import Regime, NUM_REGIMES
 
 
 def regime_accuracy(

@@ -16,14 +16,14 @@ class Regime(IntEnum):
     RISK_OFF = 3
 
 
-REGIME_NAMES = {
+REGIME_NAMES: dict[Regime, str] = {
     Regime.CALM_TREND: "Calm Trend",
     Regime.VOLATILE_TREND: "Volatile Trend",
     Regime.CHOP: "Chop",
     Regime.RISK_OFF: "Risk-Off",
 }
 
-NUM_REGIMES = len(Regime)
+NUM_REGIMES: int = len(Regime)
 
 
 @dataclass

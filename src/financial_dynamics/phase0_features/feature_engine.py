@@ -110,6 +110,27 @@ class FeatureEngine:
 
         return pd.concat([raw, normalized], axis=1)
 
+    def _update_ref_buffers(self, ohlcv: dict[str, float]) -> None:
+        """Append reference-asset close prices from an OHLCV bar into their buffers."""
+        for key, value in ohlcv.items():
+            if key.startswith("ref_") and key.endswith("_close"):
+                if key not in self._ref_buffers:
+                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
+                self._ref_buffers[key].append(value)
+
+    def _collect_ref_returns(self) -> dict[str, pd.Series] | None:
+        """Build reference-asset return series from internal buffers.
+
+        Returns None if no reference buffers exist or none have enough history.
+        """
+        if not self._ref_buffers:
+            return None
+        ref_returns: dict[str, pd.Series] = {}
+        for ref_key, buf in self._ref_buffers.items():
+            if len(buf) >= self.warmup_bars:
+                ref_returns[ref_key] = pd.Series(list(buf)).pct_change().dropna()
+        return ref_returns or None
+
     def update(self, bar_state: BarState) -> BarState:
         """Incremental update for a single bar.
 
@@ -123,12 +144,7 @@ class FeatureEngine:
             )
         close = bar_state.ohlcv["close"]
         self._close_buffer.append(close)
-
-        for key, value in bar_state.ohlcv.items():
-            if key.startswith("ref_") and key.endswith("_close"):
-                if key not in self._ref_buffers:
-                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
-                self._ref_buffers[key].append(value)
+        self._update_ref_buffers(bar_state.ohlcv)
 
         if len(self._close_buffer) < self.warmup_bars:
             bar_state.features = None
@@ -136,16 +152,7 @@ class FeatureEngine:
 
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
-
-        ref_returns: dict[str, pd.Series] | None = None
-        if self._ref_buffers:
-            ref_returns = {}
-            for ref_key, buf in self._ref_buffers.items():
-                if len(buf) >= self.warmup_bars:
-                    ref_series = pd.Series(list(buf))
-                    ref_returns[ref_key] = ref_series.pct_change().dropna()
-            if not ref_returns:
-                ref_returns = None
+        ref_returns = self._collect_ref_returns()
 
         corr_stress_val = float(self._compute_corr_stress(returns, ref_returns).iloc[-1])
 

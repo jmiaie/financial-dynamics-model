@@ -11,6 +11,7 @@ import yaml
 
 from financial_dynamics.calibration import Calibrator
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.persistence.state_io import _extract_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -87,41 +88,7 @@ def main() -> None:
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    config_dict = {
-        "features": {
-            "volatility_span": result.calibrated_config.features.volatility_span,
-            "trend_window": result.calibrated_config.features.trend_window,
-            "drawdown_window": result.calibrated_config.features.drawdown_window,
-            "correlation_window": result.calibrated_config.features.correlation_window,
-            "shock_threshold": result.calibrated_config.features.shock_threshold,
-            "normalization_method": result.calibrated_config.features.normalization_method,
-            "normalization_window": result.calibrated_config.features.normalization_window,
-            "feature_weights": result.calibrated_config.features.feature_weights,
-        },
-        "regimes": {
-            "temperature": result.calibrated_config.regimes.temperature,
-            "centroids": result.calibrated_config.regimes.centroids,
-        },
-        "transitions": {
-            "prior_strength": result.calibrated_config.transitions.prior_strength,
-            "learning_rate": result.calibrated_config.transitions.learning_rate,
-        },
-        "stabilization": {
-            "hysteresis_threshold": result.calibrated_config.stabilization.hysteresis_threshold,
-            "min_persistence_bars": result.calibrated_config.stabilization.min_persistence_bars,
-            "majority_vote_window": result.calibrated_config.stabilization.majority_vote_window,
-        },
-        "risk": {
-            "drawdown_threshold": result.calibrated_config.risk.drawdown_threshold,
-            "correlation_stress_threshold": result.calibrated_config.risk.correlation_stress_threshold,
-            "shock_threshold": result.calibrated_config.risk.shock_threshold,
-            "riskoff_confirmation_count": result.calibrated_config.risk.riskoff_confirmation_count,
-            "overextension_window": result.calibrated_config.risk.overextension_window,
-            "overextension_decay": result.calibrated_config.risk.overextension_decay,
-            "chop_penalty_window": result.calibrated_config.risk.chop_penalty_window,
-            "chop_penalty_factor": result.calibrated_config.risk.chop_penalty_factor,
-        },
-    }
+    config_dict = _extract_config(result.calibrated_config)
 
     with open(output_path, "w") as f:
         yaml.safe_dump(config_dict, f, sort_keys=False)
