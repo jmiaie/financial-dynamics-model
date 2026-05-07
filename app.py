@@ -25,7 +25,6 @@ from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.signals.detector import SignalDetector, SignalType
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 
-# Color scheme: slate and teal
 COLOR_SCHEME = {
     "primary": "#1e3a5f",      # Dark slate blue
     "secondary": "#0d7377",     # Teal
@@ -139,7 +138,7 @@ def load_data(symbol: str, period: str, interval: str):
 
 @st.cache_resource
 def get_pipeline():
-    """Get or create pipeline instance."""
+    """Construct and cache a single pipeline instance for the Streamlit session."""
     config = PipelineConfig.from_yaml("config/default.yaml")
     return FinancialDynamicsPipeline(config)
 
@@ -177,7 +176,6 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
         hovertemplate="<b>%{x|%Y-%m-%d}</b><br>Price: $%{y:.2f}<extra></extra>",
     ))
 
-    # Add regime background bands
     regime_col = results["risk_adjusted_regime"]
     valid = regime_col.dropna()
 
@@ -196,7 +194,6 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
                     line_width=0,
                 )
             except KeyError:
-                import warnings
                 warnings.warn(
                     f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
                     stacklevel=2,
@@ -341,7 +338,6 @@ def main():
     """Main Streamlit app."""
     setup_page()
 
-    # Header
     st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
     st.markdown(
         '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
@@ -349,7 +345,6 @@ def main():
     )
     st.divider()
 
-    # Sidebar configuration
     with st.sidebar:
         st.header("⚙️ Configuration")
 
@@ -391,7 +386,6 @@ def main():
             "**Authors:** Jeff Milam & Micap AI LLC"
         )
 
-    # Main content
     if "run_pipeline" not in st.session_state:
         st.session_state.run_pipeline = True
 
@@ -410,7 +404,6 @@ def main():
             pipeline = get_pipeline()
             results = pipeline.run(df)
 
-        # Metrics row
         st.divider()
         col1, col2, col3, col4 = st.columns(4)
 
@@ -463,7 +456,6 @@ def main():
 
         st.divider()
 
-        # Charts
         st.subheader("📈 Price & Regime Analysis")
         fig_price = plot_price_with_regimes(df, results)
         st.plotly_chart(fig_price, use_container_width=True)
@@ -486,7 +478,6 @@ def main():
         if fig_features:
             st.plotly_chart(fig_features, use_container_width=True)
 
-        # Forecast section
         st.divider()
         st.subheader("🔮 Regime Forecast")
 
@@ -530,7 +521,6 @@ def main():
                 )
                 st.plotly_chart(fig_forecast, use_container_width=True)
 
-        # Signal detection
         st.divider()
         st.subheader("🔔 Signals & Alerts")
 
@@ -555,7 +545,6 @@ def main():
             signals.extend(detector.check(bar_state))
 
         if signals:
-            # Show recent signals
             recent_signals = signals[-10:]
             for signal in reversed(recent_signals):
                 icon = {

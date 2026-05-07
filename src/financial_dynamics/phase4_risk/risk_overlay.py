@@ -6,7 +6,7 @@ import numpy as np
 
 from financial_dynamics.config import RiskConfig
 from financial_dynamics.types import BarState, Regime, RegimeProbabilities, NUM_REGIMES
-from financial_dynamics.phase4_risk._utils import safe_renormalize
+from financial_dynamics._utils import safe_renormalize
 from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
 from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
 
@@ -20,7 +20,7 @@ class RiskConditioningEngine:
     3. Chop dominance suppression: breaks Calm-Chop loops
     """
 
-    def __init__(self, config: RiskConfig | None = None):
+    def __init__(self, config: RiskConfig | None = None) -> None:
         self.config = config or RiskConfig()
         self._overextension = OverextensionRebalancer(
             window=self.config.overextension_window,

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -10,7 +12,7 @@ from matplotlib.axes import Axes
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.visualization._utils import fit_pca_projection
 
-REGIME_COLORS = {
+REGIME_COLORS: dict[Regime, str] = {
     Regime.CALM_TREND: "#2ecc71",
     Regime.VOLATILE_TREND: "#f39c12",
     Regime.CHOP: "#9b59b6",
@@ -21,7 +23,7 @@ REGIME_COLORS = {
 class PhaseSpacePlotter:
     """2D PCA projection of feature history with centroid attractors."""
 
-    def __init__(self, centroids: np.ndarray):
+    def __init__(self, centroids: np.ndarray) -> None:
         self.centroids = centroids
 
     def plot(
@@ -40,7 +42,7 @@ class PhaseSpacePlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = cast(Figure, ax.figure)
 
         projected, centroid_proj, _ = fit_pca_projection(
             feature_history, self.centroids

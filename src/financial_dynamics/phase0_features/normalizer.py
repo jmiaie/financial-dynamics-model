@@ -19,7 +19,7 @@ class FeatureNormalizer:
 
     _VALID_METHODS = {"zscore", "minmax"}
 
-    def __init__(self, config: FeatureConfig):
+    def __init__(self, config: FeatureConfig) -> None:
         if config.normalization_method not in self._VALID_METHODS:
             raise ValueError(
                 f"Unsupported normalization_method '{config.normalization_method}'. "

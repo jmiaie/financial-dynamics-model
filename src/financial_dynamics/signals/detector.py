@@ -35,7 +35,7 @@ class SignalDetector:
         self,
         confidence_threshold: float = 0.4,
         riskoff_probability_warning: float = 0.3,
-    ):
+    ) -> None:
         self.confidence_threshold = confidence_threshold
         self.riskoff_probability_warning = riskoff_probability_warning
         self._prev_regime: Regime | None = None

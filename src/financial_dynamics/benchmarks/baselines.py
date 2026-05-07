@@ -28,7 +28,7 @@ class VolatilityBucketClassifier:
 
     name = "volatility_bucket"
 
-    def __init__(self, window: int = 20):
+    def __init__(self, window: int = 20) -> None:
         self.window = window
 
     def classify(self, df: pd.DataFrame) -> pd.Series:
@@ -57,7 +57,7 @@ class TrendVolGridClassifier:
 
     name = "trend_vol_grid"
 
-    def __init__(self, vol_window: int = 20, trend_window: int = 14):
+    def __init__(self, vol_window: int = 20, trend_window: int = 14) -> None:
         self.vol_window = vol_window
         self.trend_window = trend_window
 
@@ -90,7 +90,7 @@ class GaussianMixtureClassifier:
 
     name = "gaussian_mixture"
 
-    def __init__(self, vol_window: int = 20, random_state: int = 0):
+    def __init__(self, vol_window: int = 20, random_state: int = 0) -> None:
         self.vol_window = vol_window
         self.random_state = random_state
 

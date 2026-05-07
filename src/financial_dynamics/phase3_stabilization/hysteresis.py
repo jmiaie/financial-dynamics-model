@@ -9,7 +9,7 @@ class HysteresisFilter:
     """Prevents regime transitions unless the new regime's probability
     exceeds the current regime's probability by at least `threshold`."""
 
-    def __init__(self, threshold: float = 0.15):
+    def __init__(self, threshold: float = 0.15) -> None:
         self.threshold = threshold
 
     def apply(

@@ -15,7 +15,7 @@ class StabilizationEngine:
     Pipeline: posterior_probabilities -> hysteresis -> persistence -> majority_vote
     """
 
-    def __init__(self, config: StabilizationConfig | None = None):
+    def __init__(self, config: StabilizationConfig | None = None) -> None:
         self.config = config or StabilizationConfig()
         self._hysteresis = HysteresisFilter(self.config.hysteresis_threshold)
         self._persistence = PersistenceFilter(self.config.min_persistence_bars)

@@ -171,7 +171,7 @@ def _extract_config(config: PipelineConfig) -> dict[str, Any]:
     }
 
 
-def _restore_config(config: PipelineConfig, data: dict) -> None:
+def _restore_config(config: PipelineConfig, data: dict[str, Any]) -> None:
     """Apply saved config values onto an existing PipelineConfig."""
     section_map = {
         "features": config.features,

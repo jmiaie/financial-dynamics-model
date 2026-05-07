@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import warnings
 
 import numpy as np
@@ -14,13 +12,11 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 import matplotlib.gridspec as gridspec
 
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
-
-if TYPE_CHECKING:
-    from financial_dynamics.pipeline import FinancialDynamicsPipeline
 
 
 class SystemDashboard:
@@ -32,7 +28,7 @@ class SystemDashboard:
     5. Risk overlay indicators
     """
 
-    def __init__(self, pipeline: FinancialDynamicsPipeline):
+    def __init__(self, pipeline: FinancialDynamicsPipeline) -> None:
         self.pipeline = pipeline
         self._fig: Figure | None = None
 

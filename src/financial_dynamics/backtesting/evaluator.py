@@ -30,7 +30,7 @@ class BacktestResult:
 class BacktestEvaluator:
     """Runs the pipeline on historical data and evaluates against ground truth."""
 
-    def __init__(self, config: PipelineConfig | None = None):
+    def __init__(self, config: PipelineConfig | None = None) -> None:
         self.config = config or PipelineConfig()
 
     def evaluate(
