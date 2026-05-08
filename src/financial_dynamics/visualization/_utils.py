@@ -3,7 +3,36 @@
 from __future__ import annotations
 
 import numpy as np
+from matplotlib.axes import Axes
 from sklearn.decomposition import PCA
+
+from financial_dynamics.types import Regime
+
+# Canonical regime colour palette shared across all visualization modules.
+# Defined here (the neutral shared-utils layer) so that trajectory.py,
+# vector_field.py, and dashboard.py do not need to import phase_space.py
+# solely for this constant, which would create a needless coupling that
+# could become a real cycle if phase_space.py ever imports from its siblings.
+REGIME_COLORS: dict[Regime, str] = {
+    Regime.CALM_TREND:     "#2ecc71",
+    Regime.VOLATILE_TREND: "#f39c12",
+    Regime.CHOP:           "#9b59b6",
+    Regime.RISK_OFF:       "#e74c3c",
+}
+
+
+def finalize_phase_space_axes(ax: Axes, title: str) -> None:
+    """Apply standard PCA phase-space axis labels, legend, grid, and title.
+
+    All three phase-space plotters (PhaseSpacePlotter, TrajectoryPlotter,
+    VectorFieldPlotter) share the same PC1/PC2 axis labels, legend style,
+    and grid settings; only the title differs.
+    """
+    ax.set_xlabel("PC1")
+    ax.set_ylabel("PC2")
+    ax.set_title(title)
+    ax.legend(loc="best", fontsize=8)
+    ax.grid(True, alpha=0.3)
 
 
 def fit_pca_projection(

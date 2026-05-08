@@ -2,14 +2,19 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
-from financial_dynamics.visualization._utils import fit_pca_centroids_only
-from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import (
+    fit_pca_centroids_only,
+    finalize_phase_space_axes,
+    REGIME_COLORS,
+)
 
 
 class VectorFieldPlotter:
@@ -35,7 +40,7 @@ class VectorFieldPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = cast(Figure, ax.figure)
 
         centroid_proj = fit_pca_centroids_only(centroids)
 
@@ -76,10 +81,6 @@ class VectorFieldPlotter:
                         ha="center", va="center",
                     )
 
-        ax.set_xlabel("PC1")
-        ax.set_ylabel("PC2")
-        ax.set_title("Transition Vector Field")
-        ax.legend(loc="best", fontsize=8)
-        ax.grid(True, alpha=0.3)
+        finalize_phase_space_axes(ax, "Transition Vector Field")
 
         return fig

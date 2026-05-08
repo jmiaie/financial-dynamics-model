@@ -15,7 +15,7 @@ from matplotlib.patches import Patch
 import matplotlib.gridspec as gridspec
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
-from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import REGIME_COLORS
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
 

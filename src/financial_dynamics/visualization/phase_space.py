@@ -2,20 +2,19 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 
 from financial_dynamics.types import Regime, REGIME_NAMES
-from financial_dynamics.visualization._utils import fit_pca_projection
-
-REGIME_COLORS = {
-    Regime.CALM_TREND: "#2ecc71",
-    Regime.VOLATILE_TREND: "#f39c12",
-    Regime.CHOP: "#9b59b6",
-    Regime.RISK_OFF: "#e74c3c",
-}
+from financial_dynamics.visualization._utils import (
+    fit_pca_projection,
+    finalize_phase_space_axes,
+    REGIME_COLORS,
+)
 
 
 class PhaseSpacePlotter:
@@ -40,7 +39,7 @@ class PhaseSpacePlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = cast(Figure, ax.figure)
 
         projected, centroid_proj, _ = fit_pca_projection(
             feature_history, self.centroids
@@ -65,10 +64,6 @@ class PhaseSpacePlotter:
                 zorder=10,
             )
 
-        ax.set_xlabel("PC1")
-        ax.set_ylabel("PC2")
-        ax.set_title("Phase-Space Projection")
-        ax.legend(loc="best", fontsize=8)
-        ax.grid(True, alpha=0.3)
+        finalize_phase_space_axes(ax, "Phase-Space Projection")
 
         return fig

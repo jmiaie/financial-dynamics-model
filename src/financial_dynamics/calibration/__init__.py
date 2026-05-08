@@ -6,6 +6,7 @@ from financial_dynamics.calibration.centroid_fitter import (
 )
 from financial_dynamics.calibration.hyperparameter_tuner import (
     HyperparameterTuner,
+    SearchSpace,
     TuningResult,
 )
 from financial_dynamics.calibration.calibrator import Calibrator, CalibrationResult
@@ -14,6 +15,7 @@ __all__ = [
     "fit_centroids",
     "fit_centroids_from_pipeline",
     "HyperparameterTuner",
+    "SearchSpace",
     "TuningResult",
     "Calibrator",
     "CalibrationResult",

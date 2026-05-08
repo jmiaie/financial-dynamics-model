@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, REGIME_NAMES
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
@@ -17,8 +17,6 @@ from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.forecasting import (
     RegimeForecast,
     forecast_regimes,
-    compute_expected_duration,
-    compute_stationary_distribution,
 )
 
 
@@ -47,7 +45,46 @@ class BarRecord(TypedDict, total=False):
     post_prob_RISK_OFF: float
     stabilized_regime: str | None
     risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+    risk_overlays: dict[str, bool] | None
+
+
+def _add_feature_fields(record: "BarRecord", state: BarState) -> None:
+    """Populate feature columns from state.features into record."""
+    if state.features is not None:
+        f = state.features
+        record["feat_volatility"] = f.volatility
+        record["feat_trend"] = f.trend_strength
+        record["feat_drawdown"] = f.drawdown_pressure
+        record["feat_corr_stress"] = f.correlation_stress
+        record["feat_shock"] = f.shock_intensity
+
+
+def _add_probability_fields(record: "BarRecord", state: BarState) -> None:
+    """Populate raw and posterior probability columns into record."""
+    if state.raw_probabilities is not None:
+        rp = state.raw_probabilities
+        record["raw_prob_CALM_TREND"] = rp[Regime.CALM_TREND]
+        record["raw_prob_VOLATILE_TREND"] = rp[Regime.VOLATILE_TREND]
+        record["raw_prob_CHOP"] = rp[Regime.CHOP]
+        record["raw_prob_RISK_OFF"] = rp[Regime.RISK_OFF]
+
+    if state.posterior_probabilities is not None:
+        pp = state.posterior_probabilities
+        record["post_prob_CALM_TREND"] = pp[Regime.CALM_TREND]
+        record["post_prob_VOLATILE_TREND"] = pp[Regime.VOLATILE_TREND]
+        record["post_prob_CHOP"] = pp[Regime.CHOP]
+        record["post_prob_RISK_OFF"] = pp[Regime.RISK_OFF]
+
+
+def _add_regime_fields(record: "BarRecord", state: BarState) -> None:
+    """Populate stabilized regime, risk-adjusted regime, and overlay columns."""
+    record["stabilized_regime"] = (
+        state.stabilized_regime.name if state.stabilized_regime is not None else None
+    )
+    record["risk_adjusted_regime"] = (
+        state.risk_adjusted_regime.name if state.risk_adjusted_regime is not None else None
+    )
+    record["risk_overlays"] = state.risk_overlays if state.risk_overlays else None
 
 
 class FinancialDynamicsPipeline:
@@ -155,29 +192,7 @@ class FinancialDynamicsPipeline:
     def _state_to_record(state: BarState) -> BarRecord:
         """Convert a BarState to a flat dict for DataFrame construction."""
         record: BarRecord = {}
-
-        if state.features is not None:
-            f = state.features
-            record["feat_volatility"] = f.volatility
-            record["feat_trend"] = f.trend_strength
-            record["feat_drawdown"] = f.drawdown_pressure
-            record["feat_corr_stress"] = f.correlation_stress
-            record["feat_shock"] = f.shock_intensity
-
-        if state.raw_probabilities is not None:
-            for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
-
-        if state.posterior_probabilities is not None:
-            for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
-
-        record["stabilized_regime"] = (
-            state.stabilized_regime.name if state.stabilized_regime is not None else None
-        )
-        record["risk_adjusted_regime"] = (
-            state.risk_adjusted_regime.name if state.risk_adjusted_regime is not None else None
-        )
-        record["risk_overlays"] = state.risk_overlays if state.risk_overlays else None
-
+        _add_feature_fields(record, state)
+        _add_probability_fields(record, state)
+        _add_regime_fields(record, state)
         return record

@@ -9,6 +9,10 @@ from typing import Any
 import numpy as np
 
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.phase0_features.feature_engine import FeatureEngine
+from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
+from financial_dynamics.phase3_stabilization.stabilizer import StabilizationEngine
+from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.types import Regime
 
@@ -46,64 +50,86 @@ def load_state(path: str | Path) -> FinancialDynamicsPipeline:
 
 def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
     """Extract all mutable state from the pipeline into a serializable dict."""
-    fe = pipeline._feature_engine
-    te = pipeline._transition_engine
-    se = pipeline._stabilization_engine
-    re = pipeline._risk_engine
-
     return {
         "version": 1,
         "bar_count": pipeline._bar_count,
         "config": _extract_config(pipeline.config),
-        "feature_engine": {
-            "close_buffer": list(fe._close_buffer),
-            "normalizer_history": [arr.tolist() for arr in fe.normalizer._history],
+        "feature_engine": _extract_feature_engine_state(pipeline._feature_engine),
+        "transition_engine": _extract_transition_engine_state(pipeline._transition_engine),
+        "stabilization_engine": _extract_stabilization_engine_state(pipeline._stabilization_engine),
+        "risk_engine": _extract_risk_engine_state(pipeline._risk_engine),
+    }
+
+
+def _extract_feature_engine_state(fe: FeatureEngine) -> dict[str, Any]:
+    """Serialize feature engine buffers."""
+    return {
+        "close_buffer": list(fe._close_buffer),
+        "normalizer_history": [arr.tolist() for arr in fe.normalizer._history],
+    }
+
+
+def _extract_transition_engine_state(te: MarkovTransitionEngine) -> dict[str, Any]:
+    """Serialize transition engine counts and matrix."""
+    return {
+        "counts": te.counts.tolist(),
+        "transition_matrix": te._transition_matrix.tolist(),
+        "prev_regime": te._prev_regime.value if te._prev_regime is not None else None,
+    }
+
+
+def _extract_stabilization_engine_state(se: StabilizationEngine) -> dict[str, Any]:
+    """Serialize stabilization engine regime and sub-component buffers."""
+    return {
+        "current_regime": se._current_regime.value,
+        "persistence": {
+            "confirmed_regime": (
+                se._persistence._confirmed_regime.value
+                if se._persistence._confirmed_regime is not None else None
+            ),
+            "candidate": (
+                se._persistence._candidate.value
+                if se._persistence._candidate is not None else None
+            ),
+            "candidate_count": se._persistence._candidate_count,
         },
-        "transition_engine": {
-            "counts": te.counts.tolist(),
-            "transition_matrix": te._transition_matrix.tolist(),
-            "prev_regime": te._prev_regime.value if te._prev_regime is not None else None,
-        },
-        "stabilization_engine": {
-            "current_regime": se._current_regime.value,
-            "persistence": {
-                "confirmed_regime": (
-                    se._persistence._confirmed_regime.value
-                    if se._persistence._confirmed_regime is not None else None
-                ),
-                "candidate": (
-                    se._persistence._candidate.value
-                    if se._persistence._candidate is not None else None
-                ),
-                "candidate_count": se._persistence._candidate_count,
-            },
-            "majority_vote_buffer": [r.value for r in se._majority._buffer],
-        },
-        "risk_engine": {
-            "overextension_history": [r.value for r in re._overextension._history],
-            "chop_history": [r.value for r in re._chop_suppressor._history],
-        },
+        "majority_vote_buffer": [r.value for r in se._majority._buffer],
+    }
+
+
+def _extract_risk_engine_state(re: RiskConditioningEngine) -> dict[str, Any]:
+    """Serialize risk engine overlay histories."""
+    return {
+        "overextension_history": [r.value for r in re._overextension._history],
+        "chop_history": [r.value for r in re._chop_suppressor._history],
     }
 
 
 def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -> None:
     """Restore mutable state into an existing pipeline instance."""
     pipeline._bar_count = state["bar_count"]
+    _restore_feature_engine_state(pipeline._feature_engine, state["feature_engine"])
+    _restore_transition_engine_state(pipeline._transition_engine, state["transition_engine"])
+    _restore_stabilization_engine_state(pipeline._stabilization_engine, state["stabilization_engine"])
+    _restore_risk_engine_state(pipeline._risk_engine, state["risk_engine"])
 
-    fe = pipeline._feature_engine
-    fe_state = state["feature_engine"]
+
+def _restore_feature_engine_state(fe: FeatureEngine, fe_state: dict[str, Any]) -> None:
+    """Restore feature engine buffers."""
     fe._close_buffer.clear()
     fe._close_buffer.extend(fe_state["close_buffer"])
     fe.normalizer._history = [np.array(arr) for arr in fe_state["normalizer_history"]]
 
-    te = pipeline._transition_engine
-    te_state = state["transition_engine"]
+
+def _restore_transition_engine_state(te: MarkovTransitionEngine, te_state: dict[str, Any]) -> None:
+    """Restore transition engine counts and matrix."""
     te.counts = np.array(te_state["counts"])
     te._transition_matrix = np.array(te_state["transition_matrix"])
     te._prev_regime = Regime(te_state["prev_regime"]) if te_state["prev_regime"] is not None else None
 
-    se = pipeline._stabilization_engine
-    se_state = state["stabilization_engine"]
+
+def _restore_stabilization_engine_state(se: StabilizationEngine, se_state: dict[str, Any]) -> None:
+    """Restore stabilization engine regime and sub-component buffers."""
     se._current_regime = Regime(se_state["current_regime"])
 
     p_state = se_state["persistence"]
@@ -118,14 +144,15 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     se._majority._buffer.clear()
     se._majority._buffer.extend(Regime(r) for r in se_state["majority_vote_buffer"])
 
-    re = pipeline._risk_engine
-    re_state = state["risk_engine"]
+
+def _restore_risk_engine_state(re: RiskConditioningEngine, re_state: dict[str, Any]) -> None:
+    """Restore risk engine overlay histories."""
     re._overextension._history = [Regime(r) for r in re_state["overextension_history"]]
     re._chop_suppressor._history.clear()
     re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
 
 
-def _extract_config(config: PipelineConfig) -> dict:
+def _extract_config(config: PipelineConfig) -> dict[str, Any]:
     """Serialize config to a plain dict."""
     return {
         "features": {
@@ -164,7 +191,7 @@ def _extract_config(config: PipelineConfig) -> dict:
     }
 
 
-def _restore_config(config: PipelineConfig, data: dict) -> None:
+def _restore_config(config: PipelineConfig, data: dict[str, Any]) -> None:
     """Apply saved config values onto an existing PipelineConfig."""
     section_map = {
         "features": config.features,
