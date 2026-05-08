@@ -1,5 +1,7 @@
 """Financial Dynamics Model - System Dynamics applied to financial time series."""
 
+__version__ = "1.0.0"
+
 from financial_dynamics.types import (
     Regime,
     REGIME_NAMES,
