@@ -7,10 +7,9 @@ __pycache__/
 dist/
 build/
 .eggs/
-*.csv
-*.png
-!assets/micap_logo.*
+.git/
 .env
-config/calibrated.yaml
-.venv/
-venv/
+tests/
+scripts/
+*.md
+!README.md
