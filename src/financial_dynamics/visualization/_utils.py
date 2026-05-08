@@ -23,3 +23,19 @@ def fit_pca_projection(
     pca = PCA(n_components=2)
     pca.fit(combined)
     return pca.transform(feature_history), pca.transform(centroids), pca
+
+
+def fit_pca_centroids_only(centroids: np.ndarray) -> np.ndarray:
+    """Fit PCA on the centroid matrix alone and return the 2D projections.
+
+    Used by plotters that display centroid positions without a feature
+    history (e.g. the transition vector field).
+
+    Args:
+        centroids: shape (4, 5) centroid matrix.
+
+    Returns:
+        shape (4, 2) projected centroid positions.
+    """
+    pca = PCA(n_components=2)
+    return pca.fit_transform(centroids)

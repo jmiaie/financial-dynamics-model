@@ -94,7 +94,12 @@ def fetch_multi_asset(
                 ref_df.columns = [c.lower() for c in ref_df.columns]
                 col_name = f"ref_{ref_sym.replace('^', '')}_close"
                 df[col_name] = ref_df["close"].reindex(df.index)
-        except (KeyError, ValueError, AttributeError):
+        except (KeyError, ValueError) as exc:
+            import warnings
+            warnings.warn(
+                f"Could not load reference symbol '{ref_sym}': {exc}",
+                stacklevel=2,
+            )
             continue
 
     return df

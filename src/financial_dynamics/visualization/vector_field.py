@@ -6,9 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
-from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.visualization._utils import fit_pca_centroids_only
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 
 
@@ -37,8 +37,7 @@ class VectorFieldPlotter:
         else:
             fig = ax.figure
 
-        pca = PCA(n_components=2)
-        centroid_proj = pca.fit_transform(centroids)
+        centroid_proj = fit_pca_centroids_only(centroids)
 
         for i, regime in enumerate(Regime):
             ax.scatter(
