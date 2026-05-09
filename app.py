@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
-from datetime import datetime, timedelta
 import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -23,9 +22,7 @@ from financial_dynamics.config import PipelineConfig
 from financial_dynamics.data_loader import fetch_ohlcv
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.signals.detector import SignalDetector, SignalType
-from financial_dynamics.visualization.phase_space import REGIME_COLORS
 
-# Color scheme: slate and teal
 COLOR_SCHEME = {
     "primary": "#1e3a5f",      # Dark slate blue
     "secondary": "#0d7377",     # Teal
@@ -133,7 +130,7 @@ def load_data(symbol: str, period: str, interval: str):
     try:
         df = fetch_ohlcv(symbol, period=period, interval=interval)
         return df, None
-    except Exception as e:
+    except (ImportError, ValueError, OSError, ConnectionError) as e:
         return None, str(e)
 
 
@@ -142,26 +139,6 @@ def get_pipeline():
     """Get or create pipeline instance."""
     config = PipelineConfig.from_yaml("config/default.yaml")
     return FinancialDynamicsPipeline(config)
-
-
-def render_regime_badge(regime: Regime, confidence: float):
-    """Render a colored badge for a regime."""
-    color = REGIME_COLORS_PLOTLY.get(regime, COLOR_SCHEME["secondary"])
-    name = REGIME_NAMES.get(regime, "Unknown")
-    html = f"""
-    <div style="
-        background: {color};
-        color: white;
-        padding: 0.75em 1.5em;
-        border-radius: 8px;
-        display: inline-block;
-        margin: 0.5em;
-        font-weight: bold;
-    ">
-        {name} — {confidence:.1%} confidence
-    </div>
-    """
-    return html
 
 
 def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
@@ -177,12 +154,10 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
         hovertemplate="<b>%{x|%Y-%m-%d}</b><br>Price: $%{y:.2f}<extra></extra>",
     ))
 
-    # Add regime background bands
     regime_col = results["risk_adjusted_regime"]
     valid = regime_col.dropna()
 
     if len(valid) > 0:
-        y_min, y_max = df["close"].min() * 0.95, df["close"].max() * 1.05
         for i in range(len(valid) - 1):
             try:
                 regime = Regime[valid.iloc[i]]
@@ -341,7 +316,6 @@ def main():
     """Main Streamlit app."""
     setup_page()
 
-    # Header
     st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
     st.markdown(
         '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
@@ -349,7 +323,6 @@ def main():
     )
     st.divider()
 
-    # Sidebar configuration
     with st.sidebar:
         st.header("⚙️ Configuration")
 
@@ -391,7 +364,6 @@ def main():
             "**Authors:** Jeff Milam & Micap AI LLC"
         )
 
-    # Main content
     if "run_pipeline" not in st.session_state:
         st.session_state.run_pipeline = True
 
@@ -401,7 +373,7 @@ def main():
 
             if error:
                 st.warning(
-                    f"⚠️ Live data unavailable for **{symbol}** (Yahoo Finance rate limit on shared cloud IPs). "
+                    f"⚠️ Live data unavailable for **{symbol}**: {error}. "
                     "Showing synthetic demo data instead.",
                     icon="📊",
                 )
@@ -410,7 +382,6 @@ def main():
             pipeline = get_pipeline()
             results = pipeline.run(df)
 
-        # Metrics row
         st.divider()
         col1, col2, col3, col4 = st.columns(4)
 
@@ -463,7 +434,6 @@ def main():
 
         st.divider()
 
-        # Charts
         st.subheader("📈 Price & Regime Analysis")
         fig_price = plot_price_with_regimes(df, results)
         st.plotly_chart(fig_price, use_container_width=True)
@@ -486,7 +456,6 @@ def main():
         if fig_features:
             st.plotly_chart(fig_features, use_container_width=True)
 
-        # Forecast section
         st.divider()
         st.subheader("🔮 Regime Forecast")
 
@@ -530,7 +499,6 @@ def main():
                 )
                 st.plotly_chart(fig_forecast, use_container_width=True)
 
-        # Signal detection
         st.divider()
         st.subheader("🔔 Signals & Alerts")
 
@@ -555,7 +523,6 @@ def main():
             signals.extend(detector.check(bar_state))
 
         if signals:
-            # Show recent signals
             recent_signals = signals[-10:]
             for signal in reversed(recent_signals):
                 icon = {
@@ -572,7 +539,6 @@ def main():
         else:
             st.info("No signals detected yet. Data is still warming up or regime is stable.")
 
-        # Data inspector
         with st.expander("📋 Data Inspector"):
             st.write("**Recent Pipeline Output**")
             display_cols = [
