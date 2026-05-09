@@ -10,8 +10,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import numpy as np
 
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import REGIME_NAMES, Regime
+from scripts._common import load_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -63,17 +63,7 @@ def main() -> None:
     print("  Financial Dynamics Model -- System Dynamics Pipeline")
     print("=" * 70)
 
-    if args.config:
-        config_path = Path(args.config)
-    else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-
-    if config_path.exists():
-        config = PipelineConfig.from_yaml(config_path)
-        print(f"\nLoaded config from {config_path}")
-    else:
-        config = PipelineConfig()
-        print("\nUsing default config")
+    config = load_config(args.config)
 
     if args.symbol:
         ref_syms = args.reference_symbols or []
