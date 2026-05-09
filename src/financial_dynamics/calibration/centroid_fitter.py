@@ -7,16 +7,7 @@ import pandas as pd
 
 from financial_dynamics.config import PipelineConfig
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.types import Regime
-
-
-FEATURE_COLUMNS = [
-    "feat_volatility",
-    "feat_trend",
-    "feat_drawdown",
-    "feat_corr_stress",
-    "feat_shock",
-]
+from financial_dynamics.types import FEATURE_COLUMNS, Regime
 
 
 def fit_centroids(
