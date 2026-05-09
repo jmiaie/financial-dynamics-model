@@ -10,8 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import pandas as pd
 
 from financial_dynamics.backtesting import BacktestEvaluator
-from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import REGIME_NAMES, Regime
+from scripts._common import load_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -63,17 +62,7 @@ def main() -> None:
     print("  Financial Dynamics Model -- Backtest Evaluation")
     print("=" * 70)
 
-    if args.config:
-        config = PipelineConfig.from_yaml(args.config)
-        print(f"\nLoaded config from {args.config}")
-    else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-        if config_path.exists():
-            config = PipelineConfig.from_yaml(config_path)
-            print(f"\nLoaded config from {config_path}")
-        else:
-            config = PipelineConfig()
-            print("\nUsing default config")
+    config = load_config(args.config)
 
     if args.data and args.labels:
         print(f"\nLoading data from {args.data}")

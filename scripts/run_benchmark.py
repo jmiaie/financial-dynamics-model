@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from financial_dynamics.benchmarks import BenchmarkRunner
-from financial_dynamics.config import PipelineConfig
+from scripts._common import load_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -31,17 +31,7 @@ def main() -> None:
     print("  Financial Dynamics Model -- Benchmark vs. Baselines")
     print("=" * 70)
 
-    if args.config:
-        config = PipelineConfig.from_yaml(args.config)
-        print(f"\nLoaded config from {args.config}")
-    else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-        if config_path.exists():
-            config = PipelineConfig.from_yaml(config_path)
-            print(f"\nLoaded config from {config_path}")
-        else:
-            config = PipelineConfig()
-            print("\nUsing default config")
+    config = load_config(args.config)
 
     from scripts.generate_synthetic_data import generate_synthetic_ohlcv
 
