@@ -63,7 +63,6 @@ def main() -> None:
     print("  Financial Dynamics Model -- System Dynamics Pipeline")
     print("=" * 70)
 
-    # Load config
     if args.config:
         config_path = Path(args.config)
     else:
@@ -76,7 +75,6 @@ def main() -> None:
         config = PipelineConfig()
         print("\nUsing default config")
 
-    # Load data
     if args.symbol:
         ref_syms = args.reference_symbols or []
         if ref_syms:
@@ -109,12 +107,10 @@ def main() -> None:
         print(f"  Price range: {df['close'].min():.2f} - {df['close'].max():.2f}")
         print(f"  True regime distribution:\n{true_labels.value_counts().to_string()}")
 
-    # Run pipeline
     print("\nRunning pipeline...")
     pipeline = FinancialDynamicsPipeline(config)
     results = pipeline.run(df)
 
-    # Report
     report = pipeline.get_state_report()
     valid = results.dropna(subset=["risk_adjusted_regime"])
     print(f"\n  Warmup bars: {report['warmup_bars']}")
@@ -132,7 +128,6 @@ def main() -> None:
             row = " ".join(f"{tm[i, j]:14.3f}" for j in range(4))
             print(f"  {REGIME_NAMES[regime]:<14} {row}")
 
-    # Generate visualization
     print("\nGenerating dashboard...")
     try:
         from financial_dynamics.visualization.dashboard import SystemDashboard
