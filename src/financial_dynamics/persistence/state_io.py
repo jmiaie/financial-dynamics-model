@@ -125,7 +125,7 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
 
 
-def _extract_config(config: PipelineConfig) -> dict:
+def _extract_config(config: PipelineConfig) -> dict[str, Any]:
     """Serialize config to a plain dict."""
     return {
         "features": {
@@ -164,7 +164,7 @@ def _extract_config(config: PipelineConfig) -> dict:
     }
 
 
-def _restore_config(config: PipelineConfig, data: dict) -> None:
+def _restore_config(config: PipelineConfig, data: dict[str, Any]) -> None:
     """Apply saved config values onto an existing PipelineConfig."""
     section_map = {
         "features": config.features,

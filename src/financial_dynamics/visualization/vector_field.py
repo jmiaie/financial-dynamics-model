@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -35,7 +37,7 @@ class VectorFieldPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = cast(Figure, ax.figure)
 
         pca = PCA(n_components=2)
         centroid_proj = pca.fit_transform(centroids)
