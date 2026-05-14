@@ -20,7 +20,7 @@ class RiskConditioningEngine:
     3. Chop dominance suppression: breaks Calm-Chop loops
     """
 
-    def __init__(self, config: RiskConfig | None = None):
+    def __init__(self, config: RiskConfig | None = None) -> None:
         self.config = config or RiskConfig()
         self._overextension = OverextensionRebalancer(
             window=self.config.overextension_window,

@@ -92,22 +92,40 @@ class PipelineConfig:
         data = raw or {}
 
         config = cls()
-        section_map = {
-            "features": (config.features, FeatureConfig),
-            "regimes": (config.regimes, RegimeConfig),
-            "transitions": (config.transitions, TransitionConfig),
-            "stabilization": (config.stabilization, StabilizationConfig),
-            "risk": (config.risk, RiskConfig),
-        }
-        for section_name, (section_obj, _) in section_map.items():
-            if section_name in data:
-                for key, value in data[section_name].items():
-                    if hasattr(section_obj, key):
-                        setattr(section_obj, key, value)
-                    else:
-                        warnings.warn(
-                            f"Unknown config key '{key}' in section "
-                            f"'{section_name}'; ignoring.",
-                            stacklevel=2,
-                        )
+        config.apply_dict(data, warn_unknown=True)
         return config
+
+    def apply_dict(
+        self,
+        data: dict,
+        *,
+        warn_unknown: bool = False,
+    ) -> None:
+        """Apply a nested section dict onto this config in-place.
+
+        Keys unknown to a section are silently skipped unless
+        ``warn_unknown=True``, in which case a :class:`UserWarning` is issued.
+
+        Args:
+            data: Mapping of section name -> {key: value} pairs.
+            warn_unknown: Emit a warning for unrecognised keys when True.
+        """
+        section_map = {
+            "features": self.features,
+            "regimes": self.regimes,
+            "transitions": self.transitions,
+            "stabilization": self.stabilization,
+            "risk": self.risk,
+        }
+        for section_name, section_obj in section_map.items():
+            if section_name not in data:
+                continue
+            for key, value in data[section_name].items():
+                if hasattr(section_obj, key):
+                    setattr(section_obj, key, value)
+                elif warn_unknown:
+                    warnings.warn(
+                        f"Unknown config key '{key}' in section "
+                        f"'{section_name}'; ignoring.",
+                        stacklevel=3,
+                    )

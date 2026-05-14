@@ -14,7 +14,7 @@ class ChopDominanceSuppressor:
     """Detects prolonged Calm-Chop oscillation patterns and penalizes
     Chop probability to break the loop and force structural movement."""
 
-    def __init__(self, window: int = 30, penalty: float = 0.1):
+    def __init__(self, window: int = 30, penalty: float = 0.1) -> None:
         self.window = window
         self.penalty = penalty
         self._history: deque[Regime] = deque(maxlen=window)

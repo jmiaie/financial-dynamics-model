@@ -32,7 +32,7 @@ class SystemDashboard:
     5. Risk overlay indicators
     """
 
-    def __init__(self, pipeline: FinancialDynamicsPipeline):
+    def __init__(self, pipeline: FinancialDynamicsPipeline) -> None:
         self.pipeline = pipeline
         self._fig: Figure | None = None
 

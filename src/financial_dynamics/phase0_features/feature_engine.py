@@ -28,7 +28,7 @@ class FeatureEngine:
     uses cross-asset correlation stress instead of single-asset kurtosis.
     """
 
-    def __init__(self, config: FeatureConfig | None = None):
+    def __init__(self, config: FeatureConfig | None = None) -> None:
         self.config = config or FeatureConfig()
         self.normalizer = FeatureNormalizer(self.config)
         self._close_buffer: deque[float] = deque(
@@ -110,10 +110,29 @@ class FeatureEngine:
 
         return pd.concat([raw, normalized], axis=1)
 
+    def _update_buffers(self, ohlcv: dict[str, float]) -> None:
+        """Append the latest close and any reference closes to their buffers."""
+        self._close_buffer.append(ohlcv["close"])
+        for key, value in ohlcv.items():
+            if key.startswith("ref_") and key.endswith("_close"):
+                if key not in self._ref_buffers:
+                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
+                self._ref_buffers[key].append(value)
+
+    def _build_ref_returns(self) -> dict[str, pd.Series] | None:
+        """Convert reference close buffers to return series, dropping short ones."""
+        if not self._ref_buffers:
+            return None
+        ref_returns = {
+            key: pd.Series(list(buf)).pct_change().dropna()
+            for key, buf in self._ref_buffers.items()
+            if len(buf) >= self.warmup_bars
+        }
+        return ref_returns or None
+
     def update(self, bar_state: BarState) -> BarState:
         """Incremental update for a single bar.
 
-        Reads bar_state.ohlcv, computes features, writes bar_state.features.
         Returns None for features if not enough warmup data.
         """
         if "close" not in bar_state.ohlcv:
@@ -121,14 +140,8 @@ class FeatureEngine:
                 f"Bar is missing required key 'close'. "
                 f"Got keys: {sorted(bar_state.ohlcv.keys())}"
             )
-        close = bar_state.ohlcv["close"]
-        self._close_buffer.append(close)
 
-        for key, value in bar_state.ohlcv.items():
-            if key.startswith("ref_") and key.endswith("_close"):
-                if key not in self._ref_buffers:
-                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
-                self._ref_buffers[key].append(value)
+        self._update_buffers(bar_state.ohlcv)
 
         if len(self._close_buffer) < self.warmup_bars:
             bar_state.features = None
@@ -136,16 +149,7 @@ class FeatureEngine:
 
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
-
-        ref_returns = None
-        if self._ref_buffers:
-            ref_returns = {}
-            for ref_key, buf in self._ref_buffers.items():
-                if len(buf) >= self.warmup_bars:
-                    ref_series = pd.Series(list(buf))
-                    ref_returns[ref_key] = ref_series.pct_change().dropna()
-            if not ref_returns:
-                ref_returns = None
+        ref_returns = self._build_ref_returns()
 
         corr_stress_val = float(self._compute_corr_stress(returns, ref_returns).iloc[-1])
 

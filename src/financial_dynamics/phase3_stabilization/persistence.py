@@ -9,7 +9,7 @@ class PersistenceFilter:
     """Requires a new regime candidate to persist for min_bars consecutive
     bars before the regime change is confirmed."""
 
-    def __init__(self, min_bars: int = 5):
+    def __init__(self, min_bars: int = 5) -> None:
         self.min_bars = min_bars
         self._confirmed_regime: Regime | None = None
         self._candidate: Regime | None = None

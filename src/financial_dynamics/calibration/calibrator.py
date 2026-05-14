@@ -29,7 +29,7 @@ class CalibrationResult:
 class Calibrator:
     """End-to-end calibration: fit centroids, then tune hyperparameters."""
 
-    def __init__(self, base_config: PipelineConfig | None = None):
+    def __init__(self, base_config: PipelineConfig | None = None) -> None:
         self.base_config = base_config or PipelineConfig()
 
     def calibrate(

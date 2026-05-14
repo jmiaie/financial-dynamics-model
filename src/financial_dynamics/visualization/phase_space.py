@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 
 from financial_dynamics.types import Regime, REGIME_NAMES
-from financial_dynamics.visualization._utils import fit_pca_projection
+from financial_dynamics.visualization._utils import ensure_ax, fit_pca_projection, plot_regime_centroids
 
 REGIME_COLORS = {
     Regime.CALM_TREND: "#2ecc71",
@@ -21,7 +20,7 @@ REGIME_COLORS = {
 class PhaseSpacePlotter:
     """2D PCA projection of feature history with centroid attractors."""
 
-    def __init__(self, centroids: np.ndarray):
+    def __init__(self, centroids: np.ndarray) -> None:
         self.centroids = centroids
 
     def plot(
@@ -37,10 +36,7 @@ class PhaseSpacePlotter:
             regimes: list of N regime assignments for coloring.
             ax: optional axes to draw on.
         """
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-        else:
-            fig = ax.figure
+        fig, ax = ensure_ax(ax)
 
         projected, centroid_proj, _ = fit_pca_projection(
             feature_history, self.centroids
@@ -57,13 +53,7 @@ class PhaseSpacePlotter:
                     label=REGIME_NAMES[regime],
                 )
 
-        for i, regime in enumerate(Regime):
-            ax.scatter(
-                centroid_proj[i, 0], centroid_proj[i, 1],
-                c=REGIME_COLORS[regime],
-                marker="*", s=300, edgecolors="black", linewidths=1.0,
-                zorder=10,
-            )
+        plot_regime_centroids(centroid_proj, ax)
 
         ax.set_xlabel("PC1")
         ax.set_ylabel("PC2")

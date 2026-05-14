@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
 
 from financial_dynamics.types import BarState, Regime, RegimeProbabilities
@@ -35,7 +35,7 @@ class SignalDetector:
         self,
         confidence_threshold: float = 0.4,
         riskoff_probability_warning: float = 0.3,
-    ):
+    ) -> None:
         self.confidence_threshold = confidence_threshold
         self.riskoff_probability_warning = riskoff_probability_warning
         self._prev_regime: Regime | None = None
@@ -70,7 +70,6 @@ class SignalDetector:
         return signals
 
     def _check_regime_change(self, regime: Regime, confidence: float) -> list[Signal]:
-        """Detect regime change from previous bar."""
         if self._prev_regime is not None and regime != self._prev_regime:
             return [Signal(
                 signal_type=SignalType.REGIME_CHANGE,
@@ -83,7 +82,6 @@ class SignalDetector:
         return []
 
     def _check_riskoff_warning(self, regime: Regime, probs: RegimeProbabilities | None) -> list[Signal]:
-        """Detect elevated Risk-Off probability."""
         if probs is None:
             return []
         riskoff_prob = probs[Regime.RISK_OFF]
@@ -102,7 +100,6 @@ class SignalDetector:
         return []
 
     def _check_confidence_drop(self, regime: Regime, confidence: float) -> list[Signal]:
-        """Detect confidence drop below threshold."""
         if self._prev_confidence > self.confidence_threshold and confidence < self.confidence_threshold:
             return [Signal(
                 signal_type=SignalType.CONFIDENCE_DROP,
@@ -118,7 +115,6 @@ class SignalDetector:
         return []
 
     def _check_stabilization(self, regime: Regime, confidence: float) -> list[Signal]:
-        """Detect regime stabilization (3 consecutive bars)."""
         if self._pending_regime != regime:
             self._pending_regime = regime
             self._pending_count = 1

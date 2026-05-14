@@ -34,7 +34,7 @@ class BenchmarkRunner:
         self,
         pipeline_config: PipelineConfig | None = None,
         baselines: list[BaselineClassifier] | None = None,
-    ):
+    ) -> None:
         self.pipeline_config = pipeline_config or PipelineConfig()
         self.baselines = baselines if baselines is not None else self._default_baselines()
 

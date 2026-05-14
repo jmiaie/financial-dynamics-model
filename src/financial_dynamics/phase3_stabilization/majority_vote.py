@@ -14,12 +14,11 @@ class MajorityVoteFilter:
     Ties are broken in favor of the most recent assignment.
     """
 
-    def __init__(self, window: int = 10):
+    def __init__(self, window: int = 10) -> None:
         self.window = window
         self._buffer: deque[Regime] = deque(maxlen=window)
 
     def apply(self, regime: Regime) -> Regime:
-        """Add regime to the rolling buffer and return the majority."""
         self._buffer.append(regime)
         counts = Counter(self._buffer)
         max_count = max(counts.values())

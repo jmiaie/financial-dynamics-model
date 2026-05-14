@@ -7,8 +7,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import numpy as np
-
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import REGIME_NAMES, Regime

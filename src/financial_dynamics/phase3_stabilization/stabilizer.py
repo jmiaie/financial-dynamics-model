@@ -15,7 +15,7 @@ class StabilizationEngine:
     Pipeline: posterior_probabilities -> hysteresis -> persistence -> majority_vote
     """
 
-    def __init__(self, config: StabilizationConfig | None = None):
+    def __init__(self, config: StabilizationConfig | None = None) -> None:
         self.config = config or StabilizationConfig()
         self._hysteresis = HysteresisFilter(self.config.hysteresis_threshold)
         self._persistence = PersistenceFilter(self.config.min_persistence_bars)
@@ -23,11 +23,7 @@ class StabilizationEngine:
         self._current_regime: Regime = Regime.CALM_TREND
 
     def update(self, bar_state: BarState) -> BarState:
-        """Apply stabilization filters to posterior probabilities.
-
-        Reads bar_state.posterior_probabilities (or raw_probabilities as fallback).
-        Writes bar_state.stabilized_regime.
-        """
+        """Apply stabilization filters to posterior probabilities."""
         probs = bar_state.posterior_probabilities or bar_state.raw_probabilities
         if probs is None:
             return bar_state

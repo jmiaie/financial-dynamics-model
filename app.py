@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
-from datetime import datetime, timedelta
 import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -23,8 +22,6 @@ from financial_dynamics.config import PipelineConfig
 from financial_dynamics.data_loader import fetch_ohlcv
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.signals.detector import SignalDetector, SignalType
-from financial_dynamics.visualization.phase_space import REGIME_COLORS
-
 # Color scheme: slate and teal
 COLOR_SCHEME = {
     "primary": "#1e3a5f",      # Dark slate blue
@@ -196,7 +193,6 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
                     line_width=0,
                 )
             except KeyError:
-                import warnings
                 warnings.warn(
                     f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
                     stacklevel=2,

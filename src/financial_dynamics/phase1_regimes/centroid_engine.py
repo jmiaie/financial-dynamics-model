@@ -16,7 +16,7 @@ from financial_dynamics.phase1_regimes.regime_definitions import get_centroids
 class CentroidEngine:
     """Phase 1: Maps feature vectors to regime probabilities."""
 
-    def __init__(self, config: RegimeConfig | None = None):
+    def __init__(self, config: RegimeConfig | None = None) -> None:
         self.config = config or RegimeConfig()
         self.centroids = get_centroids(self.config)
         self.temperature = self.config.temperature
@@ -39,7 +39,6 @@ class CentroidEngine:
         return RegimeProbabilities(probs=probs)
 
     def update(self, bar_state: BarState) -> BarState:
-        """Pipeline interface: reads features, writes raw_probabilities."""
         if bar_state.features is None:
             return bar_state
 

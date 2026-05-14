@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import Regime, NUM_REGIMES
 
 
 def regime_accuracy(
@@ -49,6 +49,25 @@ def regime_confusion_matrix(
     return pd.DataFrame(matrix, index=regime_names, columns=regime_names)
 
 
+def _per_regime_metrics(matrix: np.ndarray, i: int, regime: Regime) -> dict:
+    """Compute precision, recall, F1, and support for a single regime row."""
+    tp = matrix[i, i]
+    fp = matrix[:, i].sum() - tp
+    fn = matrix[i, :].sum() - tp
+    support = matrix[i, :].sum()
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    f1 = (2 * precision * recall / (precision + recall)
+          if (precision + recall) > 0 else 0.0)
+    return {
+        "regime": regime.name,
+        "precision": precision,
+        "recall": recall,
+        "f1": f1,
+        "support": int(support),
+    }
+
+
 def regime_classification_report(
     true_labels: pd.Series,
     predicted_labels: pd.Series,
@@ -65,28 +84,13 @@ def regime_classification_report(
     weighted_p, weighted_r, weighted_f1 = 0.0, 0.0, 0.0
 
     for i, regime in enumerate(Regime):
-        tp = matrix[i, i]
-        fp = matrix[:, i].sum() - tp
-        fn = matrix[i, :].sum() - tp
-        support = matrix[i, :].sum()
+        row = _per_regime_metrics(matrix, i, regime)
+        rows.append(row)
 
-        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
-        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-        f1 = (2 * precision * recall / (precision + recall)
-              if (precision + recall) > 0 else 0.0)
-
-        rows.append({
-            "regime": regime.name,
-            "precision": precision,
-            "recall": recall,
-            "f1": f1,
-            "support": int(support),
-        })
-
-        weight = support / total_support if total_support > 0 else 0.0
-        weighted_p += precision * weight
-        weighted_r += recall * weight
-        weighted_f1 += f1 * weight
+        weight = row["support"] / total_support if total_support > 0 else 0.0
+        weighted_p += row["precision"] * weight
+        weighted_r += row["recall"] * weight
+        weighted_f1 += row["f1"] * weight
 
     rows.append({
         "regime": "weighted_avg",

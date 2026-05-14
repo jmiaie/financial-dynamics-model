@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import IntEnum
+from typing import TypedDict
 
 import numpy as np
 
@@ -107,3 +108,31 @@ class BarState:
     # Phase 4 output
     risk_adjusted_regime: Regime | None = None
     risk_overlays: dict[str, bool] = field(default_factory=dict)
+
+
+class StateReport(TypedDict):
+    """System state summary returned by FinancialDynamicsPipeline.get_state_report()."""
+    bar_count: int
+    warmup_bars: int
+    is_warmed_up: bool
+    transition_matrix: np.ndarray
+
+
+class BarRecord(TypedDict, total=False):
+    """Flat record for DataFrame construction from BarState."""
+    feat_volatility: float
+    feat_trend: float
+    feat_drawdown: float
+    feat_corr_stress: float
+    feat_shock: float
+    raw_prob_CALM_TREND: float
+    raw_prob_VOLATILE_TREND: float
+    raw_prob_CHOP: float
+    raw_prob_RISK_OFF: float
+    post_prob_CALM_TREND: float
+    post_prob_VOLATILE_TREND: float
+    post_prob_CHOP: float
+    post_prob_RISK_OFF: float
+    stabilized_regime: str | None
+    risk_adjusted_regime: str | None
+    risk_overlays: dict[str, bool] | None

@@ -14,7 +14,7 @@ class OverextensionRebalancer:
     """Detects when a regime has persisted beyond its expected duration
     and applies a suppression factor to its probability."""
 
-    def __init__(self, window: int = 50, decay: float = 0.02):
+    def __init__(self, window: int = 50, decay: float = 0.02) -> None:
         self.window = window
         self.decay = decay
         self._history: list[Regime] = []
@@ -46,7 +46,6 @@ class OverextensionRebalancer:
         return safe_renormalize(adjusted)
 
     def record(self, regime: Regime) -> None:
-        """Record a regime observation."""
         self._history.append(regime)
         if len(self._history) > self.window * 2:
             self._history = self._history[-self.window * 2:]

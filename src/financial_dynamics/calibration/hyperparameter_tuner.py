@@ -36,7 +36,7 @@ class HyperparameterTuner:
     Uses BacktestEvaluator's accuracy on labeled data as the objective.
     """
 
-    def __init__(self, base_config: PipelineConfig | None = None):
+    def __init__(self, base_config: PipelineConfig | None = None) -> None:
         self.base_config = base_config or PipelineConfig()
 
     def tune(

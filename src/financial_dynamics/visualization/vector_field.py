@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import ensure_ax
 
 
 class VectorFieldPlotter:
@@ -32,10 +32,7 @@ class VectorFieldPlotter:
             transition_matrix: shape (4, 4) row-stochastic matrix.
             ax: optional axes.
         """
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-        else:
-            fig = ax.figure
+        fig, ax = ensure_ax(ax)
 
         pca = PCA(n_components=2)
         centroid_proj = pca.fit_transform(centroids)
@@ -48,6 +45,27 @@ class VectorFieldPlotter:
                 zorder=10, label=REGIME_NAMES[regime],
             )
 
+        self._draw_transition_arrows(centroid_proj, transition_matrix, ax)
+
+        ax.set_xlabel("PC1")
+        ax.set_ylabel("PC2")
+        ax.set_title("Transition Vector Field")
+        ax.legend(loc="best", fontsize=8)
+        ax.grid(True, alpha=0.3)
+
+        return fig
+
+    def _draw_transition_arrows(
+        self,
+        centroid_proj: np.ndarray,
+        transition_matrix: np.ndarray,
+        ax: Axes,
+    ) -> None:
+        """Draw weighted arrows between centroid projections for each transition.
+
+        Skips self-transitions and transitions with probability below 0.05.
+        Annotates transitions above 0.15 with their probability label.
+        """
         for i in range(NUM_REGIMES):
             for j in range(NUM_REGIMES):
                 if i == j:
@@ -76,11 +94,3 @@ class VectorFieldPlotter:
                         fontsize=6, alpha=0.7,
                         ha="center", va="center",
                     )
-
-        ax.set_xlabel("PC1")
-        ax.set_ylabel("PC2")
-        ax.set_title("Transition Vector Field")
-        ax.legend(loc="best", fontsize=8)
-        ax.grid(True, alpha=0.3)
-
-        return fig

@@ -11,7 +11,6 @@ import pandas as pd
 
 from financial_dynamics.backtesting import BacktestEvaluator
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import REGIME_NAMES, Regime
 
 
 def parse_args() -> argparse.Namespace:

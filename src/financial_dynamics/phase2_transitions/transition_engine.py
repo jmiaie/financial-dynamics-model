@@ -21,7 +21,7 @@ class MarkovTransitionEngine:
     to produce posterior regime probabilities.
     """
 
-    def __init__(self, config: TransitionConfig | None = None):
+    def __init__(self, config: TransitionConfig | None = None) -> None:
         self.config = config or TransitionConfig()
         self.counts = initialize_count_matrix(self.config.prior_strength)
         self._transition_matrix = counts_to_transition_matrix(self.counts)

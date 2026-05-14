@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
-from financial_dynamics.visualization._utils import fit_pca_projection
+from financial_dynamics.visualization._utils import ensure_ax, fit_pca_projection, plot_regime_centroids
 
 
 class TrajectoryPlotter:
@@ -31,10 +30,7 @@ class TrajectoryPlotter:
             centroids: shape (4, 5) centroid matrix.
             ax: optional axes.
         """
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-        else:
-            fig = ax.figure
+        fig, ax = ensure_ax(ax)
 
         projected, centroid_proj, _ = fit_pca_projection(feature_history, centroids)
 
@@ -50,19 +46,7 @@ class TrajectoryPlotter:
         ax.scatter(projected[-1, 0], projected[-1, 1],
                    marker="s", s=100, c="red", zorder=10, label="End")
 
-        for i, regime in enumerate(Regime):
-            ax.scatter(
-                centroid_proj[i, 0], centroid_proj[i, 1],
-                c=REGIME_COLORS[regime],
-                marker="*", s=300, edgecolors="black", linewidths=1.0,
-                zorder=10,
-            )
-            ax.annotate(
-                REGIME_NAMES[regime],
-                (centroid_proj[i, 0], centroid_proj[i, 1]),
-                textcoords="offset points", xytext=(8, 8),
-                fontsize=7, alpha=0.8,
-            )
+        plot_regime_centroids(centroid_proj, ax, show_labels=True)
 
         ax.set_xlabel("PC1")
         ax.set_ylabel("PC2")
