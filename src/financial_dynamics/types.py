@@ -7,6 +7,18 @@ from enum import IntEnum
 
 import numpy as np
 
+# TypeAlias for hyperparameter search spaces
+SearchSpace = dict[str, list[float | int]]
+
+# Column names produced by FinancialDynamicsPipeline.run() for the 5 normalized features
+FEATURE_COLUMNS: list[str] = [
+    "feat_volatility",
+    "feat_trend",
+    "feat_drawdown",
+    "feat_corr_stress",
+    "feat_shock",
+]
+
 
 class Regime(IntEnum):
     """The four market regimes identified by the model."""

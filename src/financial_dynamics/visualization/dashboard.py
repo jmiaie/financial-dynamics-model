@@ -14,7 +14,7 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 import matplotlib.gridspec as gridspec
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES, FEATURE_COLUMNS
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
@@ -67,28 +67,30 @@ class SystemDashboard:
             raise RuntimeError("No figure to save. Call plot() before save().")
         self._fig.savefig(path, dpi=dpi, bbox_inches="tight")
 
+    def _draw_regime_bands(self, valid: pd.Series, ax: Axes) -> None:
+        """Shade background of ax with a color band for each regime interval."""
+        for i in range(len(valid) - 1):
+            regime_str = valid.iloc[i]
+            try:
+                regime = Regime[regime_str]
+            except KeyError:
+                warnings.warn(
+                    f"Unknown regime '{regime_str}' at index {valid.index[i]}",
+                    stacklevel=2,
+                )
+                continue
+            ax.axvspan(
+                valid.index[i], valid.index[i + 1],
+                alpha=0.15, color=REGIME_COLORS[regime],
+            )
+
     def _plot_price_chart(self, df: pd.DataFrame, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 1: Price with regime-colored background bands."""
         ax.plot(df.index, df["close"], color="black", linewidth=0.8, alpha=0.9)
 
-        regime_col = results["risk_adjusted_regime"]
-        valid = regime_col.dropna()
-
+        valid = results["risk_adjusted_regime"].dropna()
         if len(valid) > 0:
-            for i in range(len(valid) - 1):
-                regime_str = valid.iloc[i]
-                try:
-                    regime = Regime[regime_str]
-                except KeyError:
-                    warnings.warn(
-                        f"Unknown regime '{regime_str}' at index {valid.index[i]}",
-                        stacklevel=2,
-                    )
-                    continue
-                ax.axvspan(
-                    valid.index[i], valid.index[i + 1],
-                    alpha=0.15, color=REGIME_COLORS[regime],
-                )
+            self._draw_regime_bands(valid, ax)
 
         legend_patches = [
             Patch(facecolor=REGIME_COLORS[r], alpha=0.3, label=REGIME_NAMES[r])
@@ -101,8 +103,7 @@ class SystemDashboard:
 
     def _plot_phase_space(self, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 2: Phase-space projection with trajectory."""
-        feat_cols = ["feat_volatility", "feat_trend", "feat_drawdown",
-                     "feat_corr_stress", "feat_shock"]
+        feat_cols = FEATURE_COLUMNS
         valid = results.dropna(subset=feat_cols + ["risk_adjusted_regime"])
 
         if len(valid) < 5:

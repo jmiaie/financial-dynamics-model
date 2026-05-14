@@ -10,6 +10,7 @@ import pandas as pd
 
 from financial_dynamics.backtesting.evaluator import BacktestEvaluator
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.types import SearchSpace
 
 
 @dataclass
@@ -17,11 +18,8 @@ class TuningResult:
     """Outcome of a hyperparameter search."""
     best_config: PipelineConfig
     best_accuracy: float
-    best_params: dict[str, float]
+    best_params: dict[str, float | int]
     all_trials: pd.DataFrame
-
-
-SearchSpace = dict[str, list[float | int]]
 
 
 _DEFAULT_SPACE: SearchSpace = {
@@ -72,7 +70,7 @@ class HyperparameterTuner:
         trials = []
         best_accuracy = -1.0
         best_config = self.base_config
-        best_params: dict[str, float] = {}
+        best_params: dict[str, float | int] = {}
 
         for values in product(*value_grid):
             params = dict(zip(param_names, values))
@@ -97,7 +95,7 @@ class HyperparameterTuner:
     @staticmethod
     def _apply_params(
         base_config: PipelineConfig,
-        params: dict[str, float],
+        params: dict[str, float | int],
     ) -> PipelineConfig:
         """Return a deep-copied config with dotted-path overrides applied."""
         new_config = deepcopy(base_config)

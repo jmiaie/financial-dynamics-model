@@ -28,11 +28,6 @@ class MarkovTransitionEngine:
         self._prev_regime: Regime | None = None
 
     def update(self, bar_state: BarState) -> BarState:
-        """Process a bar through the transition engine.
-
-        Reads bar_state.raw_probabilities, updates the transition matrix,
-        computes posterior probabilities.
-        """
         if bar_state.raw_probabilities is None:
             return bar_state
 
@@ -47,7 +42,6 @@ class MarkovTransitionEngine:
             )
             self._transition_matrix = counts_to_transition_matrix(self.counts)
 
-        # Compute posterior probabilities
         if self._prev_regime is not None:
             transition_row = self._transition_matrix[int(self._prev_regime)]
             posterior = compute_posterior(

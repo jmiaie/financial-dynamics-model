@@ -7,6 +7,8 @@ from financial_dynamics.types import (
     FeatureVector,
     RegimeProbabilities,
     BarState,
+    SearchSpace,
+    FEATURE_COLUMNS,
 )
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.signals import Signal, SignalDetector, SignalType
@@ -19,6 +21,8 @@ __all__ = [
     "FeatureVector",
     "RegimeProbabilities",
     "BarState",
+    "SearchSpace",
+    "FEATURE_COLUMNS",
     "FinancialDynamicsPipeline",
     "Signal",
     "SignalDetector",
