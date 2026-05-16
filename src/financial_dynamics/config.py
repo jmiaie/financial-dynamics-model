@@ -68,6 +68,21 @@ class PipelineConfig:
     stabilization: StabilizationConfig = field(default_factory=StabilizationConfig)
     risk: RiskConfig = field(default_factory=RiskConfig)
 
+    @staticmethod
+    def _apply_section(section_obj: object, section_name: str, values: dict) -> None:
+        """Apply a dict of YAML values onto a config section dataclass in-place.
+
+        Unknown keys emit a warning and are silently skipped.
+        """
+        for key, value in values.items():
+            if hasattr(section_obj, key):
+                setattr(section_obj, key, value)
+            else:
+                warnings.warn(
+                    f"Unknown config key '{key}' in section '{section_name}'; ignoring.",
+                    stacklevel=3,
+                )
+
     @classmethod
     def from_yaml(cls, path: str | Path) -> PipelineConfig:
         """Load configuration from YAML, merging with defaults."""
@@ -92,22 +107,14 @@ class PipelineConfig:
         data = raw or {}
 
         config = cls()
-        section_map = {
-            "features": (config.features, FeatureConfig),
-            "regimes": (config.regimes, RegimeConfig),
-            "transitions": (config.transitions, TransitionConfig),
-            "stabilization": (config.stabilization, StabilizationConfig),
-            "risk": (config.risk, RiskConfig),
+        sections = {
+            "features": config.features,
+            "regimes": config.regimes,
+            "transitions": config.transitions,
+            "stabilization": config.stabilization,
+            "risk": config.risk,
         }
-        for section_name, (section_obj, _) in section_map.items():
+        for section_name, section_obj in sections.items():
             if section_name in data:
-                for key, value in data[section_name].items():
-                    if hasattr(section_obj, key):
-                        setattr(section_obj, key, value)
-                    else:
-                        warnings.warn(
-                            f"Unknown config key '{key}' in section "
-                            f"'{section_name}'; ignoring.",
-                            stacklevel=2,
-                        )
+                cls._apply_section(section_obj, section_name, data[section_name])
         return config

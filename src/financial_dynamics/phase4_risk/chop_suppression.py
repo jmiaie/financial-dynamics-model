@@ -6,7 +6,7 @@ from collections import deque
 
 import numpy as np
 
-from financial_dynamics.types import Regime, NUM_REGIMES
+from financial_dynamics.types import Regime
 from financial_dynamics._utils import safe_renormalize
 
 
@@ -43,8 +43,6 @@ class ChopDominanceSuppressor:
         adjusted = probs.copy()
         adjusted[int(Regime.CHOP)] *= max(1.0 - self.penalty * 3, 0.05)
         adjusted[int(Regime.CALM_TREND)] *= max(1.0 - self.penalty, 0.2)
-
-        # Boost Volatile Trend slightly to encourage structural movement
         adjusted[int(Regime.VOLATILE_TREND)] *= (1.0 + self.penalty * 2)
 
         return safe_renormalize(adjusted)

@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from financial_dynamics.config import TransitionConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, NUM_REGIMES
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 from financial_dynamics.phase2_transitions.bayesian_update import (
     bayesian_update,
     compute_posterior,
@@ -47,7 +47,6 @@ class MarkovTransitionEngine:
             )
             self._transition_matrix = counts_to_transition_matrix(self.counts)
 
-        # Compute posterior probabilities
         if self._prev_regime is not None:
             transition_row = self._transition_matrix[int(self._prev_regime)]
             posterior = compute_posterior(

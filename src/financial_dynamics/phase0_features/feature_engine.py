@@ -110,6 +110,45 @@ class FeatureEngine:
 
         return pd.concat([raw, normalized], axis=1)
 
+    def _update_buffers(self, bar: dict[str, float]) -> None:
+        """Append close and any reference-asset closes to their rolling buffers."""
+        self._close_buffer.append(bar["close"])
+        for key, value in bar.items():
+            if key.startswith("ref_") and key.endswith("_close"):
+                if key not in self._ref_buffers:
+                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
+                self._ref_buffers[key].append(value)
+
+    def _build_ref_returns(self) -> dict[str, pd.Series] | None:
+        """Build a returns dict for each reference asset that has enough history.
+
+        Returns None when no reference buffers are populated or warmed up.
+        """
+        if not self._ref_buffers:
+            return None
+        ref_returns = {
+            key: pd.Series(list(buf)).pct_change().dropna()
+            for key, buf in self._ref_buffers.items()
+            if len(buf) >= self.warmup_bars
+        }
+        return ref_returns or None
+
+    def _compute_raw_features(
+        self,
+        close_series: pd.Series,
+        returns: pd.Series,
+    ) -> np.ndarray:
+        """Compute the five raw (un-normalized) feature values for the current bar."""
+        ref_returns = self._build_ref_returns()
+        corr_stress = float(self._compute_corr_stress(returns, ref_returns).iloc[-1])
+        return np.array([
+            float(compute_ewma_volatility(returns, self.config.volatility_span).iloc[-1]),
+            float(compute_trend_strength(close_series, self.config.trend_window).iloc[-1]),
+            float(compute_drawdown_pressure(close_series, self.config.drawdown_window).iloc[-1]),
+            corr_stress,
+            float(compute_shock_intensity(returns, self.config.correlation_window).iloc[-1]),
+        ])
+
     def update(self, bar_state: BarState) -> BarState:
         """Incremental update for a single bar.
 
@@ -121,14 +160,8 @@ class FeatureEngine:
                 f"Bar is missing required key 'close'. "
                 f"Got keys: {sorted(bar_state.ohlcv.keys())}"
             )
-        close = bar_state.ohlcv["close"]
-        self._close_buffer.append(close)
 
-        for key, value in bar_state.ohlcv.items():
-            if key.startswith("ref_") and key.endswith("_close"):
-                if key not in self._ref_buffers:
-                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
-                self._ref_buffers[key].append(value)
+        self._update_buffers(bar_state.ohlcv)
 
         if len(self._close_buffer) < self.warmup_bars:
             bar_state.features = None
@@ -136,26 +169,7 @@ class FeatureEngine:
 
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
-
-        ref_returns: dict[str, pd.Series] | None = None
-        if self._ref_buffers:
-            ref_returns = {}
-            for ref_key, buf in self._ref_buffers.items():
-                if len(buf) >= self.warmup_bars:
-                    ref_series = pd.Series(list(buf))
-                    ref_returns[ref_key] = ref_series.pct_change().dropna()
-            if not ref_returns:
-                ref_returns = None
-
-        corr_stress_val = float(self._compute_corr_stress(returns, ref_returns).iloc[-1])
-
-        raw = np.array([
-            float(compute_ewma_volatility(returns, self.config.volatility_span).iloc[-1]),
-            float(compute_trend_strength(close_series, self.config.trend_window).iloc[-1]),
-            float(compute_drawdown_pressure(close_series, self.config.drawdown_window).iloc[-1]),
-            corr_stress_val,
-            float(compute_shock_intensity(returns, self.config.correlation_window).iloc[-1]),
-        ])
+        raw = self._compute_raw_features(close_series, returns)
 
         if np.isnan(raw).any():
             bar_state.features = None

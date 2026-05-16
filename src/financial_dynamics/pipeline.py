@@ -17,8 +17,6 @@ from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.forecasting import (
     RegimeForecast,
     forecast_regimes,
-    compute_expected_duration,
-    compute_stationary_distribution,
 )
 
 
@@ -47,7 +45,7 @@ class BarRecord(TypedDict, total=False):
     post_prob_RISK_OFF: float
     stabilized_regime: str | None
     risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+    risk_overlays: dict[str, bool] | None
 
 
 class FinancialDynamicsPipeline:

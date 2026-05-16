@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
+from matplotlib.figure import Figure, SubFigure
 from matplotlib.axes import Axes
 from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import resolve_ax
 
 
 class VectorFieldPlotter:
@@ -24,7 +24,7 @@ class VectorFieldPlotter:
         centroids: np.ndarray,
         transition_matrix: np.ndarray,
         ax: Axes | None = None,
-    ) -> Figure:
+    ) -> Figure | SubFigure:
         """Draw transition vectors between centroids.
 
         Args:
@@ -32,10 +32,7 @@ class VectorFieldPlotter:
             transition_matrix: shape (4, 4) row-stochastic matrix.
             ax: optional axes.
         """
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-        else:
-            fig = ax.figure
+        fig, ax = resolve_ax(ax)
 
         pca = PCA(n_components=2)
         centroid_proj = pca.fit_transform(centroids)

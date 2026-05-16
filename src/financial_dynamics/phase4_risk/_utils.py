@@ -1,4 +1,4 @@
-"""Re-export shared utilities for backwards compatibility."""
+"""Re-export safe_renormalize from the top-level utils module."""
 
 from financial_dynamics._utils import safe_renormalize
 

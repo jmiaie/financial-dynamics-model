@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
+from matplotlib.figure import Figure, SubFigure
 from matplotlib.axes import Axes
 
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
-from financial_dynamics.visualization._utils import fit_pca_projection
+from financial_dynamics.visualization._utils import fit_pca_projection, resolve_ax
 
 
 class TrajectoryPlotter:
@@ -22,7 +21,7 @@ class TrajectoryPlotter:
         regimes: list[Regime],
         centroids: np.ndarray,
         ax: Axes | None = None,
-    ) -> Figure:
+    ) -> Figure | SubFigure:
         """Plot trajectory path.
 
         Args:
@@ -31,10 +30,7 @@ class TrajectoryPlotter:
             centroids: shape (4, 5) centroid matrix.
             ax: optional axes.
         """
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-        else:
-            fig = ax.figure
+        fig, ax = resolve_ax(ax)
 
         projected, centroid_proj, _ = fit_pca_projection(feature_history, centroids)
 

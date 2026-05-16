@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from itertools import product
 
 import pandas as pd
 
 from financial_dynamics.backtesting.evaluator import BacktestEvaluator
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.types import SearchSpace
 
 
 @dataclass
@@ -19,9 +20,6 @@ class TuningResult:
     best_accuracy: float
     best_params: dict[str, float]
     all_trials: pd.DataFrame
-
-
-SearchSpace = dict[str, list[float | int]]
 
 
 _DEFAULT_SPACE: SearchSpace = {
