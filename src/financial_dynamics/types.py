@@ -95,3 +95,10 @@ class BarState:
     # Phase 4 output
     risk_adjusted_regime: Regime | None = None
     risk_overlays: dict[str, bool] = field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# Calibration types
+# ---------------------------------------------------------------------------
+
+SearchSpace = dict[str, list[float | int]]

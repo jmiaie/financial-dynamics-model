@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TypedDict
+from typing import TypedDict, cast
 
 import numpy as np
 import pandas as pd
 
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, REGIME_NAMES
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
@@ -154,7 +154,9 @@ class FinancialDynamicsPipeline:
     @staticmethod
     def _state_to_record(state: BarState) -> BarRecord:
         """Convert a BarState to a flat dict for DataFrame construction."""
-        record: BarRecord = {}
+        # Build into a plain dict first; dynamic f-string keys cannot be
+        # statically verified against TypedDict, so we cast at the end.
+        record: dict[str, object] = {}
 
         if state.features is not None:
             f = state.features
@@ -180,4 +182,4 @@ class FinancialDynamicsPipeline:
         )
         record["risk_overlays"] = state.risk_overlays if state.risk_overlays else None
 
-        return record
+        return cast(BarRecord, record)
