@@ -2,8 +2,29 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+
+if TYPE_CHECKING:
+    from matplotlib.axes import Axes
+    from matplotlib.figure import Figure, SubFigure
+
+
+def resolve_ax(ax: "Axes | None", figsize: tuple[int, int] = (8, 6)) -> "tuple[Figure | SubFigure, Axes]":
+    """Return (fig, ax), creating a new figure if ax is None.
+
+    Consolidates the standard matplotlib optional-axes boilerplate used
+    across all visualization plotters.
+    """
+    fig: "Figure | SubFigure"
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+    else:
+        fig = ax.figure
+    return fig, ax
 
 
 def fit_pca_projection(
