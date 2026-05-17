@@ -5,7 +5,7 @@ import numpy as np
 from financial_dynamics.types import NUM_REGIMES
 
 
-def safe_renormalize(probs: np.ndarray) -> np.ndarray:  # probs: shape (4,)
+def safe_renormalize(probs: np.ndarray) -> np.ndarray:
     """Safely renormalize a probability vector to sum to 1.0.
 
     If the sum is near zero, returns a uniform distribution.

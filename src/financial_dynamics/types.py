@@ -79,19 +79,10 @@ class BarState:
     timestamp: int | float | str | None = None
     ohlcv: dict[str, float] = field(default_factory=dict)
 
-    # Phase 0 output
     features: FeatureVector | None = None
-
-    # Phase 1 output
     raw_probabilities: RegimeProbabilities | None = None
-
-    # Phase 2 output
     transition_matrix: np.ndarray | None = None  # shape (4, 4), row-stochastic
     posterior_probabilities: RegimeProbabilities | None = None
-
-    # Phase 3 output
     stabilized_regime: Regime | None = None
-
-    # Phase 4 output
     risk_adjusted_regime: Regime | None = None
     risk_overlays: dict[str, bool] = field(default_factory=dict)
