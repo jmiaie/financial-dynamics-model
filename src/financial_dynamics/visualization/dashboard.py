@@ -14,6 +14,7 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 import matplotlib.gridspec as gridspec
 
+from financial_dynamics.calibration.centroid_fitter import FEATURE_COLUMNS
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
@@ -101,8 +102,7 @@ class SystemDashboard:
 
     def _plot_phase_space(self, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 2: Phase-space projection with trajectory."""
-        feat_cols = ["feat_volatility", "feat_trend", "feat_drawdown",
-                     "feat_corr_stress", "feat_shock"]
+        feat_cols = FEATURE_COLUMNS
         valid = results.dropna(subset=feat_cols + ["risk_adjusted_regime"])
 
         if len(valid) < 5:

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from sklearn.decomposition import PCA
+from typing import cast
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
@@ -35,7 +36,7 @@ class VectorFieldPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = cast(Figure, ax.figure)
 
         pca = PCA(n_components=2)
         centroid_proj = pca.fit_transform(centroids)

@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from typing import cast
 
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
@@ -34,7 +35,7 @@ class TrajectoryPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = cast(Figure, ax.figure)
 
         projected, centroid_proj, _ = fit_pca_projection(feature_history, centroids)
 
