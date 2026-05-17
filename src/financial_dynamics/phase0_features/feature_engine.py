@@ -110,6 +110,18 @@ class FeatureEngine:
 
         return pd.concat([raw, normalized], axis=1)
 
+    def _fill_ref_buffers(self, ohlcv: dict[str, float]) -> None:
+        """Append reference-asset close prices from a bar dict to their buffers.
+
+        Keys matching the pattern ref_*_close are treated as reference assets.
+        Buffers are created on first encounter.
+        """
+        for key, value in ohlcv.items():
+            if key.startswith("ref_") and key.endswith("_close"):
+                if key not in self._ref_buffers:
+                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
+                self._ref_buffers[key].append(value)
+
     def update(self, bar_state: BarState) -> BarState:
         """Incremental update for a single bar.
 
@@ -124,11 +136,7 @@ class FeatureEngine:
         close = bar_state.ohlcv["close"]
         self._close_buffer.append(close)
 
-        for key, value in bar_state.ohlcv.items():
-            if key.startswith("ref_") and key.endswith("_close"):
-                if key not in self._ref_buffers:
-                    self._ref_buffers[key] = deque(maxlen=self._max_window + 10)
-                self._ref_buffers[key].append(value)
+        self._fill_ref_buffers(bar_state.ohlcv)
 
         if len(self._close_buffer) < self.warmup_bars:
             bar_state.features = None
@@ -137,7 +145,7 @@ class FeatureEngine:
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
 
-        ref_returns = None
+        ref_returns: dict[str, pd.Series] | None = None
         if self._ref_buffers:
             ref_returns = {}
             for ref_key, buf in self._ref_buffers.items():

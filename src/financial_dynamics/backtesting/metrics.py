@@ -49,6 +49,19 @@ def regime_confusion_matrix(
     return pd.DataFrame(matrix, index=regime_names, columns=regime_names)
 
 
+def _per_regime_metrics(tp: int, fp: int, fn: int) -> tuple[float, float, float]:
+    """Compute precision, recall, and F1 from confusion matrix counts.
+
+    Returns:
+        (precision, recall, f1) each in [0, 1].
+    """
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    f1 = (2 * precision * recall / (precision + recall)
+          if (precision + recall) > 0 else 0.0)
+    return precision, recall, f1
+
+
 def regime_classification_report(
     true_labels: pd.Series,
     predicted_labels: pd.Series,
@@ -70,10 +83,7 @@ def regime_classification_report(
         fn = matrix[i, :].sum() - tp
         support = matrix[i, :].sum()
 
-        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
-        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-        f1 = (2 * precision * recall / (precision + recall)
-              if (precision + recall) > 0 else 0.0)
+        precision, recall, f1 = _per_regime_metrics(tp, fp, fn)
 
         rows.append({
             "regime": regime.name,
