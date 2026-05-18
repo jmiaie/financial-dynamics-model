@@ -8,7 +8,7 @@ from typing import Any
 
 import numpy as np
 
-from financial_dynamics.config import PipelineConfig
+from financial_dynamics.config import PipelineConfig, _apply_section_overrides
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.types import Regime
 
@@ -48,8 +48,6 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
     """Extract all mutable state from the pipeline into a serializable dict."""
     fe = pipeline._feature_engine
     te = pipeline._transition_engine
-    se = pipeline._stabilization_engine
-    re = pipeline._risk_engine
 
     return {
         "version": 1,
@@ -64,24 +62,10 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
             "transition_matrix": te._transition_matrix.tolist(),
             "prev_regime": te._prev_regime.value if te._prev_regime is not None else None,
         },
-        "stabilization_engine": {
-            "current_regime": se._current_regime.value,
-            "persistence": {
-                "confirmed_regime": (
-                    se._persistence._confirmed_regime.value
-                    if se._persistence._confirmed_regime is not None else None
-                ),
-                "candidate": (
-                    se._persistence._candidate.value
-                    if se._persistence._candidate is not None else None
-                ),
-                "candidate_count": se._persistence._candidate_count,
-            },
-            "majority_vote_buffer": [r.value for r in se._majority._buffer],
-        },
+        "stabilization_engine": _extract_stabilization_state(pipeline._stabilization_engine),
         "risk_engine": {
-            "overextension_history": [r.value for r in re._overextension._history],
-            "chop_history": [r.value for r in re._chop_suppressor._history],
+            "overextension_history": [r.value for r in pipeline._risk_engine._overextension._history],
+            "chop_history": [r.value for r in pipeline._risk_engine._chop_suppressor._history],
         },
     }
 
@@ -102,11 +86,39 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     te._transition_matrix = np.array(te_state["transition_matrix"])
     te._prev_regime = Regime(te_state["prev_regime"]) if te_state["prev_regime"] is not None else None
 
-    se = pipeline._stabilization_engine
-    se_state = state["stabilization_engine"]
-    se._current_regime = Regime(se_state["current_regime"])
+    _restore_stabilization_state(pipeline._stabilization_engine, state["stabilization_engine"])
 
-    p_state = se_state["persistence"]
+    re = pipeline._risk_engine
+    re_state = state["risk_engine"]
+    re._overextension._history = [Regime(r) for r in re_state["overextension_history"]]
+    re._chop_suppressor._history.clear()
+    re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
+
+
+def _extract_stabilization_state(se) -> dict[str, Any]:
+    """Serialize the stabilization engine's multi-level nested state."""
+    return {
+        "current_regime": se._current_regime.value,
+        "persistence": {
+            "confirmed_regime": (
+                se._persistence._confirmed_regime.value
+                if se._persistence._confirmed_regime is not None else None
+            ),
+            "candidate": (
+                se._persistence._candidate.value
+                if se._persistence._candidate is not None else None
+            ),
+            "candidate_count": se._persistence._candidate_count,
+        },
+        "majority_vote_buffer": [r.value for r in se._majority._buffer],
+    }
+
+
+def _restore_stabilization_state(se, state: dict[str, Any]) -> None:
+    """Restore the stabilization engine's multi-level nested state."""
+    se._current_regime = Regime(state["current_regime"])
+
+    p_state = state["persistence"]
     se._persistence._confirmed_regime = (
         Regime(p_state["confirmed_regime"]) if p_state["confirmed_regime"] is not None else None
     )
@@ -116,16 +128,10 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     se._persistence._candidate_count = p_state["candidate_count"]
 
     se._majority._buffer.clear()
-    se._majority._buffer.extend(Regime(r) for r in se_state["majority_vote_buffer"])
-
-    re = pipeline._risk_engine
-    re_state = state["risk_engine"]
-    re._overextension._history = [Regime(r) for r in re_state["overextension_history"]]
-    re._chop_suppressor._history.clear()
-    re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
+    se._majority._buffer.extend(Regime(r) for r in state["majority_vote_buffer"])
 
 
-def _extract_config(config: PipelineConfig) -> dict:
+def _extract_config(config: PipelineConfig) -> dict[str, dict[str, object]]:
     """Serialize config to a plain dict."""
     return {
         "features": {
@@ -133,7 +139,6 @@ def _extract_config(config: PipelineConfig) -> dict:
             "trend_window": config.features.trend_window,
             "drawdown_window": config.features.drawdown_window,
             "correlation_window": config.features.correlation_window,
-            "shock_threshold": config.features.shock_threshold,
             "normalization_method": config.features.normalization_method,
             "normalization_window": config.features.normalization_window,
             "feature_weights": config.features.feature_weights,
@@ -164,17 +169,9 @@ def _extract_config(config: PipelineConfig) -> dict:
     }
 
 
-def _restore_config(config: PipelineConfig, data: dict) -> None:
+def _restore_config(
+    config: PipelineConfig,
+    data: dict[str, dict[str, object]],
+) -> None:
     """Apply saved config values onto an existing PipelineConfig."""
-    section_map = {
-        "features": config.features,
-        "regimes": config.regimes,
-        "transitions": config.transitions,
-        "stabilization": config.stabilization,
-        "risk": config.risk,
-    }
-    for section_name, section_obj in section_map.items():
-        if section_name in data:
-            for key, value in data[section_name].items():
-                if hasattr(section_obj, key):
-                    setattr(section_obj, key, value)
+    _apply_section_overrides(config, data)

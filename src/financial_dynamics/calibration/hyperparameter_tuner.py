@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from itertools import product
 
 import pandas as pd
 
 from financial_dynamics.backtesting.evaluator import BacktestEvaluator
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.types import SearchSpace
 
 
 @dataclass
@@ -19,9 +20,6 @@ class TuningResult:
     best_accuracy: float
     best_params: dict[str, float]
     all_trials: pd.DataFrame
-
-
-SearchSpace = dict[str, list[float | int]]
 
 
 _DEFAULT_SPACE: SearchSpace = {
@@ -69,7 +67,26 @@ class HyperparameterTuner:
         param_names = list(space.keys())
         value_grid = [space[name] for name in param_names]
 
-        trials = []
+        trials, best_accuracy, best_config, best_params = self._run_trials(
+            param_names, value_grid, df, labels
+        )
+
+        return TuningResult(
+            best_config=best_config,
+            best_accuracy=best_accuracy,
+            best_params=best_params,
+            all_trials=pd.DataFrame(trials),
+        )
+
+    def _run_trials(
+        self,
+        param_names: list[str],
+        value_grid: list[list[float | int]],
+        df: pd.DataFrame,
+        labels: pd.Series,
+    ) -> tuple[list[dict], float, PipelineConfig, dict[str, float]]:
+        """Execute the grid search and return raw trial results."""
+        trials: list[dict] = []
         best_accuracy = -1.0
         best_config = self.base_config
         best_params: dict[str, float] = {}
@@ -87,12 +104,7 @@ class HyperparameterTuner:
                 best_config = trial_config
                 best_params = params
 
-        return TuningResult(
-            best_config=best_config,
-            best_accuracy=best_accuracy,
-            best_params=best_params,
-            all_trials=pd.DataFrame(trials),
-        )
+        return trials, best_accuracy, best_config, best_params
 
     @staticmethod
     def _apply_params(

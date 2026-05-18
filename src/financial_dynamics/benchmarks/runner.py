@@ -8,6 +8,7 @@ import pandas as pd
 
 from financial_dynamics.backtesting.evaluator import BacktestEvaluator
 from financial_dynamics.backtesting.metrics import (
+    align_predictions,
     regime_accuracy,
     regime_classification_report,
 )
@@ -66,9 +67,7 @@ class BenchmarkRunner:
 
         for baseline in self.baselines:
             preds = baseline.classify(df)
-            mask = preds.notna()
-            aligned_labels = labels.loc[preds.index[mask]]
-            aligned_preds = preds[mask]
+            aligned_labels, aligned_preds = align_predictions(labels, preds)
 
             accuracy = regime_accuracy(aligned_labels, aligned_preds)
             report = regime_classification_report(aligned_labels, aligned_preds)
@@ -76,7 +75,7 @@ class BenchmarkRunner:
             rows.append({
                 "model": baseline.name,
                 "accuracy": accuracy,
-                "evaluated_bars": int(mask.sum()),
+                "evaluated_bars": len(aligned_preds),
             })
             per_model_reports[baseline.name] = report
 

@@ -9,10 +9,8 @@ import pandas as pd
 
 from financial_dynamics.backtesting.evaluator import BacktestEvaluator, BacktestResult
 from financial_dynamics.calibration.centroid_fitter import fit_centroids_from_pipeline
-from financial_dynamics.calibration.hyperparameter_tuner import (
-    HyperparameterTuner,
-    SearchSpace,
-)
+from financial_dynamics.calibration.hyperparameter_tuner import HyperparameterTuner
+from financial_dynamics.types import SearchSpace
 from financial_dynamics.config import PipelineConfig
 
 

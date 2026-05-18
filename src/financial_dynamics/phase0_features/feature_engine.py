@@ -69,6 +69,36 @@ class FeatureEngine:
             )
         return compute_correlation_stress(returns, self.config.correlation_window)
 
+    def _compute_incremental_raw(self) -> np.ndarray | None:
+        """Compute raw feature values from current buffers.
+
+        Returns None if any indicator value is NaN.
+        """
+        close_series = pd.Series(list(self._close_buffer))
+        returns = close_series.pct_change().dropna()
+
+        ref_returns: dict[str, pd.Series] | None = None
+        if self._ref_buffers:
+            ref_returns = {}
+            for ref_key, buf in self._ref_buffers.items():
+                if len(buf) >= self.warmup_bars:
+                    ref_series = pd.Series(list(buf))
+                    ref_returns[ref_key] = ref_series.pct_change().dropna()
+            if not ref_returns:
+                ref_returns = None
+
+        corr_stress_val = float(self._compute_corr_stress(returns, ref_returns).iloc[-1])
+
+        raw = np.array([
+            float(compute_ewma_volatility(returns, self.config.volatility_span).iloc[-1]),
+            float(compute_trend_strength(close_series, self.config.trend_window).iloc[-1]),
+            float(compute_drawdown_pressure(close_series, self.config.drawdown_window).iloc[-1]),
+            corr_stress_val,
+            float(compute_shock_intensity(returns, self.config.correlation_window).iloc[-1]),
+        ])
+
+        return None if np.isnan(raw).any() else raw
+
     def compute_batch(self, df: pd.DataFrame) -> pd.DataFrame:
         """Compute all features for a historical DataFrame.
 
@@ -134,30 +164,8 @@ class FeatureEngine:
             bar_state.features = None
             return bar_state
 
-        close_series = pd.Series(list(self._close_buffer))
-        returns = close_series.pct_change().dropna()
-
-        ref_returns = None
-        if self._ref_buffers:
-            ref_returns = {}
-            for ref_key, buf in self._ref_buffers.items():
-                if len(buf) >= self.warmup_bars:
-                    ref_series = pd.Series(list(buf))
-                    ref_returns[ref_key] = ref_series.pct_change().dropna()
-            if not ref_returns:
-                ref_returns = None
-
-        corr_stress_val = float(self._compute_corr_stress(returns, ref_returns).iloc[-1])
-
-        raw = np.array([
-            float(compute_ewma_volatility(returns, self.config.volatility_span).iloc[-1]),
-            float(compute_trend_strength(close_series, self.config.trend_window).iloc[-1]),
-            float(compute_drawdown_pressure(close_series, self.config.drawdown_window).iloc[-1]),
-            corr_stress_val,
-            float(compute_shock_intensity(returns, self.config.correlation_window).iloc[-1]),
-        ])
-
-        if np.isnan(raw).any():
+        raw = self._compute_incremental_raw()
+        if raw is None:
             bar_state.features = None
             return bar_state
 

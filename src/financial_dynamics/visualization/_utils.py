@@ -6,6 +6,13 @@ import numpy as np
 from sklearn.decomposition import PCA
 
 
+def fit_pca_centroids(centroids: np.ndarray) -> tuple[np.ndarray, PCA]:
+    """Fit PCA on centroids and return their 2D projection."""
+    pca = PCA(n_components=2)
+    projected = pca.fit_transform(centroids)
+    return projected, pca
+
+
 def fit_pca_projection(
     feature_history: np.ndarray,
     centroids: np.ndarray,

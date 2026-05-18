@@ -5,7 +5,16 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import Regime, NUM_REGIMES
+
+
+def align_predictions(
+    labels: pd.Series,
+    predictions: pd.Series,
+) -> tuple[pd.Series, pd.Series]:
+    """Drop NaN predictions and align true labels to the valid index."""
+    mask = predictions.notna()
+    return labels.loc[predictions.index[mask]], predictions[mask]
 
 
 def regime_accuracy(

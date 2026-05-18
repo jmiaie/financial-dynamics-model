@@ -34,7 +34,7 @@ class TrajectoryPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = ax.get_figure()  # type: ignore[assignment]
 
         projected, centroid_proj, _ = fit_pca_projection(feature_history, centroids)
 

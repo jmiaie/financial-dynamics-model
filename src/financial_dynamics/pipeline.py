@@ -2,52 +2,23 @@
 
 from __future__ import annotations
 
-from typing import TypedDict
-
 import numpy as np
 import pandas as pd
 
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, REGIME_NAMES
+from financial_dynamics.types import (
+    BarRecord,
+    BarState,
+    Regime,
+    RegimeProbabilities,
+    StateReport,
+)
 from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
 from financial_dynamics.phase3_stabilization.stabilizer import StabilizationEngine
 from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
-from financial_dynamics.forecasting import (
-    RegimeForecast,
-    forecast_regimes,
-    compute_expected_duration,
-    compute_stationary_distribution,
-)
-
-
-class StateReport(TypedDict):
-    """System state summary returned by get_state_report()."""
-    bar_count: int
-    warmup_bars: int
-    is_warmed_up: bool
-    transition_matrix: np.ndarray
-
-
-class BarRecord(TypedDict, total=False):
-    """Flat record for DataFrame construction from BarState."""
-    feat_volatility: float
-    feat_trend: float
-    feat_drawdown: float
-    feat_corr_stress: float
-    feat_shock: float
-    raw_prob_CALM_TREND: float
-    raw_prob_VOLATILE_TREND: float
-    raw_prob_CHOP: float
-    raw_prob_RISK_OFF: float
-    post_prob_CALM_TREND: float
-    post_prob_VOLATILE_TREND: float
-    post_prob_CHOP: float
-    post_prob_RISK_OFF: float
-    stabilized_regime: str | None
-    risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+from financial_dynamics.forecasting import RegimeForecast, forecast_regimes
 
 
 class FinancialDynamicsPipeline:
@@ -165,12 +136,16 @@ class FinancialDynamicsPipeline:
             record["feat_shock"] = f.shock_intensity
 
         if state.raw_probabilities is not None:
-            for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
+            record["raw_prob_CALM_TREND"] = state.raw_probabilities[Regime.CALM_TREND]
+            record["raw_prob_VOLATILE_TREND"] = state.raw_probabilities[Regime.VOLATILE_TREND]
+            record["raw_prob_CHOP"] = state.raw_probabilities[Regime.CHOP]
+            record["raw_prob_RISK_OFF"] = state.raw_probabilities[Regime.RISK_OFF]
 
         if state.posterior_probabilities is not None:
-            for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
+            record["post_prob_CALM_TREND"] = state.posterior_probabilities[Regime.CALM_TREND]
+            record["post_prob_VOLATILE_TREND"] = state.posterior_probabilities[Regime.VOLATILE_TREND]
+            record["post_prob_CHOP"] = state.posterior_probabilities[Regime.CHOP]
+            record["post_prob_RISK_OFF"] = state.posterior_probabilities[Regime.RISK_OFF]
 
         record["stabilized_regime"] = (
             state.stabilized_regime.name if state.stabilized_regime is not None else None

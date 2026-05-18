@@ -15,8 +15,7 @@ class FeatureConfig:
     trend_window: int = 14
     drawdown_window: int = 60
     correlation_window: int = 20
-    shock_threshold: float = 2.0
-    normalization_method: str = "zscore"  # "zscore" or "minmax"
+    normalization_method: str = "zscore"
     normalization_window: int = 252
     feature_weights: list[float] = field(
         default_factory=lambda: [1.0, 1.0, 1.0, 1.0, 1.0]
@@ -72,42 +71,55 @@ class PipelineConfig:
     def from_yaml(cls, path: str | Path) -> PipelineConfig:
         """Load configuration from YAML, merging with defaults."""
         path = Path(path)
-        try:
-            with open(path) as f:
-                raw = yaml.safe_load(f)
-        except FileNotFoundError:
-            raise FileNotFoundError(
-                f"Pipeline config not found: {path.resolve()}"
-            ) from None
-        except yaml.YAMLError as exc:
-            raise ValueError(
-                f"Invalid YAML in {path.resolve()}: {exc}"
-            ) from exc
-
-        if raw is not None and not isinstance(raw, dict):
-            raise ValueError(
-                f"Expected YAML mapping at top level of {path.resolve()}, "
-                f"got {type(raw).__name__}"
-            )
-        data = raw or {}
-
+        data = _load_yaml_file(path)
         config = cls()
-        section_map = {
-            "features": (config.features, FeatureConfig),
-            "regimes": (config.regimes, RegimeConfig),
-            "transitions": (config.transitions, TransitionConfig),
-            "stabilization": (config.stabilization, StabilizationConfig),
-            "risk": (config.risk, RiskConfig),
-        }
-        for section_name, (section_obj, _) in section_map.items():
-            if section_name in data:
-                for key, value in data[section_name].items():
-                    if hasattr(section_obj, key):
-                        setattr(section_obj, key, value)
-                    else:
-                        warnings.warn(
-                            f"Unknown config key '{key}' in section "
-                            f"'{section_name}'; ignoring.",
-                            stacklevel=2,
-                        )
+        _apply_section_overrides(config, data, warn_unknown=True)
         return config
+
+
+def _load_yaml_file(path: Path) -> dict:
+    """Load and parse a YAML file, raising clear errors on failure."""
+    try:
+        with open(path) as f:
+            raw = yaml.safe_load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            f"Pipeline config not found: {path.resolve()}"
+        ) from None
+    except yaml.YAMLError as exc:
+        raise ValueError(
+            f"Invalid YAML in {path.resolve()}: {exc}"
+        ) from exc
+
+    if raw is not None and not isinstance(raw, dict):
+        raise ValueError(
+            f"Expected YAML mapping at top level of {path.resolve()}, "
+            f"got {type(raw).__name__}"
+        )
+    return raw or {}
+
+
+def _apply_section_overrides(
+    config: PipelineConfig,
+    data: dict,
+    warn_unknown: bool = False,
+) -> None:
+    """Apply section key-value overrides from data onto config in-place."""
+    section_map = {
+        "features": config.features,
+        "regimes": config.regimes,
+        "transitions": config.transitions,
+        "stabilization": config.stabilization,
+        "risk": config.risk,
+    }
+    for section_name, section_obj in section_map.items():
+        if section_name in data:
+            for key, value in data[section_name].items():
+                if hasattr(section_obj, key):
+                    setattr(section_obj, key, value)
+                elif warn_unknown:
+                    warnings.warn(
+                        f"Unknown config key '{key}' in section "
+                        f"'{section_name}'; ignoring.",
+                        stacklevel=3,
+                    )

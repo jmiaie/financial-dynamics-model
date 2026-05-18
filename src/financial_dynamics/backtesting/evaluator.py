@@ -9,6 +9,7 @@ import pandas as pd
 from financial_dynamics.config import PipelineConfig
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.backtesting.metrics import (
+    align_predictions,
     regime_accuracy,
     regime_confusion_matrix,
     regime_classification_report,
@@ -53,17 +54,16 @@ class BacktestEvaluator:
         results = pipeline.run(df)
 
         predicted = results[regime_column]
-        mask = predicted.notna()
-        aligned_true = true_labels.loc[mask.index[mask]]
+        aligned_true, aligned_preds = align_predictions(true_labels, predicted)
 
         return BacktestResult(
             pipeline_results=results,
-            accuracy=regime_accuracy(aligned_true, predicted[mask]),
-            confusion_matrix=regime_confusion_matrix(aligned_true, predicted[mask]),
-            classification_report=regime_classification_report(aligned_true, predicted[mask]),
+            accuracy=regime_accuracy(aligned_true, aligned_preds),
+            confusion_matrix=regime_confusion_matrix(aligned_true, aligned_preds),
+            classification_report=regime_classification_report(aligned_true, aligned_preds),
             warmup_bars=pipeline.warmup_bars,
             total_bars=len(df),
-            evaluated_bars=int(mask.sum()),
+            evaluated_bars=len(aligned_preds),
         )
 
     def evaluate_rolling(

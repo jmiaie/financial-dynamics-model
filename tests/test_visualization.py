@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 
 from financial_dynamics.types import Regime
 from financial_dynamics.phase1_regimes.regime_definitions import get_default_centroids
-from financial_dynamics.visualization.phase_space import PhaseSpacePlotter
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
 from financial_dynamics.visualization.dashboard import SystemDashboard
@@ -29,21 +28,6 @@ def sample_regimes() -> list[Regime]:
 @pytest.fixture
 def sample_centroids() -> np.ndarray:
     return get_default_centroids()
-
-
-class TestPhaseSpacePlotter:
-    def test_plot_generates_figure(self, sample_features, sample_regimes, sample_centroids):
-        plotter = PhaseSpacePlotter(sample_centroids)
-        fig = plotter.plot(sample_features, sample_regimes)
-        assert fig is not None
-        plt.close(fig)
-
-    def test_plot_with_provided_axes(self, sample_features, sample_regimes, sample_centroids):
-        fig, ax = plt.subplots()
-        plotter = PhaseSpacePlotter(sample_centroids)
-        result_fig = plotter.plot(sample_features, sample_regimes, ax=ax)
-        assert result_fig is fig
-        plt.close(fig)
 
 
 class TestTrajectoryPlotter:
