@@ -2,19 +2,17 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING
 
-import warnings
-
-import numpy as np
-import pandas as pd
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import pandas as pd
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.patches import Patch
-import matplotlib.gridspec as gridspec
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, REGIME_NAMES, Regime
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter

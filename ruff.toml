@@ -1,0 +1,27 @@
+target-version = "py310"
+line-length = 100
+
+[lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "RUF",    # ruff-specific
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B008",   # function call in default argument
+    "SIM108", # ternary operator
+    "RUF001", # ambiguous unicode in strings (σ is intentional math notation)
+    "RUF002", # ambiguous unicode in docstrings
+    "RUF003", # ambiguous unicode in comments
+    "RUF005", # collection literal concatenation (readability preference)
+    "RUF012", # mutable class variable annotation
+]
+
+[lint.isort]
+known-first-party = ["financial_dynamics"]

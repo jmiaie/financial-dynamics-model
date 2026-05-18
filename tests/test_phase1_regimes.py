@@ -3,9 +3,12 @@
 import numpy as np
 import pytest
 
-from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
-from financial_dynamics.phase1_regimes.regime_definitions import get_centroids, get_default_centroids
 from financial_dynamics.config import RegimeConfig
+from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
+from financial_dynamics.phase1_regimes.regime_definitions import (
+    get_centroids,
+    get_default_centroids,
+)
 from financial_dynamics.types import BarState, FeatureVector, Regime
 
 

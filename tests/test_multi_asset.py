@@ -4,13 +4,12 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase0_features.indicators import (
     compute_correlation_stress,
     compute_cross_asset_stress,
 )
-from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
 
 
 class TestCrossAssetStress:
@@ -89,7 +88,7 @@ class TestMultiAssetFeatureEngine:
         from financial_dynamics.types import BarState
         engine = FeatureEngine()
         features_found = False
-        for i in range(n):
+        for _i in range(n):
             bar = {
                 "open": 100 + rng.normal(0, 0.5),
                 "high": 102 + rng.normal(0, 0.5),

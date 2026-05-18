@@ -1,15 +1,13 @@
 """Tests for the backtesting framework."""
 
-import numpy as np
 import pandas as pd
-import pytest
 
+from financial_dynamics.backtesting.evaluator import BacktestEvaluator, BacktestResult
 from financial_dynamics.backtesting.metrics import (
     regime_accuracy,
-    regime_confusion_matrix,
     regime_classification_report,
+    regime_confusion_matrix,
 )
-from financial_dynamics.backtesting.evaluator import BacktestEvaluator, BacktestResult
 from financial_dynamics.types import Regime
 
 

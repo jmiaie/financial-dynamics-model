@@ -5,7 +5,6 @@ import pandas as pd
 import pytest
 
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import Regime
 
 
@@ -79,7 +78,7 @@ class TestPipelineIntegration:
 
         batch_regimes = results_batch["risk_adjusted_regime"].tolist()
         # Compare: batch uses NaN for missing, streaming uses None
-        for s, b in zip(stream_regimes, batch_regimes):
+        for s, b in zip(stream_regimes, batch_regimes, strict=True):
             if s is None:
                 assert b is None or (isinstance(b, float) and np.isnan(b))
             else:

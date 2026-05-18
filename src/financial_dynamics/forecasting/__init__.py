@@ -6,13 +6,13 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from financial_dynamics.types import Regime, RegimeProbabilities, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, Regime, RegimeProbabilities
 
 __all__ = [
     "RegimeForecast",
-    "forecast_regimes",
     "compute_expected_duration",
     "compute_stationary_distribution",
+    "forecast_regimes",
 ]
 
 

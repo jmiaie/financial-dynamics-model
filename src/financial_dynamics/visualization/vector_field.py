@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
+import numpy as np
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from sklearn.decomposition import PCA
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, REGIME_NAMES, Regime
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 
 

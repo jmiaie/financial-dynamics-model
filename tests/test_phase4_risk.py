@@ -3,10 +3,10 @@
 import numpy as np
 import pytest
 
-from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
-from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
-from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.config import RiskConfig
+from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
+from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
+from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.types import BarState, FeatureVector, Regime, RegimeProbabilities
 
 

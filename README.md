@@ -6,6 +6,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
+[![CI](https://img.shields.io/github/actions/workflow/status/jmiaie/financial-dynamics-model/ci.yml?style=flat-square&label=CI)](https://github.com/jmiaie/financial-dynamics-model/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-229%20passed-0d7377?style=flat-square)](#testing)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)

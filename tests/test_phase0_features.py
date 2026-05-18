@@ -4,16 +4,16 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from financial_dynamics.config import FeatureConfig
+from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase0_features.indicators import (
-    compute_ewma_volatility,
-    compute_trend_strength,
-    compute_drawdown_pressure,
     compute_correlation_stress,
+    compute_drawdown_pressure,
+    compute_ewma_volatility,
     compute_shock_intensity,
+    compute_trend_strength,
 )
 from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
-from financial_dynamics.phase0_features.feature_engine import FeatureEngine
-from financial_dynamics.config import FeatureConfig
 from financial_dynamics.types import BarState
 
 

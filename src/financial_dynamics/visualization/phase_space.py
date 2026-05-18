@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
+import numpy as np
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 
-from financial_dynamics.types import Regime, REGIME_NAMES
+from financial_dynamics.types import REGIME_NAMES, Regime
 from financial_dynamics.visualization._utils import fit_pca_projection
 
 REGIME_COLORS = {

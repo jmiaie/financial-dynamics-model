@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from itertools import product
 
 import pandas as pd
@@ -75,7 +75,7 @@ class HyperparameterTuner:
         best_params: dict[str, float] = {}
 
         for values in product(*value_grid):
-            params = dict(zip(param_names, values))
+            params = dict(zip(param_names, values, strict=True))
             trial_config = self._apply_params(self.base_config, params)
             evaluator = BacktestEvaluator(trial_config)
             result = evaluator.evaluate(df, labels)

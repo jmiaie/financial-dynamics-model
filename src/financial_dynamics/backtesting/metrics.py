@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, Regime
 
 
 def regime_accuracy(
@@ -40,7 +40,7 @@ def regime_confusion_matrix(
     matrix = np.zeros((NUM_REGIMES, NUM_REGIMES), dtype=int)
     name_to_idx = {r.name: int(r) for r in Regime}
 
-    for true_val, pred_val in zip(t, p):
+    for true_val, pred_val in zip(t, p, strict=False):
         ti = name_to_idx.get(true_val)
         pi = name_to_idx.get(pred_val)
         if ti is not None and pi is not None:

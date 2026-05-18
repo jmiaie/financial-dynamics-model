@@ -4,10 +4,8 @@ import time
 
 import numpy as np
 import pandas as pd
-import pytest
 
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
 
 
 def _make_ohlcv(n: int, seed: int = 42) -> pd.DataFrame:
@@ -120,8 +118,8 @@ class TestPerformanceMemory:
 
     def test_normalizer_history_bounded(self):
         """The normalizer's history should not grow beyond its window."""
-        from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
         from financial_dynamics.config import FeatureConfig
+        from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
 
         config = FeatureConfig(normalization_window=100)
         norm = FeatureNormalizer(config)

@@ -1,11 +1,10 @@
 """Tests for the signal/alert layer."""
 
 import numpy as np
-import pytest
 
-from financial_dynamics.signals import SignalDetector, Signal, SignalType
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
+from financial_dynamics.signals import Signal, SignalDetector, SignalType
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 
 def _make_bar_state(

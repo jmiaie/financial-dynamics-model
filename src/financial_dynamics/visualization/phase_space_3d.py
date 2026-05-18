@@ -19,11 +19,11 @@ from __future__ import annotations
 
 import numpy as np
 import plotly.graph_objects as go
-from scipy.spatial import ConvexHull, QhullError
 from scipy.interpolate import griddata
+from scipy.spatial import ConvexHull, QhullError
 from sklearn.decomposition import PCA
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, REGIME_NAMES, Regime
 from financial_dynamics.visualization._utils import fit_pca_projection
 
 REGIME_COLORS_3D = {

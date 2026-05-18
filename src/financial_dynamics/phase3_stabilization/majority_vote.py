@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections import deque, Counter
+from collections import Counter, deque
 
 from financial_dynamics.types import Regime
 

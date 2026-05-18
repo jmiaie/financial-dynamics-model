@@ -4,22 +4,20 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig, FeatureConfig, RegimeConfig
-from financial_dynamics.types import Regime, RegimeProbabilities, BarState, FeatureVector
+from financial_dynamics.config import FeatureConfig, PipelineConfig, RegimeConfig
+from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
 from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
 from financial_dynamics.phase2_transitions.bayesian_update import (
     compute_posterior,
-    initialize_count_matrix,
-    counts_to_transition_matrix,
 )
 from financial_dynamics.phase3_stabilization.hysteresis import HysteresisFilter
-from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
 from financial_dynamics.phase3_stabilization.majority_vote import MajorityVoteFilter
-from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
-from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
+from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
 from financial_dynamics.phase4_risk._utils import safe_renormalize
-from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
+from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
+from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 
 class TestNumericalStability:
@@ -158,11 +156,11 @@ class TestPressure:
 
     def test_transition_matrix_stays_valid_under_pressure(self):
         """After many rapid updates, transition matrix should still be row-stochastic."""
-        from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
         from financial_dynamics.config import TransitionConfig
+        from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
 
         engine = MarkovTransitionEngine(TransitionConfig(learning_rate=1.0))
-        for i in range(10000):
+        for _i in range(10000):
             state = BarState()
             probs = np.random.dirichlet([0.1, 0.1, 0.1, 0.1])
             state.raw_probabilities = RegimeProbabilities(probs=probs)
@@ -203,7 +201,7 @@ class TestShock:
         pipeline = FinancialDynamicsPipeline()
 
         price = 100.0
-        for i in range(200):
+        for _i in range(200):
             price = max(price * 0.97, 0.001)
             bar = {"open": price * 1.01, "high": price * 1.02,
                    "low": price * 0.98, "close": price, "volume": 5000}

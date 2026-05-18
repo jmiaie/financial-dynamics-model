@@ -1,13 +1,11 @@
 """Tests for Phase 3: Stabilization."""
 
 import numpy as np
-import pytest
 
 from financial_dynamics.phase3_stabilization.hysteresis import HysteresisFilter
-from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
 from financial_dynamics.phase3_stabilization.majority_vote import MajorityVoteFilter
+from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
 from financial_dynamics.phase3_stabilization.stabilizer import StabilizationEngine
-from financial_dynamics.config import StabilizationConfig
 from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 

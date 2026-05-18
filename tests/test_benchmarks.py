@@ -1,8 +1,5 @@
 """Tests for baseline classifiers and the benchmark runner."""
 
-import numpy as np
-import pandas as pd
-import pytest
 
 from financial_dynamics.benchmarks.baselines import (
     GaussianMixtureClassifier,
@@ -11,7 +8,6 @@ from financial_dynamics.benchmarks.baselines import (
 )
 from financial_dynamics.benchmarks.runner import BenchmarkRunner, BenchmarkSummary
 from financial_dynamics.types import Regime
-
 
 VALID_REGIME_NAMES = {r.name for r in Regime}
 

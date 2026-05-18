@@ -3,14 +3,14 @@
 import numpy as np
 import pytest
 
+from financial_dynamics.config import TransitionConfig
 from financial_dynamics.phase2_transitions.bayesian_update import (
-    initialize_count_matrix,
-    counts_to_transition_matrix,
     bayesian_update,
     compute_posterior,
+    counts_to_transition_matrix,
+    initialize_count_matrix,
 )
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
-from financial_dynamics.config import TransitionConfig
 from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 

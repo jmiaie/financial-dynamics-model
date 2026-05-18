@@ -4,13 +4,11 @@ import json
 
 import numpy as np
 import pandas as pd
-import pytest
 
-from financial_dynamics.persistence import save_state, load_state
+from financial_dynamics.config import PipelineConfig
+from financial_dynamics.persistence import load_state, save_state
 from financial_dynamics.persistence.state_io import _extract_state
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import Regime
 
 
 class TestSaveLoad:
@@ -177,7 +175,7 @@ class TestResumption:
         full_second_half = full_results.iloc[split:]
         full_regimes = full_second_half["risk_adjusted_regime"].tolist()
 
-        for resumed_r, full_r in zip(resumed_results, full_regimes):
+        for resumed_r, full_r in zip(resumed_results, full_regimes, strict=True):
             if resumed_r is None:
                 assert full_r is None or (isinstance(full_r, float) and np.isnan(full_r))
             else:

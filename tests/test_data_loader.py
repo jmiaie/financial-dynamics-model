@@ -77,9 +77,8 @@ class TestFetchOhlcv:
                 fetch_ohlcv("INVALID_TICKER_XYZ")
 
     def test_missing_yfinance_raises_import_error(self):
-        with patch.dict("sys.modules", {"yfinance": None}):
-            with pytest.raises(ImportError, match="yfinance is required"):
-                fetch_ohlcv("SPY")
+        with patch.dict("sys.modules", {"yfinance": None}), pytest.raises(ImportError, match="yfinance is required"):
+            fetch_ohlcv("SPY")
 
     @patch("financial_dynamics.data_loader.yf", create=True)
     def test_output_compatible_with_pipeline(self, mock_yf, mock_yf_data):
