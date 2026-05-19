@@ -337,8 +337,30 @@ src/financial_dynamics/
 ├── data_loader.py               # yfinance integration
 └── persistence/                 # State serialization
 
+examples/
+├── quickstart.py                # Basic regime classification
+├── streaming.py                 # Real-time bar-by-bar processing
+├── multi_asset.py               # Cross-asset stress detection
+├── backtesting.py               # Accuracy evaluation with labeled data
+├── forecasting.py               # k-step regime predictions
+└── signals.py                   # Regime change & risk signal detection
+
 app.py                           # Streamlit interactive dashboard
 config/default.yaml              # All tunable parameters
+```
+
+---
+
+## Examples
+
+```bash
+python examples/quickstart.py                          # Classify SPY regimes
+python examples/quickstart.py --symbol AAPL --period 2y
+python examples/streaming.py                           # Bar-by-bar streaming
+python examples/multi_asset.py --refs QQQ,IWM,TLT,GLD # Cross-asset stress
+python examples/backtesting.py                         # Accuracy on synthetic data
+python examples/forecasting.py --horizon 20            # Regime forecast
+python examples/signals.py --symbol QQQ                # Signal detection
 ```
 
 ---
