@@ -269,7 +269,7 @@ def _build_transition_markers(
     regimes: list[Regime],
 ) -> go.Scatter3d | None:
     """'X' markers at exact bars where a regime change occurred."""
-    changes = []
+    changes: list[int] = []
     for i in range(1, len(regimes)):
         if regimes[i] != regimes[i - 1]:
             changes.append(i)

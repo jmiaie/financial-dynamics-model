@@ -60,7 +60,7 @@ def regime_classification_report(
     cm = regime_confusion_matrix(true_labels, predicted_labels)
     matrix = cm.values
 
-    rows = []
+    rows: list[dict[str, str | float | int]] = []
     total_support = matrix.sum()
     weighted_p, weighted_r, weighted_f1 = 0.0, 0.0, 0.0
 

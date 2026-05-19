@@ -48,8 +48,8 @@ def forecast_regimes(
     T = transition_matrix.copy()
     probs = current_probs.probs.copy()
 
-    horizon_probs = []
-    most_likely_path = []
+    horizon_probs: list[RegimeProbabilities] = []
+    most_likely_path: list[Regime] = []
 
     T_power = np.eye(NUM_REGIMES)
     for _ in range(horizon):

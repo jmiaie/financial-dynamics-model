@@ -137,7 +137,7 @@ class FeatureEngine:
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
 
-        ref_returns = None
+        ref_returns: dict[str, pd.Series] | None = None
         if self._ref_buffers:
             ref_returns = {}
             for ref_key, buf in self._ref_buffers.items():

@@ -98,7 +98,7 @@ def compute_cross_asset_stress(
     if not reference_returns:
         return compute_correlation_stress(returns, window)
 
-    corrs = []
+    corrs: list[pd.Series] = []
     for ref_returns in reference_returns.values():
         aligned = pd.DataFrame({"primary": returns, "ref": ref_returns}).dropna()
         if len(aligned) < window:
