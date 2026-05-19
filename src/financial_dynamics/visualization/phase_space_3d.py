@@ -309,7 +309,7 @@ def _build_covariance_ellipsoids(
     resolution: int = 16,
 ) -> list[go.Mesh3d]:
     """1σ ellipsoid for each regime fitted from the covariance of its points."""
-    traces = []
+    traces: list[go.Mesh3d] = []
     u = np.linspace(0, 2 * np.pi, resolution)
     v = np.linspace(0, np.pi, resolution)
     sphere_x = np.outer(np.cos(u), np.sin(v))
@@ -496,7 +496,7 @@ def _build_stationary_halos(
 ) -> list[go.Mesh3d]:
     """Translucent sphere around each centroid sized by stationary distribution."""
     pi = _compute_stationary(transition_matrix)
-    traces = []
+    traces: list[go.Mesh3d] = []
     for i, regime in enumerate(Regime):
         weight = float(pi[i])
         if weight < 0.01:
@@ -576,7 +576,7 @@ def _build_basins(
     regimes: list[Regime],
 ) -> list[go.Mesh3d]:
     """Convex-hull mesh for each regime — its basin of attraction."""
-    traces = []
+    traces: list[go.Mesh3d] = []
     for regime in Regime:
         mask = np.array([r == regime for r in regimes])
         pts = projected[mask]
@@ -615,7 +615,7 @@ def _build_points(
     confidences: np.ndarray,
 ) -> list[go.Scatter3d]:
     """Regime-colored points with size & opacity driven by posterior confidence."""
-    traces = []
+    traces: list[go.Scatter3d] = []
     for regime in Regime:
         mask = np.array([r == regime for r in regimes])
         if not mask.any():
@@ -809,9 +809,9 @@ def _build_animation_frames(
     """Frame-by-frame reveal of the trajectory."""
     n = len(projected)
     step = max(1, n // 60)
-    frames = []
+    frames: list[go.Frame] = []
     for k in range(step, n + 1, step):
-        frame_data = []
+        frame_data: list[go.Scatter3d] = []
         # floor shadow
         z_floor = float(projected[:k, 2].min()) - 0.3
         frame_data.append(go.Scatter3d(
