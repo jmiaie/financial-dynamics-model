@@ -54,7 +54,7 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
     return {
         "version": 1,
         "bar_count": pipeline._bar_count,
-        "config": _extract_config(pipeline.config),
+        "config": config_to_dict(pipeline.config),
         "feature_engine": {
             "close_buffer": list(fe._close_buffer),
             "normalizer_history": [arr.tolist() for arr in fe.normalizer._history],
@@ -125,8 +125,13 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
 
 
-def _extract_config(config: PipelineConfig) -> dict:
-    """Serialize config to a plain dict."""
+def config_to_dict(config: PipelineConfig) -> dict[str, Any]:
+    """Serialize a PipelineConfig to a plain nested dict.
+
+    The returned dict mirrors the YAML layout accepted by
+    ``PipelineConfig.from_yaml`` and can be passed directly to
+    ``yaml.safe_dump``.
+    """
     return {
         "features": {
             "volatility_span": config.features.volatility_span,
@@ -164,7 +169,7 @@ def _extract_config(config: PipelineConfig) -> dict:
     }
 
 
-def _restore_config(config: PipelineConfig, data: dict) -> None:
+def _restore_config(config: PipelineConfig, data: dict[str, Any]) -> None:
     """Apply saved config values onto an existing PipelineConfig."""
     section_map = {
         "features": config.features,

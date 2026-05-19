@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TypedDict
+from typing import TypedDict, cast
 
 import numpy as np
 import pandas as pd
 
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, REGIME_NAMES
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
@@ -17,8 +17,6 @@ from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.forecasting import (
     RegimeForecast,
     forecast_regimes,
-    compute_expected_duration,
-    compute_stationary_distribution,
 )
 
 
@@ -47,7 +45,7 @@ class BarRecord(TypedDict, total=False):
     post_prob_RISK_OFF: float
     stabilized_regime: str | None
     risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+    risk_overlays: dict[str, bool] | None
 
 
 class FinancialDynamicsPipeline:
@@ -164,13 +162,14 @@ class FinancialDynamicsPipeline:
             record["feat_corr_stress"] = f.correlation_stress
             record["feat_shock"] = f.shock_intensity
 
+        _record = cast(dict, record)
         if state.raw_probabilities is not None:
             for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
+                _record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
 
         if state.posterior_probabilities is not None:
             for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
+                _record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
 
         record["stabilized_regime"] = (
             state.stabilized_regime.name if state.stabilized_regime is not None else None
