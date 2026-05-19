@@ -17,12 +17,15 @@ Renders the 5D feature space as an interactive 3D dynamical-systems chart with:
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 import plotly.graph_objects as go
 from scipy.interpolate import griddata
 from scipy.spatial import ConvexHull, QhullError
 from sklearn.decomposition import PCA
 
+from financial_dynamics.forecasting import compute_stationary_distribution
 from financial_dynamics.types import NUM_REGIMES, REGIME_NAMES, Regime
 from financial_dynamics.visualization._utils import fit_pca_projection
 
@@ -176,8 +179,8 @@ def build_phase_space_3d(
 # Scene layout
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _scene_layout(var_explained: np.ndarray) -> dict:
-    def axis(label: str) -> dict:
+def _scene_layout(var_explained: np.ndarray) -> dict[str, Any]:
+    def axis(label: str) -> dict[str, Any]:
         return dict(
             title=dict(text=label, font=dict(size=10, color="#64748b")),
             backgroundcolor="rgb(15, 23, 42)",
@@ -420,7 +423,7 @@ def _build_vol_isosurface(
 
     try:
         vol_grid = griddata(projected, volatility, grid_pts, method="linear")
-    except Exception:
+    except (ValueError, QhullError):
         return None
 
     vol_grid = np.where(np.isnan(vol_grid), 0.0, vol_grid)
@@ -519,12 +522,11 @@ def _build_stationary_halos(
 
 
 def _compute_stationary(T: np.ndarray) -> np.ndarray:
-    """Stationary distribution from the transition matrix."""
-    eigenvalues, eigenvectors = np.linalg.eig(T.T)
-    idx = np.argmin(np.abs(eigenvalues - 1.0))
-    pi = np.real(eigenvectors[:, idx])
-    pi = np.abs(pi)
-    return pi / pi.sum() if pi.sum() > 0 else np.ones(len(pi)) / len(pi)
+    """Stationary distribution from the transition matrix.
+
+    Delegates to the canonical implementation in forecasting module.
+    """
+    return compute_stationary_distribution(T).probs
 
 
 def _sphere_mesh(center: np.ndarray, radius: float, resolution: int = 14) -> np.ndarray:
@@ -566,7 +568,7 @@ def _build_floor_shadow(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Regime basins (item 1 — kept from prior version)
+# Regime basins (convex hulls)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _build_basins(
@@ -604,7 +606,7 @@ def _build_basins(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Confidence-encoded scatter (item 3 — kept from prior version)
+# Confidence-encoded scatter
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _build_points(
@@ -648,18 +650,15 @@ def _build_points(
     return traces
 
 
-# (Trajectory is now velocity-encoded — see _build_velocity_trajectory above)
-
-
 # ─────────────────────────────────────────────────────────────────────────────
-# Transition flow arrows (item 2 — kept from prior version)
+# Transition flow arrows
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _build_transition_arrows(
     centroid_proj: np.ndarray,
     transition_matrix: np.ndarray,
     threshold: float = 0.08,
-) -> list:
+) -> list[go.Scatter3d | go.Cone]:
     """3D flow arrows between centroids weighted by transition probability."""
     traces = []
     regimes_list = list(Regime)
@@ -858,7 +857,7 @@ def _build_animation_frames(
     return frames
 
 
-def _play_pause_buttons() -> dict:
+def _play_pause_buttons() -> dict[str, Any]:
     return dict(
         type="buttons",
         showactive=False,

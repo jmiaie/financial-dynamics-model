@@ -14,9 +14,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 import warnings
 
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
-
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
 from financial_dynamics.data_loader import fetch_ohlcv
@@ -249,7 +246,6 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
                     line_width=0,
                 )
             except KeyError:
-                import warnings
                 warnings.warn(
                     f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
                     stacklevel=2,

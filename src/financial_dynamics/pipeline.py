@@ -45,7 +45,7 @@ class BarRecord(TypedDict, total=False):
     post_prob_RISK_OFF: float
     stabilized_regime: str | None
     risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+    risk_overlays: dict[str, bool] | None
 
 
 class FinancialDynamicsPipeline:

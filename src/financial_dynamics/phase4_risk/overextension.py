@@ -6,7 +6,7 @@ from collections import Counter
 
 import numpy as np
 
-from financial_dynamics.phase4_risk._utils import safe_renormalize
+from financial_dynamics._utils import safe_renormalize
 from financial_dynamics.types import NUM_REGIMES, Regime
 
 
