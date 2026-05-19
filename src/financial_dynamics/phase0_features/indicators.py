@@ -4,6 +4,8 @@ Each function accepts pandas Series and returns pandas Series.
 No internal state -- purely functional.
 """
 
+from __future__ import annotations
+
 import numpy as np
 import pandas as pd
 

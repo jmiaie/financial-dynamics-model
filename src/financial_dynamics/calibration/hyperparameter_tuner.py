@@ -17,7 +17,7 @@ class TuningResult:
     """Outcome of a hyperparameter search."""
     best_config: PipelineConfig
     best_accuracy: float
-    best_params: dict[str, float]
+    best_params: dict[str, float | int]
     all_trials: pd.DataFrame
 
 
@@ -69,10 +69,10 @@ class HyperparameterTuner:
         param_names = list(space.keys())
         value_grid = [space[name] for name in param_names]
 
-        trials = []
+        trials: list[dict[str, float | int]] = []
         best_accuracy = -1.0
         best_config = self.base_config
-        best_params: dict[str, float] = {}
+        best_params: dict[str, float | int] = {}
 
         for values in product(*value_grid):
             params = dict(zip(param_names, values, strict=True))
@@ -97,7 +97,7 @@ class HyperparameterTuner:
     @staticmethod
     def _apply_params(
         base_config: PipelineConfig,
-        params: dict[str, float],
+        params: dict[str, float | int],
     ) -> PipelineConfig:
         """Return a deep-copied config with dotted-path overrides applied."""
         new_config = deepcopy(base_config)

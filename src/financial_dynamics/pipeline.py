@@ -112,7 +112,7 @@ class FinancialDynamicsPipeline:
 
         self.reset()
 
-        results = []
+        results: list[BarRecord] = []
         for idx, row in df.iterrows():
             bar = row.to_dict()
             state = self.step(bar, timestamp=idx)

@@ -1,5 +1,7 @@
 """Bayesian update logic for the Markov transition matrix."""
 
+from __future__ import annotations
+
 import numpy as np
 
 from financial_dynamics._utils import safe_renormalize

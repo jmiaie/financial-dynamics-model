@@ -194,26 +194,6 @@ def get_pipeline():
     return FinancialDynamicsPipeline(config)
 
 
-def render_regime_badge(regime: Regime, confidence: float):
-    """Render a colored badge for a regime."""
-    color = REGIME_COLORS_PLOTLY.get(regime, COLOR_SCHEME["secondary"])
-    name = REGIME_NAMES.get(regime, "Unknown")
-    html = f"""
-    <div style="
-        background: {color};
-        color: white;
-        padding: 0.75em 1.5em;
-        border-radius: 8px;
-        display: inline-block;
-        margin: 0.5em;
-        font-weight: bold;
-    ">
-        {name} — {confidence:.1%} confidence
-    </div>
-    """
-    return html
-
-
 def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
     """Interactive price chart with regime background bands."""
     fig = go.Figure()

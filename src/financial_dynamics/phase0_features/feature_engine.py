@@ -93,7 +93,7 @@ class FeatureEngine:
             "shock_intensity": compute_shock_intensity(returns, self.config.correlation_window),
         }, index=df.index)
 
-        normalized_rows = []
+        normalized_rows: list[np.ndarray] = []
         self.normalizer.reset()
         for _, row in raw.iterrows():
             vals = row.values

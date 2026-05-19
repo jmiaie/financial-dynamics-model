@@ -1,4 +1,4 @@
-"""Institutional-grade 3D phase-space visualization.
+"""Interactive 3D phase-space visualization.
 
 Renders the 5D feature space as an interactive 3D dynamical-systems chart with:
 - Regime basins of attraction (convex-hull mesh surfaces)
@@ -62,7 +62,7 @@ def build_phase_space_3d(
     show_transitions_markers: bool = True,
     animate: bool = False,
 ) -> go.Figure:
-    """Build an institutional-grade 3D phase-space plot."""
+    """Build the interactive 3D phase-space figure with all enabled layers."""
     projected, centroid_proj, pca = fit_pca_projection(
         feature_history, centroids, n_components=3
     )
@@ -215,7 +215,7 @@ def _build_pca_loadings(
     projected: np.ndarray,
 ) -> list[go.Scatter3d | go.Cone]:
     """Arrows from the origin showing how each original feature maps into 3D PCA space."""
-    traces = []
+    traces: list[go.Scatter3d | go.Cone] = []
     components = pca.components_  # (3, 5)
     scale = np.std(projected, axis=0).mean() * 1.8
 
@@ -660,7 +660,7 @@ def _build_transition_arrows(
     threshold: float = 0.08,
 ) -> list[go.Scatter3d | go.Cone]:
     """3D flow arrows between centroids weighted by transition probability."""
-    traces = []
+    traces: list[go.Scatter3d | go.Cone] = []
     regimes_list = list(Regime)
     for i, src_regime in enumerate(regimes_list):
         for j, dst_regime in enumerate(regimes_list):
@@ -725,7 +725,7 @@ def _build_centroid_markers(
     pi = (_compute_stationary(transition_matrix)
           if transition_matrix is not None
           else np.full(NUM_REGIMES, 0.25))
-    traces = []
+    traces: list[go.Scatter3d] = []
     for i, regime in enumerate(Regime):
         weight = float(pi[i])
         label = f"{REGIME_NAMES[regime]}\nπ={weight:.0%}"

@@ -52,7 +52,7 @@ class BenchmarkRunner:
         labels: pd.Series,
     ) -> BenchmarkSummary:
         """Run pipeline + baselines, return summary DataFrame and per-model reports."""
-        rows = []
+        rows: list[dict[str, str | float | int]] = []
         per_model_reports: dict[str, pd.DataFrame] = {}
 
         evaluator = BacktestEvaluator(self.pipeline_config)

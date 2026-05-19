@@ -78,7 +78,7 @@ class BacktestEvaluator:
         Returns a DataFrame with columns [window_start, window_end, accuracy,
         evaluated_bars] for each window position.
         """
-        rows = []
+        rows: list[dict[str, int | float]] = []
         n = len(df)
 
         for start in range(0, n - window_size + 1, step_size):

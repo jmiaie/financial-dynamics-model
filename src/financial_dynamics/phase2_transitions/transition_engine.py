@@ -47,7 +47,6 @@ class MarkovTransitionEngine:
             )
             self._transition_matrix = counts_to_transition_matrix(self.counts)
 
-        # Compute posterior probabilities
         if self._prev_regime is not None:
             transition_row = self._transition_matrix[int(self._prev_regime)]
             posterior = compute_posterior(
