@@ -8,8 +8,10 @@
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-229%20passed-0d7377?style=flat-square)](#pruebas)
+[![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#pruebas)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#pruebas)
+[![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
 **Transforma datos OHLCV sin procesar en probabilidades de régimen explicables para trading cuantitativo y gestión de riesgo.**
@@ -23,7 +25,7 @@
 <table>
 <tr>
 <td align="center"><strong>80.6%</strong><br><sub>Precisión</sub></td>
-<td align="center"><strong>229</strong><br><sub>Pruebas</sub></td>
+<td align="center"><strong>268</strong><br><sub>Pruebas</sub></td>
 <td align="center"><strong>5</strong><br><sub>Fases del Pipeline</sub></td>
 <td align="center"><strong>4</strong><br><sub>Regímenes de Mercado</sub></td>
 <td align="center"><strong>12</strong><br><sub>Capas 3D</sub></td>
@@ -291,7 +293,7 @@ risk:
 ## Pruebas
 
 ```bash
-pytest tests/ -v                          # Las 229 pruebas
+pytest tests/ -v                          # Las 268 pruebas
 pytest tests/test_phase0_features.py -v   # Ingeniería de características
 pytest tests/test_pipeline_integration.py # De extremo a extremo
 pytest tests/test_stress.py               # Estabilidad numérica

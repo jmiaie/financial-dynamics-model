@@ -8,8 +8,10 @@
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-229%20passed-0d7377?style=flat-square)](#테스트)
+[![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#테스트)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#테스트)
+[![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
 **원시 OHLCV 데이터를 설명 가능한 레짐 확률로 변환하여 퀀트 트레이딩과 리스크 관리에 활용합니다.**
@@ -23,7 +25,7 @@
 <table>
 <tr>
 <td align="center"><strong>80.6%</strong><br><sub>정확도</sub></td>
-<td align="center"><strong>229</strong><br><sub>테스트</sub></td>
+<td align="center"><strong>268</strong><br><sub>테스트</sub></td>
 <td align="center"><strong>5</strong><br><sub>파이프라인 단계</sub></td>
 <td align="center"><strong>4</strong><br><sub>시장 레짐</sub></td>
 <td align="center"><strong>12</strong><br><sub>3D 시각화 레이어</sub></td>
@@ -289,7 +291,7 @@ risk:
 ## 테스트
 
 ```bash
-pytest tests/ -v                          # 전체 229개 테스트
+pytest tests/ -v                          # 전체 268개 테스트
 pytest tests/test_phase0_features.py -v   # 특성 엔지니어링
 pytest tests/test_pipeline_integration.py # 엔드투엔드
 pytest tests/test_stress.py               # 수치 안정성

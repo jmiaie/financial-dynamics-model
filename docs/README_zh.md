@@ -8,8 +8,10 @@
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-229%20passed-0d7377?style=flat-square)](#测试)
+[![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#测试)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#测试)
+[![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
 **将原始 OHLCV 数据转化为可解释的体制概率，服务于量化交易与风险管理。**
@@ -23,7 +25,7 @@
 <table>
 <tr>
 <td align="center"><strong>80.6%</strong><br><sub>准确率</sub></td>
-<td align="center"><strong>229</strong><br><sub>单元测试</sub></td>
+<td align="center"><strong>268</strong><br><sub>单元测试</sub></td>
 <td align="center"><strong>5</strong><br><sub>管道阶段</sub></td>
 <td align="center"><strong>4</strong><br><sub>市场体制</sub></td>
 <td align="center"><strong>12</strong><br><sub>3D 可视化层</sub></td>
@@ -289,7 +291,7 @@ risk:
 ## 测试
 
 ```bash
-pytest tests/ -v                          # 全部 229 项测试
+pytest tests/ -v                          # 全部 268 项测试
 pytest tests/test_phase0_features.py -v   # 特征工程
 pytest tests/test_pipeline_integration.py # 端到端测试
 pytest tests/test_stress.py               # 数值稳定性

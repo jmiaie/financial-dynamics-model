@@ -7,8 +7,9 @@ Thank you for your interest in contributing. This guide will help you get starte
 ```bash
 git clone https://github.com/jmiaie/financial-dynamics-model.git
 cd financial-dynamics-model
-pip install -e ".[all]"
-pytest tests/ -v
+pip install -e ".[all]"    # includes hypothesis, mypy, ruff, etc.
+pre-commit install          # set up pre-commit hooks (lint, format, typecheck)
+make all                    # lint + typecheck + test + build
 ```
 
 ## Making Changes
@@ -16,7 +17,7 @@ pytest tests/ -v
 1. **Fork** the repo and create a branch from `main`
 2. **Write code** — follow the existing style, no unnecessary abstractions
 3. **Add tests** — all new features need test coverage
-4. **Run tests** — `pytest tests/ -v` must pass (229+ tests)
+4. **Run checks** — `make all` must pass (lint + typecheck + test + build)
 5. **Open a PR** — use the PR template, explain what and why
 
 ## Code Style
@@ -44,7 +45,9 @@ Each phase reads from and writes to `BarState`. The `Pipeline` orchestrator call
 ## Testing
 
 ```bash
-pytest tests/ -v                          # All tests
+make test                                 # Run all tests
+make typecheck                            # mypy type checking (zero errors expected)
+make all                                  # lint + typecheck + test + build
 pytest tests/test_phase0_features.py -v   # Specific module
 pytest tests/test_stress.py -v            # Numerical stability
 ```
@@ -54,6 +57,18 @@ Key invariants checked in tests:
 - Transition matrix rows sum to 1.0
 - All probabilities are non-negative
 - Batch and streaming modes produce identical results
+
+### Property-Based Testing
+
+`tests/test_property.py` uses Hypothesis to fuzz mathematical invariants (e.g., probability normalization, matrix row sums) with random inputs. Hypothesis ships with two profiles:
+
+- **dev** (default) — fast iterations, fewer examples
+- **ci** — thorough, runs in CI with more examples
+
+```bash
+pytest tests/test_property.py -v                        # dev profile
+pytest tests/test_property.py -v --hypothesis-seed=0    # reproducible run
+```
 
 ## Reporting Issues
 

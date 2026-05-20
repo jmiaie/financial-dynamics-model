@@ -72,6 +72,9 @@ Documentation = "https://github.com/jmiaie/financial-dynamics-model#readme"
 Issues = "https://github.com/jmiaie/financial-dynamics-model/issues"
 Demo = "https://financial-dynamics-model.streamlit.app"
 
+[project.scripts]
+fdm = "financial_dynamics.__main__:main"
+
 [tool.hatch.version]
 path = "src/financial_dynamics/__init__.py"
 

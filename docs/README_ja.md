@@ -8,8 +8,10 @@
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-229%20passed-0d7377?style=flat-square)](#テスト)
+[![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#テスト)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#テスト)
+[![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
 **生のOHLCVデータを、定量トレーディングおよびリスク管理のための説明可能なレジーム確率に変換します。**
@@ -23,7 +25,7 @@
 <table>
 <tr>
 <td align="center"><strong>80.6%</strong><br><sub>精度</sub></td>
-<td align="center"><strong>229</strong><br><sub>テスト</sub></td>
+<td align="center"><strong>268</strong><br><sub>テスト</sub></td>
 <td align="center"><strong>5</strong><br><sub>パイプライン段階</sub></td>
 <td align="center"><strong>4</strong><br><sub>市場レジーム</sub></td>
 <td align="center"><strong>12</strong><br><sub>3Dレイヤー</sub></td>
@@ -289,7 +291,7 @@ risk:
 ## テスト
 
 ```bash
-pytest tests/ -v                          # 全229テスト
+pytest tests/ -v                          # 全268テスト
 pytest tests/test_phase0_features.py -v   # 特徴量エンジニアリング
 pytest tests/test_pipeline_integration.py # エンドツーエンド
 pytest tests/test_stress.py               # 数値安定性

@@ -124,7 +124,15 @@ print(f"Path: {' → '.join(r.name for r in forecast.most_likely_path[:5])}")
 ### CLI
 
 ```bash
-python scripts/run_pipeline.py --symbol SPY --period 1y --interval 1d
+# Installed command (after pip install)
+fdm SPY --period 1y --forecast 20
+fdm AAPL --period 2y --interval 1d
+
+# Or via module
+python -m financial_dynamics SPY
+python -m financial_dynamics --version
+
+# Advanced scripts
 python scripts/run_backtest.py --data historical.csv --labels regimes.csv --rolling
 python scripts/run_calibration.py --output calibrated.yaml
 python scripts/run_benchmark.py --config config/default.yaml
