@@ -31,7 +31,7 @@ jobs:
           pip install -e ".[all]"
 
       - name: Run tests with coverage
-        run: pytest tests/ -v --tb=short --cov=financial_dynamics --cov-fail-under=90
+        run: HYPOTHESIS_PROFILE=ci pytest tests/ -v --tb=short --cov=financial_dynamics --cov-fail-under=90
 
   lint:
     runs-on: ubuntu-latest
@@ -92,4 +92,5 @@ jobs:
       - name: Verify wheel
         run: |
           pip install dist/*.whl
-          python -c "from financial_dynamics import FinancialDynamicsPipeline; print('Import OK')"
+          python -c "from financial_dynamics import FinancialDynamicsPipeline, __version__; print(f'Import OK - v{__version__}')"
+          fdm --version
