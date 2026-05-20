@@ -290,7 +290,7 @@ risk:
 
 ## Testing
 
-**260+ tests** across **22 test files** — 98% coverage (90% minimum enforced in CI).
+**268 tests** across **22 test files** — 98% coverage (90% minimum enforced in CI).
 
 ```bash
 make test            # run full suite
@@ -455,14 +455,73 @@ See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for Porkbun DNS + Streamlit Cloud
 
 ---
 
+## API Reference
+
+<details>
+<summary><strong>Core Classes</strong></summary>
+
+| Class | Import | Description |
+|-------|--------|-------------|
+| `FinancialDynamicsPipeline` | `financial_dynamics` | Main orchestrator — `.run(df)` for batch, `.step(bar)` for streaming |
+| `PipelineConfig` | `financial_dynamics.config` | Typed configuration with YAML loading |
+| `Regime` | `financial_dynamics.types` | `IntEnum`: CALM_TREND, VOLATILE_TREND, CHOP, RISK_OFF |
+| `BarState` | `financial_dynamics.types` | Per-bar state flowing through all 5 phases |
+| `FeatureVector` | `financial_dynamics.types` | 5D normalized feature vector (vol, trend, drawdown, corr, shock) |
+| `RegimeProbabilities` | `financial_dynamics.types` | Probability distribution with `.dominant`, `.confidence` |
+| `SignalDetector` | `financial_dynamics.signals` | Detects regime changes, Risk-Off warnings, confidence drops |
+| `RegimeForecast` | `financial_dynamics.forecasting` | k-step-ahead regime predictions from transition matrix |
+
+</details>
+
+<details>
+<summary><strong>Key Methods</strong></summary>
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `pipeline.run(df)` | `DataFrame` | Batch process OHLCV DataFrame through all 5 phases |
+| `pipeline.step(bar)` | `BarState` | Process a single bar (streaming mode) |
+| `pipeline.forecast(horizon)` | `RegimeForecast` | k-step regime probability forecast |
+| `pipeline.get_state_report()` | `StateReport` | Current bar count, warmup status, transition matrix |
+| `pipeline.reset()` | `None` | Reset all internal state for a fresh run |
+| `fetch_ohlcv(symbol)` | `DataFrame` | Load OHLCV data from Yahoo Finance |
+| `fetch_multi_asset(symbol, refs)` | `DataFrame` | OHLCV + cross-asset reference close prices |
+| `detector.check(bar_state)` | `list[Signal]` | Check for actionable signals on a bar |
+| `save_state(pipeline, path)` | `None` | Serialize pipeline state to JSON |
+| `load_state(path)` | `Pipeline` | Restore pipeline from saved state |
+
+</details>
+
+<details>
+<summary><strong>Output Columns</strong></summary>
+
+`pipeline.run(df)` returns a DataFrame with these columns:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `feat_volatility` | float | Normalized EWMA volatility |
+| `feat_trend` | float | Normalized trend strength |
+| `feat_drawdown` | float | Normalized drawdown pressure |
+| `feat_corr_stress` | float | Normalized correlation stress |
+| `feat_shock` | float | Normalized shock intensity |
+| `raw_prob_{REGIME}` | float | Phase 1 centroid probabilities |
+| `post_prob_{REGIME}` | float | Phase 2 Bayesian posterior probabilities |
+| `stabilized_regime` | str | Phase 3 temporally stabilized regime |
+| `risk_adjusted_regime` | str | Phase 4 final regime assignment |
+| `risk_overlays` | dict | Risk conditioning flags applied |
+
+</details>
+
+---
+
 ## Documentation
 
 | Resource | Description |
 |----------|-------------|
 | [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Streamlit Cloud, Docker, custom domain |
 | [STREAMLIT_QUICK_START.md](STREAMLIT_QUICK_START.md) | Run the dashboard locally |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Development setup, code style, architecture |
+| [CHANGELOG.md](CHANGELOG.md) | Release notes and version history |
 | [config/default.yaml](config/default.yaml) | All tunable parameters |
-| `scripts/run_pipeline.py --help` | CLI reference |
 
 ---
 
@@ -474,8 +533,11 @@ Contributions welcome. Please open an issue first to discuss major changes.
 git clone https://github.com/jmiaie/financial-dynamics-model.git
 cd financial-dynamics-model
 pip install -e ".[all]"
-pytest tests/ -v
+pre-commit install
+make all                # lint + typecheck + test + build
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for code style, architecture guide, and testing conventions.
 
 ---
 
