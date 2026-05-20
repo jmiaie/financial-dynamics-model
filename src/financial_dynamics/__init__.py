@@ -1,6 +1,6 @@
 """Financial Dynamics Model - System Dynamics applied to financial time series."""
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 from financial_dynamics.forecasting import RegimeForecast
 from financial_dynamics.pipeline import FinancialDynamicsPipeline

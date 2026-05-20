@@ -3,6 +3,7 @@ __pycache__/
 *.pyo
 .pytest_cache/
 .coverage
+htmlcov/
 *.egg-info/
 dist/
 build/
@@ -14,4 +15,6 @@ build/
 config/calibrated.yaml
 .venv/
 venv/
-dist/
+.mypy_cache/
+.hypothesis/
+.ruff_cache/

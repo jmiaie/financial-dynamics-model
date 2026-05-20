@@ -6,9 +6,14 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+from hypothesis import settings
 
 # Ensure src is importable
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+settings.register_profile("ci", max_examples=500, deadline=None)
+settings.register_profile("dev", max_examples=50, deadline=None)
+settings.load_profile("dev")
 
 
 @pytest.fixture
