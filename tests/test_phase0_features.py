@@ -101,6 +101,12 @@ class TestNormalizer:
         assert (result >= 0).all()
         assert (result <= 1.01).all()
 
+    def test_invalid_method_raises_value_error(self):
+        """Cover normalizer.py line 24: invalid normalization_method."""
+        config = FeatureConfig(normalization_method="invalid_method")
+        with pytest.raises(ValueError, match="Unsupported normalization_method"):
+            FeatureNormalizer(config)
+
     def test_reset_clears_state(self):
         config = FeatureConfig()
         norm = FeatureNormalizer(config)

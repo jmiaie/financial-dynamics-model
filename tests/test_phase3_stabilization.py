@@ -95,6 +95,15 @@ class TestMajorityVote:
         # Tie: 2 CALM, 2 CHOP. Most recent is CHOP
         assert result == Regime.CHOP
 
+    def test_three_way_tie_breaks_to_most_recent(self):
+        """Cover the reversed-buffer tie-breaking loop with a three-way tie."""
+        mv = MajorityVoteFilter(window=3)
+        mv.apply(Regime.CALM_TREND)
+        mv.apply(Regime.VOLATILE_TREND)
+        result = mv.apply(Regime.CHOP)
+        # 3-way tie: 1 each; most recent (CHOP) wins
+        assert result == Regime.CHOP
+
     def test_reset(self):
         mv = MajorityVoteFilter(window=5)
         for _ in range(5):

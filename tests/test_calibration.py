@@ -126,6 +126,22 @@ class TestHyperparameterTuner:
         with pytest.raises(ValueError, match="at least one parameter"):
             tuner.tune(df, labels, search_space={})
 
+    def test_uses_default_space_when_none(self, synthetic_ohlcv):
+        """Cover line 63: search_space is None triggers _DEFAULT_SPACE."""
+        df, labels = synthetic_ohlcv
+        tuner = HyperparameterTuner()
+        result = tuner.tune(df, labels, search_space=None)
+        assert isinstance(result, TuningResult)
+        # Default space has 4*3*3*3 = 108 combos
+        assert len(result.all_trials) == 108
+
+    def test_raises_on_unknown_key_in_valid_section(self, synthetic_ohlcv):
+        """Cover line 112: valid section but unknown attribute key."""
+        df, labels = synthetic_ohlcv
+        tuner = HyperparameterTuner()
+        with pytest.raises(ValueError, match="has no 'nonexistent_key'"):
+            tuner.tune(df, labels, search_space={"regimes.nonexistent_key": [1.0]})
+
 
 class TestCalibrator:
     def test_calibrate_returns_result(self, synthetic_ohlcv):

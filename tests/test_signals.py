@@ -90,6 +90,16 @@ class TestSignalDetector:
         signals = detector.check(state)
         assert signals == []
 
+    def test_no_riskoff_warning_when_probs_none(self):
+        """Cover detector.py line 88/91-92: _check_riskoff_warning returns [] when probs is None."""
+        detector = SignalDetector(riskoff_probability_warning=0.1)
+        state = BarState()
+        state.risk_adjusted_regime = Regime.CALM_TREND
+        # No posterior_probabilities or raw_probabilities
+        signals = detector.check(state)
+        warnings = [s for s in signals if s.signal_type == SignalType.RISKOFF_WARNING]
+        assert len(warnings) == 0
+
     def test_reset(self):
         detector = SignalDetector()
         detector.check(_make_bar_state(Regime.CALM_TREND))

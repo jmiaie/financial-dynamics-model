@@ -23,6 +23,12 @@ class TestRegimeDefinitions:
         assert centroids.shape == (4, 5)
         np.testing.assert_array_equal(centroids, get_default_centroids())
 
+    def test_unknown_regime_name_raises_value_error(self):
+        config = RegimeConfig()
+        config.centroids["BOGUS_REGIME"] = [0.1, 0.2, 0.3, 0.4, 0.5]
+        with pytest.raises(ValueError, match="Unknown regime name 'BOGUS_REGIME'"):
+            get_centroids(config)
+
 
 class TestCentroidEngine:
     def test_probabilities_sum_to_one(self):

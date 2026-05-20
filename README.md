@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![CI](https://img.shields.io/github/actions/workflow/status/jmiaie/financial-dynamics-model/ci.yml?style=flat-square&label=CI)](https://github.com/jmiaie/financial-dynamics-model/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-260%20passed-0d7377?style=flat-square)](#testing)
+[![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#testing)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#testing)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
@@ -25,7 +25,7 @@
 <table>
 <tr>
 <td align="center"><strong>80.6%</strong><br><sub>Accuracy</sub></td>
-<td align="center"><strong>260</strong><br><sub>Unit Tests</sub></td>
+<td align="center"><strong>268</strong><br><sub>Unit Tests</sub></td>
 <td align="center"><strong>5</strong><br><sub>Pipeline Phases</sub></td>
 <td align="center"><strong>4</strong><br><sub>Market Regimes</sub></td>
 <td align="center"><strong>12</strong><br><sub>3D Viz Layers</sub></td>
@@ -290,13 +290,34 @@ risk:
 
 ## Testing
 
+**260+ tests** across **22 test files** — 98% coverage (90% minimum enforced in CI).
+
 ```bash
-pytest tests/ -v                          # All 240 tests
-pytest tests/test_phase0_features.py -v   # Feature engineering
-pytest tests/test_pipeline_integration.py # End-to-end
-pytest tests/test_stress.py               # Numerical stability
-pytest tests/test_visualization.py        # 3D rendering
+make test            # run full suite
+make test-quick      # fast run
+make coverage        # with HTML report
+make lint            # ruff check
+make typecheck       # mypy (zero errors)
+make format          # auto-format
+make all             # lint + typecheck + test + build
 ```
+
+**Property-based testing** with [Hypothesis](https://hypothesis.readthedocs.io/) — 14 tests verify numerical invariants (probability normalization, transition matrix rows, feature bounds).
+
+| Profile | Examples | Use case |
+|---------|----------|----------|
+| `dev` | 50 | Local iteration — fast feedback |
+| `ci` | 500 | CI pipeline — thorough coverage |
+
+```bash
+HYPOTHESIS_PROFILE=ci pytest           # thorough run
+pytest tests/test_phase0_features.py   # feature engineering
+pytest tests/test_pipeline_integration.py  # end-to-end
+pytest tests/test_stress.py            # numerical stability
+pytest tests/test_visualization.py     # 3D rendering
+```
+
+**Code quality:** mypy type checking with zero errors, pre-commit hooks (ruff, formatting, type checks) for consistent quality on every commit.
 
 <details>
 <summary><strong>Test Coverage by Module</strong></summary>
@@ -312,6 +333,7 @@ pytest tests/test_visualization.py        # 3D rendering
 | Visualization | 16 | 2D + 3D |
 | Signals | 12 | Detection |
 | Stress / Numerical | 20 | Edge cases |
+| Hypothesis (property) | 14 | Numerical invariants |
 | Calibration + Others | 31 | Tooling |
 
 </details>

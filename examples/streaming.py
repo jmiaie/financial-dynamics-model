@@ -35,7 +35,9 @@ def main() -> None:
 
         if state.risk_adjusted_regime is not None:
             regime_name = REGIME_NAMES[state.risk_adjusted_regime]
-            conf = max(state.posterior_probabilities) if state.posterior_probabilities else 0.0
+            conf = (
+                state.posterior_probabilities.confidence if state.posterior_probabilities else 0.0
+            )
             date_str = str(timestamp)[:10]
             print(
                 f"{idx:4d}  {date_str:>12s}  {row['close']:8.2f}  {regime_name:>20s}  {conf:10.1%}"
@@ -43,8 +45,8 @@ def main() -> None:
 
     report = pipeline.get_state_report()
     print("\nFinal state:")
-    print(f"  Regime:     {REGIME_NAMES[report['current_regime']]}")
-    print(f"  Bars seen:  {report['bars_processed']}")
+    print(f"  Bars seen:  {report['bar_count']}")
+    print(f"  Warmed up:  {report['is_warmed_up']}")
 
 
 if __name__ == "__main__":

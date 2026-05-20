@@ -42,15 +42,14 @@ def main() -> None:
     print(f"Expected duration in current regime: {forecast.expected_duration:.1f} bars")
     print(f"\nMost likely path (next {args.horizon} bars):")
     for step, regime in enumerate(forecast.most_likely_path, 1):
-        probs = forecast.horizon_probs[step - 1]
-        conf = max(probs)
-        print(f"  t+{step:2d}: {REGIME_NAMES[regime]:20s} ({conf:.1%})")
+        rp = forecast.horizon_probabilities[step - 1]
+        print(f"  t+{step:2d}: {REGIME_NAMES[regime]:20s} ({rp.confidence:.1%})")
 
     print("\nProbability evolution:")
     header = "".join(f"{REGIME_NAMES[r]:>14s}" for r in Regime)
     print(f"  {'Step':>6s}{header}")
-    for step, probs in enumerate(forecast.horizon_probs, 1):
-        row = "".join(f"{p:14.3f}" for p in probs)
+    for step, rp in enumerate(forecast.horizon_probabilities, 1):
+        row = "".join(f"{rp[r]:14.3f}" for r in Regime)
         print(f"  t+{step:4d}{row}")
 
     tm = pipeline._transition_engine.get_transition_matrix()

@@ -90,6 +90,25 @@ class TestRiskConditioningEngine:
         engine.update(state)
         assert state.risk_adjusted_regime is None
 
+    def test_no_probs_assigns_stabilized_directly(self):
+        """Cover lines 46-47: when probs is None, risk_adjusted_regime = stabilized_regime."""
+        engine = RiskConditioningEngine()
+        state = BarState()
+        state.stabilized_regime = Regime.VOLATILE_TREND
+        # No posterior_probabilities or raw_probabilities set
+        engine.update(state)
+        assert state.risk_adjusted_regime == Regime.VOLATILE_TREND
+
+    def test_riskoff_confirmation_returns_false_when_features_none(self):
+        """Cover line 85: _check_riskoff_confirmation returns False when features is None."""
+        engine = RiskConditioningEngine()
+        state = BarState()
+        state.stabilized_regime = Regime.RISK_OFF
+        state.posterior_probabilities = RegimeProbabilities(probs=np.array([0.1, 0.1, 0.1, 0.7]))
+        # features is None
+        engine.update(state)
+        assert state.risk_overlays.get("riskoff_confirmed") is False
+
     def test_riskoff_not_confirmed_without_stressors(self):
         engine = RiskConditioningEngine()
         state = BarState()

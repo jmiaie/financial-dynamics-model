@@ -25,13 +25,24 @@ def main() -> None:
 
     print(f"Loading {args.symbol}...")
     df = fetch_ohlcv(args.symbol, period=args.period)
+
     pipeline = FinancialDynamicsPipeline()
-    results = pipeline.run(df)
-
     detector = SignalDetector()
-    signals = detector.detect_all(results)
+    all_signals = []
 
-    print(f"\n{len(signals)} signals detected:\n")
+    for timestamp, row in df.iterrows():
+        bar = {
+            "open": row["open"],
+            "high": row["high"],
+            "low": row["low"],
+            "close": row["close"],
+            "volume": row["volume"],
+        }
+        state = pipeline.step(bar, timestamp=str(timestamp))
+        signals = detector.check(state)
+        all_signals.extend(signals)
+
+    print(f"\n{len(all_signals)} signals detected:\n")
 
     type_names = {
         SignalType.REGIME_CHANGE: "REGIME CHANGE",
@@ -40,14 +51,13 @@ def main() -> None:
         SignalType.REGIME_STABILIZED: "STABILIZED",
     }
 
-    for signal in signals:
+    for signal in all_signals:
         label = type_names.get(signal.signal_type, str(signal.signal_type))
-        date = str(results.index[signal.bar_index])[:10] if signal.bar_index < len(results) else "?"
-        print(f"  [{date}] {label:>15s}  {signal.message}")
+        print(f"  [bar {signal.bar_index:4d}] {label:>15s}  {signal.message}")
 
     print("\nSignal summary:")
     for stype in SignalType:
-        count = sum(1 for s in signals if s.signal_type == stype)
+        count = sum(1 for s in all_signals if s.signal_type == stype)
         if count > 0:
             label = type_names.get(stype, str(stype))
             print(f"  {label:>15s}: {count}")
