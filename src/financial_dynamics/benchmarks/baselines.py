@@ -15,8 +15,7 @@ class BaselineClassifier(Protocol):
 
     name: str
 
-    def classify(self, df: pd.DataFrame) -> pd.Series:
-        ...
+    def classify(self, df: pd.DataFrame) -> pd.Series: ...
 
 
 class VolatilityBucketClassifier:
@@ -101,11 +100,13 @@ class GaussianMixtureClassifier:
         returns = close.pct_change()
         vol = returns.rolling(self.vol_window).std()
 
-        features = pd.DataFrame({
-            "return": returns,
-            "abs_return": returns.abs(),
-            "vol": vol,
-        })
+        features = pd.DataFrame(
+            {
+                "return": returns,
+                "abs_return": returns.abs(),
+                "vol": vol,
+            }
+        )
         valid = features.dropna()
 
         gmm = GaussianMixture(

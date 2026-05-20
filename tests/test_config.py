@@ -84,11 +84,15 @@ class TestFromYaml:
 
     def test_multiple_sections_override(self, tmp_path):
         multi = tmp_path / "multi.yaml"
-        multi.write_text(yaml.dump({
-            "features": {"volatility_span": 50},
-            "transitions": {"learning_rate": 0.1},
-            "risk": {"riskoff_confirmation_count": 5},
-        }))
+        multi.write_text(
+            yaml.dump(
+                {
+                    "features": {"volatility_span": 50},
+                    "transitions": {"learning_rate": 0.1},
+                    "risk": {"riskoff_confirmation_count": 5},
+                }
+            )
+        )
         config = PipelineConfig.from_yaml(multi)
         assert config.features.volatility_span == 50
         assert config.transitions.learning_rate == 0.1

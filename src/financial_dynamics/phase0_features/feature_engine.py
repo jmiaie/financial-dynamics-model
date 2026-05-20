@@ -31,9 +31,7 @@ class FeatureEngine:
     def __init__(self, config: FeatureConfig | None = None):
         self.config = config or FeatureConfig()
         self.normalizer = FeatureNormalizer(self.config)
-        self._close_buffer: deque[float] = deque(
-            maxlen=self._max_window + 10
-        )
+        self._close_buffer: deque[float] = deque(maxlen=self._max_window + 10)
         self._ref_buffers: dict[str, deque[float]] = {}
 
     @property
@@ -64,9 +62,7 @@ class FeatureEngine:
             Correlation stress Series (same length as returns).
         """
         if ref_returns:
-            return compute_cross_asset_stress(
-                returns, ref_returns, self.config.correlation_window
-            )
+            return compute_cross_asset_stress(returns, ref_returns, self.config.correlation_window)
         return compute_correlation_stress(returns, self.config.correlation_window)
 
     def compute_batch(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -85,18 +81,21 @@ class FeatureEngine:
         ref_returns = {col: df[col].pct_change() for col in ref_cols} if ref_cols else None
         corr_stress = self._compute_corr_stress(returns, ref_returns)
 
-        raw = pd.DataFrame({
-            "volatility": compute_ewma_volatility(returns, self.config.volatility_span),
-            "trend_strength": compute_trend_strength(close, self.config.trend_window),
-            "drawdown_pressure": compute_drawdown_pressure(close, self.config.drawdown_window),
-            "correlation_stress": corr_stress,
-            "shock_intensity": compute_shock_intensity(returns, self.config.correlation_window),
-        }, index=df.index)
+        raw = pd.DataFrame(
+            {
+                "volatility": compute_ewma_volatility(returns, self.config.volatility_span),
+                "trend_strength": compute_trend_strength(close, self.config.trend_window),
+                "drawdown_pressure": compute_drawdown_pressure(close, self.config.drawdown_window),
+                "correlation_stress": corr_stress,
+                "shock_intensity": compute_shock_intensity(returns, self.config.correlation_window),
+            },
+            index=df.index,
+        )
 
         normalized_rows: list[np.ndarray] = []
         self.normalizer.reset()
         for _, row in raw.iterrows():
-            vals = row.values
+            vals = np.asarray(row.values)
             if np.isnan(vals).any():
                 normalized_rows.append(np.full(5, np.nan))
             else:
@@ -118,8 +117,7 @@ class FeatureEngine:
         """
         if "close" not in bar_state.ohlcv:
             raise KeyError(
-                f"Bar is missing required key 'close'. "
-                f"Got keys: {sorted(bar_state.ohlcv.keys())}"
+                f"Bar is missing required key 'close'. Got keys: {sorted(bar_state.ohlcv.keys())}"
             )
         close = bar_state.ohlcv["close"]
         self._close_buffer.append(close)
@@ -149,13 +147,17 @@ class FeatureEngine:
 
         corr_stress_val = float(self._compute_corr_stress(returns, ref_returns).iloc[-1])
 
-        raw = np.array([
-            float(compute_ewma_volatility(returns, self.config.volatility_span).iloc[-1]),
-            float(compute_trend_strength(close_series, self.config.trend_window).iloc[-1]),
-            float(compute_drawdown_pressure(close_series, self.config.drawdown_window).iloc[-1]),
-            corr_stress_val,
-            float(compute_shock_intensity(returns, self.config.correlation_window).iloc[-1]),
-        ])
+        raw = np.array(
+            [
+                float(compute_ewma_volatility(returns, self.config.volatility_span).iloc[-1]),
+                float(compute_trend_strength(close_series, self.config.trend_window).iloc[-1]),
+                float(
+                    compute_drawdown_pressure(close_series, self.config.drawdown_window).iloc[-1]
+                ),
+                corr_stress_val,
+                float(compute_shock_intensity(returns, self.config.correlation_window).iloc[-1]),
+            ]
+        )
 
         if np.isnan(raw).any():
             bar_state.features = None

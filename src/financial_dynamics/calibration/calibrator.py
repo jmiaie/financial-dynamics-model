@@ -19,6 +19,7 @@ from financial_dynamics.config import PipelineConfig
 @dataclass
 class CalibrationResult:
     """Outcome of a full calibration run."""
+
     calibrated_config: PipelineConfig
     baseline_accuracy: float
     centroid_only_accuracy: float

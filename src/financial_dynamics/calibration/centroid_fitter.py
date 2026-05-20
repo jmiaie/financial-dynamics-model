@@ -38,9 +38,7 @@ def fit_centroids(
     """
     missing = set(FEATURE_COLUMNS) - set(features.columns)
     if missing:
-        raise ValueError(
-            f"features DataFrame missing required columns: {sorted(missing)}"
-        )
+        raise ValueError(f"features DataFrame missing required columns: {sorted(missing)}")
 
     valid = features[FEATURE_COLUMNS].dropna()
     aligned_labels = labels.loc[valid.index]

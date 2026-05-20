@@ -20,7 +20,7 @@ def compute_ewma_volatility(returns: pd.Series, span: int = 20) -> pd.Series:
     Returns:
         Series of annualized volatility estimates (sqrt of EWMA variance).
     """
-    squared = returns ** 2
+    squared = returns**2
     ewma_var = squared.ewm(span=span, min_periods=span).mean()
     return np.sqrt(ewma_var)
 
@@ -35,9 +35,10 @@ def compute_trend_strength(close: pd.Series, window: int = 14) -> pd.Series:
     Returns:
         Series with normalized absolute trend strength.
     """
+
     def _regression_slope(y: np.ndarray) -> float:
         if len(y) < 2 or np.isnan(y).any():
-            return np.nan
+            return float("nan")
         x = np.arange(len(y), dtype=float)
         x_mean = x.mean()
         y_mean = y.mean()

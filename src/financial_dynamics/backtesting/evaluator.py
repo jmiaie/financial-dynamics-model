@@ -18,6 +18,7 @@ from financial_dynamics.pipeline import FinancialDynamicsPipeline
 @dataclass
 class BacktestResult:
     """Container for backtest outputs."""
+
     pipeline_results: pd.DataFrame
     accuracy: float
     confusion_matrix: pd.DataFrame
@@ -87,11 +88,13 @@ class BacktestEvaluator:
             window_labels = true_labels.iloc[start:end]
 
             result = self.evaluate(window_df, window_labels)
-            rows.append({
-                "window_start": start,
-                "window_end": end,
-                "accuracy": result.accuracy,
-                "evaluated_bars": result.evaluated_bars,
-            })
+            rows.append(
+                {
+                    "window_start": start,
+                    "window_end": end,
+                    "accuracy": result.accuracy,
+                    "evaluated_bars": result.evaluated_bars,
+                }
+            )
 
         return pd.DataFrame(rows)

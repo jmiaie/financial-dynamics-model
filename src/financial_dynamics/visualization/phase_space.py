@@ -40,28 +40,32 @@ class PhaseSpacePlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = ax.get_figure()  # type: ignore[assignment]
 
-        projected, centroid_proj, _ = fit_pca_projection(
-            feature_history, self.centroids
-        )
+        projected, centroid_proj, _ = fit_pca_projection(feature_history, self.centroids)
 
         for regime in Regime:
             mask = [r == regime for r in regimes]
             if any(mask):
                 pts = projected[mask]
                 ax.scatter(
-                    pts[:, 0], pts[:, 1],
+                    pts[:, 0],
+                    pts[:, 1],
                     c=REGIME_COLORS[regime],
-                    alpha=0.4, s=15,
+                    alpha=0.4,
+                    s=15,
                     label=REGIME_NAMES[regime],
                 )
 
         for i, regime in enumerate(Regime):
             ax.scatter(
-                centroid_proj[i, 0], centroid_proj[i, 1],
+                centroid_proj[i, 0],
+                centroid_proj[i, 1],
                 c=REGIME_COLORS[regime],
-                marker="*", s=300, edgecolors="black", linewidths=1.0,
+                marker="*",
+                s=300,
+                edgecolors="black",
+                linewidths=1.0,
                 zorder=10,
             )
 

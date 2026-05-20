@@ -66,14 +66,16 @@ class TestMultiAssetFeatureEngine:
         rng = np.random.default_rng(42)
         n = 120
         prices = 100 + np.cumsum(rng.normal(0, 0.5, n))
-        df = pd.DataFrame({
-            "open": prices - 0.2,
-            "high": prices + abs(rng.normal(0, 0.3, n)),
-            "low": prices - abs(rng.normal(0, 0.3, n)),
-            "close": prices,
-            "volume": rng.integers(1000, 5000, n),
-            "ref_VIX_close": 20 + rng.normal(0, 2, n),
-        })
+        df = pd.DataFrame(
+            {
+                "open": prices - 0.2,
+                "high": prices + abs(rng.normal(0, 0.3, n)),
+                "low": prices - abs(rng.normal(0, 0.3, n)),
+                "close": prices,
+                "volume": rng.integers(1000, 5000, n),
+                "ref_VIX_close": 20 + rng.normal(0, 2, n),
+            }
+        )
 
         engine = FeatureEngine()
         features = engine.compute_batch(df)
@@ -86,6 +88,7 @@ class TestMultiAssetFeatureEngine:
         n = 80
 
         from financial_dynamics.types import BarState
+
         engine = FeatureEngine()
         features_found = False
         for _i in range(n):
@@ -107,13 +110,15 @@ class TestMultiAssetFeatureEngine:
         rng = np.random.default_rng(42)
         n = 120
         prices = 100 + np.cumsum(rng.normal(0, 0.5, n))
-        df = pd.DataFrame({
-            "open": prices - 0.2,
-            "high": prices + abs(rng.normal(0, 0.3, n)),
-            "low": prices - abs(rng.normal(0, 0.3, n)),
-            "close": prices,
-            "volume": rng.integers(1000, 5000, n),
-        })
+        df = pd.DataFrame(
+            {
+                "open": prices - 0.2,
+                "high": prices + abs(rng.normal(0, 0.3, n)),
+                "low": prices - abs(rng.normal(0, 0.3, n)),
+                "close": prices,
+                "volume": rng.integers(1000, 5000, n),
+            }
+        )
 
         engine = FeatureEngine()
         features = engine.compute_batch(df)
@@ -125,15 +130,17 @@ class TestMultiAssetPipeline:
         rng = np.random.default_rng(42)
         n = 120
         prices = 100 + np.cumsum(rng.normal(0, 0.5, n))
-        df = pd.DataFrame({
-            "open": prices - 0.2,
-            "high": prices + abs(rng.normal(0, 0.3, n)),
-            "low": prices - abs(rng.normal(0, 0.3, n)),
-            "close": prices,
-            "volume": rng.integers(1000, 5000, n),
-            "ref_VIX_close": 20 + rng.normal(0, 2, n),
-            "ref_TLT_close": 90 + rng.normal(0, 1, n),
-        })
+        df = pd.DataFrame(
+            {
+                "open": prices - 0.2,
+                "high": prices + abs(rng.normal(0, 0.3, n)),
+                "low": prices - abs(rng.normal(0, 0.3, n)),
+                "close": prices,
+                "volume": rng.integers(1000, 5000, n),
+                "ref_VIX_close": 20 + rng.normal(0, 2, n),
+                "ref_TLT_close": 90 + rng.normal(0, 1, n),
+            }
+        )
 
         pipeline = FinancialDynamicsPipeline()
         results = pipeline.run(df)

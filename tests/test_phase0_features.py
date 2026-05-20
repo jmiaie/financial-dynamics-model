@@ -115,10 +115,16 @@ class TestFeatureEngine:
         engine = FeatureEngine()
         result = engine.compute_batch(calm_trend_data)
         expected_cols = [
-            "volatility", "trend_strength", "drawdown_pressure",
-            "correlation_stress", "shock_intensity",
-            "norm_volatility", "norm_trend_strength", "norm_drawdown_pressure",
-            "norm_correlation_stress", "norm_shock_intensity",
+            "volatility",
+            "trend_strength",
+            "drawdown_pressure",
+            "correlation_stress",
+            "shock_intensity",
+            "norm_volatility",
+            "norm_trend_strength",
+            "norm_drawdown_pressure",
+            "norm_correlation_stress",
+            "norm_shock_intensity",
         ]
         for col in expected_cols:
             assert col in result.columns
@@ -147,7 +153,8 @@ class TestFeatureEngine:
         assert not np.isnan(arr).any()
 
     def test_warmup_bars_property(self):
-        config = FeatureConfig(volatility_span=20, trend_window=14,
-                               drawdown_window=60, correlation_window=20)
+        config = FeatureConfig(
+            volatility_span=20, trend_window=14, drawdown_window=60, correlation_window=20
+        )
         engine = FeatureEngine(config)
         assert engine.warmup_bars == 61

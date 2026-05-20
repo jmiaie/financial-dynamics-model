@@ -37,7 +37,9 @@ def main() -> None:
             regime_name = REGIME_NAMES[state.risk_adjusted_regime]
             conf = max(state.posterior_probabilities) if state.posterior_probabilities else 0.0
             date_str = str(timestamp)[:10]
-            print(f"{idx:4d}  {date_str:>12s}  {row['close']:8.2f}  {regime_name:>20s}  {conf:10.1%}")
+            print(
+                f"{idx:4d}  {date_str:>12s}  {row['close']:8.2f}  {regime_name:>20s}  {conf:10.1%}"
+            )
 
     report = pipeline.get_state_report()
     print("\nFinal state:")

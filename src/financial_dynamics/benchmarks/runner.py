@@ -23,6 +23,7 @@ from financial_dynamics.config import PipelineConfig
 @dataclass
 class BenchmarkSummary:
     """Side-by-side scores for the full pipeline and baseline classifiers."""
+
     summary: pd.DataFrame
     per_model_reports: dict[str, pd.DataFrame]
 
@@ -57,11 +58,13 @@ class BenchmarkRunner:
 
         evaluator = BacktestEvaluator(self.pipeline_config)
         pipeline_result = evaluator.evaluate(df, labels)
-        rows.append({
-            "model": "financial_dynamics_pipeline",
-            "accuracy": pipeline_result.accuracy,
-            "evaluated_bars": pipeline_result.evaluated_bars,
-        })
+        rows.append(
+            {
+                "model": "financial_dynamics_pipeline",
+                "accuracy": pipeline_result.accuracy,
+                "evaluated_bars": pipeline_result.evaluated_bars,
+            }
+        )
         per_model_reports["financial_dynamics_pipeline"] = pipeline_result.classification_report
 
         for baseline in self.baselines:
@@ -73,16 +76,16 @@ class BenchmarkRunner:
             accuracy = regime_accuracy(aligned_labels, aligned_preds)
             report = regime_classification_report(aligned_labels, aligned_preds)
 
-            rows.append({
-                "model": baseline.name,
-                "accuracy": accuracy,
-                "evaluated_bars": int(mask.sum()),
-            })
+            rows.append(
+                {
+                    "model": baseline.name,
+                    "accuracy": accuracy,
+                    "evaluated_bars": int(mask.sum()),
+                }
+            )
             per_model_reports[baseline.name] = report
 
-        summary = pd.DataFrame(rows).sort_values(
-            "accuracy", ascending=False
-        ).reset_index(drop=True)
+        summary = pd.DataFrame(rows).sort_values("accuracy", ascending=False).reset_index(drop=True)
         return BenchmarkSummary(
             summary=summary,
             per_model_reports=per_model_reports,

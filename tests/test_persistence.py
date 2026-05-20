@@ -128,13 +128,15 @@ class TestSaveLoad:
         config.regimes.temperature = 2.5
 
         pipeline = FinancialDynamicsPipeline(config)
-        df = pd.DataFrame({
-            "open": [100] * 100,
-            "high": [102] * 100,
-            "low": [99] * 100,
-            "close": [101] * 100,
-            "volume": [1000] * 100,
-        })
+        df = pd.DataFrame(
+            {
+                "open": [100] * 100,
+                "high": [102] * 100,
+                "low": [99] * 100,
+                "close": [101] * 100,
+                "volume": [1000] * 100,
+            }
+        )
         pipeline.run(df)
 
         path = tmp_path / "state.json"

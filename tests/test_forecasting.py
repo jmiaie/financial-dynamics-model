@@ -15,12 +15,14 @@ from financial_dynamics.types import Regime, RegimeProbabilities
 
 @pytest.fixture
 def learned_tm() -> np.ndarray:
-    return np.array([
-        [0.7, 0.1, 0.1, 0.1],
-        [0.1, 0.6, 0.2, 0.1],
-        [0.2, 0.1, 0.5, 0.2],
-        [0.1, 0.2, 0.1, 0.6],
-    ])
+    return np.array(
+        [
+            [0.7, 0.1, 0.1, 0.1],
+            [0.1, 0.6, 0.2, 0.1],
+            [0.2, 0.1, 0.5, 0.2],
+            [0.1, 0.2, 0.1, 0.6],
+        ]
+    )
 
 
 class TestForecastRegimes:
@@ -71,12 +73,14 @@ class TestExpectedDuration:
         assert duration == pytest.approx(1.0 / 0.3, rel=1e-6)
 
     def test_low_self_transition_gives_short_duration(self):
-        tm = np.array([
-            [0.1, 0.3, 0.3, 0.3],
-            [0.3, 0.1, 0.3, 0.3],
-            [0.3, 0.3, 0.1, 0.3],
-            [0.3, 0.3, 0.3, 0.1],
-        ])
+        tm = np.array(
+            [
+                [0.1, 0.3, 0.3, 0.3],
+                [0.3, 0.1, 0.3, 0.3],
+                [0.3, 0.3, 0.1, 0.3],
+                [0.3, 0.3, 0.3, 0.1],
+            ]
+        )
         duration = compute_expected_duration(tm, Regime.CALM_TREND)
         assert duration == pytest.approx(1.0 / 0.9, rel=1e-6)
 

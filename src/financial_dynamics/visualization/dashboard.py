@@ -84,13 +84,14 @@ class SystemDashboard:
                     )
                     continue
                 ax.axvspan(
-                    valid.index[i], valid.index[i + 1],
-                    alpha=0.15, color=REGIME_COLORS[regime],
+                    valid.index[i],
+                    valid.index[i + 1],
+                    alpha=0.15,
+                    color=REGIME_COLORS[regime],
                 )
 
         legend_patches = [
-            Patch(facecolor=REGIME_COLORS[r], alpha=0.3, label=REGIME_NAMES[r])
-            for r in Regime
+            Patch(facecolor=REGIME_COLORS[r], alpha=0.3, label=REGIME_NAMES[r]) for r in Regime
         ]
         ax.legend(handles=legend_patches, loc="upper left", fontsize=8)
         ax.set_title("Price with Regime Classification")
@@ -99,13 +100,17 @@ class SystemDashboard:
 
     def _plot_phase_space(self, results: pd.DataFrame, ax: Axes) -> None:
         """Panel 2: Phase-space projection with trajectory."""
-        feat_cols = ["feat_volatility", "feat_trend", "feat_drawdown",
-                     "feat_corr_stress", "feat_shock"]
+        feat_cols = [
+            "feat_volatility",
+            "feat_trend",
+            "feat_drawdown",
+            "feat_corr_stress",
+            "feat_shock",
+        ]
         valid = results.dropna(subset=feat_cols + ["risk_adjusted_regime"])
 
         if len(valid) < 5:
-            ax.text(0.5, 0.5, "Insufficient data", ha="center", va="center",
-                    transform=ax.transAxes)
+            ax.text(0.5, 0.5, "Insufficient data", ha="center", va="center", transform=ax.transAxes)
             return
 
         features = valid[feat_cols].values
@@ -128,8 +133,7 @@ class SystemDashboard:
         valid = results.dropna(subset=prob_cols)
 
         if len(valid) < 2:
-            ax.text(0.5, 0.5, "Insufficient data", ha="center", va="center",
-                    transform=ax.transAxes)
+            ax.text(0.5, 0.5, "Insufficient data", ha="center", va="center", transform=ax.transAxes)
             return
 
         colors = [REGIME_COLORS[r] for r in Regime]
@@ -164,8 +168,14 @@ class SystemDashboard:
 
         for i in range(NUM_REGIMES):
             for j in range(NUM_REGIMES):
-                ax.text(j, i, f"{tm[i, j]:.2f}",
-                        ha="center", va="center", fontsize=9,
-                        color="white" if tm[i, j] > 0.5 else "black")
+                ax.text(
+                    j,
+                    i,
+                    f"{tm[i, j]:.2f}",
+                    ha="center",
+                    va="center",
+                    fontsize=9,
+                    color="white" if tm[i, j] > 0.5 else "black",
+                )
 
         plt.colorbar(im, ax=ax, shrink=0.8)

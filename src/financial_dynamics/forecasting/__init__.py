@@ -19,6 +19,7 @@ __all__ = [
 @dataclass
 class RegimeForecast:
     """K-step-ahead regime probability forecast."""
+
     current_regime: Regime
     current_probabilities: RegimeProbabilities
     horizon_probabilities: list[RegimeProbabilities]
@@ -81,7 +82,7 @@ def compute_expected_duration(
     self_transition = transition_matrix[int(regime), int(regime)]
     if self_transition >= 1.0:
         return float("inf")
-    return 1.0 / (1.0 - self_transition)
+    return float(1.0 / (1.0 - self_transition))
 
 
 def compute_stationary_distribution(

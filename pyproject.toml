@@ -57,6 +57,9 @@ dashboard = [
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
+    "hypothesis>=6.0",
+    "mypy>=1.0",
+    "types-PyYAML>=6.0",
 ]
 all = [
     "financial-dynamics[data,dashboard,dev]",
@@ -87,3 +90,19 @@ packages = ["src/financial_dynamics"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "matplotlib.*",
+    "plotly.*",
+    "scipy.*",
+    "sklearn.*",
+    "yfinance.*",
+]
+ignore_missing_imports = true

@@ -20,8 +20,9 @@ from financial_dynamics.data_loader import fetch_multi_asset
 def main() -> None:
     parser = argparse.ArgumentParser(description="Multi-asset regime detection")
     parser.add_argument("--symbol", default="SPY", help="Primary ticker")
-    parser.add_argument("--refs", default="QQQ,IWM,TLT,GLD,^VIX",
-                        help="Comma-separated reference tickers")
+    parser.add_argument(
+        "--refs", default="QQQ,IWM,TLT,GLD,^VIX", help="Comma-separated reference tickers"
+    )
     parser.add_argument("--period", default="1y")
     args = parser.parse_args()
 

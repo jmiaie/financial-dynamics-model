@@ -72,28 +72,31 @@ def regime_classification_report(
 
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-        f1 = (2 * precision * recall / (precision + recall)
-              if (precision + recall) > 0 else 0.0)
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
 
-        rows.append({
-            "regime": regime.name,
-            "precision": precision,
-            "recall": recall,
-            "f1": f1,
-            "support": int(support),
-        })
+        rows.append(
+            {
+                "regime": regime.name,
+                "precision": precision,
+                "recall": recall,
+                "f1": f1,
+                "support": int(support),
+            }
+        )
 
         weight = support / total_support if total_support > 0 else 0.0
         weighted_p += precision * weight
         weighted_r += recall * weight
         weighted_f1 += f1 * weight
 
-    rows.append({
-        "regime": "weighted_avg",
-        "precision": weighted_p,
-        "recall": weighted_r,
-        "f1": weighted_f1,
-        "support": int(total_support),
-    })
+    rows.append(
+        {
+            "regime": "weighted_avg",
+            "precision": weighted_p,
+            "recall": weighted_r,
+            "f1": weighted_f1,
+            "support": int(total_support),
+        }
+    )
 
     return pd.DataFrame(rows).set_index("regime")

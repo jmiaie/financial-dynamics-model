@@ -1,4 +1,4 @@
-.PHONY: install test lint format build clean all
+.PHONY: install test test-quick coverage lint format typecheck build clean all
 
 install:
 	pip install -e ".[all]"
@@ -19,11 +19,14 @@ format:
 	ruff format src/ tests/ examples/
 	ruff check --fix src/ tests/ examples/
 
+typecheck:
+	mypy src/financial_dynamics/
+
 build:
 	python -m hatchling build
 
 clean:
-	rm -rf dist/ build/ *.egg-info .pytest_cache .coverage htmlcov
+	rm -rf dist/ build/ *.egg-info .pytest_cache .coverage htmlcov .mypy_cache
 	find . -type d -name __pycache__ -exec rm -rf {} +
 
-all: lint test build
+all: lint typecheck test build

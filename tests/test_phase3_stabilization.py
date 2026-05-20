@@ -107,9 +107,7 @@ class TestStabilizationEngine:
     def test_produces_stabilized_regime(self):
         engine = StabilizationEngine()
         state = BarState()
-        state.posterior_probabilities = RegimeProbabilities(
-            probs=np.array([0.7, 0.1, 0.1, 0.1])
-        )
+        state.posterior_probabilities = RegimeProbabilities(probs=np.array([0.7, 0.1, 0.1, 0.1]))
         engine.update(state)
         assert state.stabilized_regime is not None
         assert isinstance(state.stabilized_regime, Regime)

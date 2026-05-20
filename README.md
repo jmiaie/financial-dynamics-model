@@ -8,9 +8,10 @@
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![CI](https://img.shields.io/github/actions/workflow/status/jmiaie/financial-dynamics-model/ci.yml?style=flat-square&label=CI)](https://github.com/jmiaie/financial-dynamics-model/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-240%20passed-0d7377?style=flat-square)](#testing)
+[![Tests](https://img.shields.io/badge/tests-260%20passed-0d7377?style=flat-square)](#testing)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
-[![Coverage](https://img.shields.io/badge/coverage-97%25-0d7377?style=flat-square)](#testing)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#testing)
+[![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
 **Transforms raw OHLCV data into explainable regime probabilities for quantitative trading and risk management.**
@@ -24,7 +25,7 @@
 <table>
 <tr>
 <td align="center"><strong>80.6%</strong><br><sub>Accuracy</sub></td>
-<td align="center"><strong>240</strong><br><sub>Unit Tests</sub></td>
+<td align="center"><strong>260</strong><br><sub>Unit Tests</sub></td>
 <td align="center"><strong>5</strong><br><sub>Pipeline Phases</sub></td>
 <td align="center"><strong>4</strong><br><sub>Market Regimes</sub></td>
 <td align="center"><strong>12</strong><br><sub>3D Viz Layers</sub></td>

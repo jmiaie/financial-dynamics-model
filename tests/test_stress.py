@@ -123,8 +123,13 @@ class TestPressure:
                 close = 100 + rng.normal(0, 0.1)
             else:
                 close = 50 + rng.normal(0, 5.0)
-            bar = {"open": close - 0.1, "high": close + 1, "low": close - 1,
-                   "close": close, "volume": 5000}
+            bar = {
+                "open": close - 0.1,
+                "high": close + 1,
+                "low": close - 1,
+                "close": close,
+                "volume": 5000,
+            }
             state = pipeline.step(bar)
             if state.raw_probabilities is not None:
                 assert np.isfinite(state.raw_probabilities.probs).all()
@@ -182,14 +187,24 @@ class TestShock:
         price = 100.0
         for _ in range(80):
             price *= 1.001
-            bar = {"open": price - 0.05, "high": price + 0.1,
-                   "low": price - 0.1, "close": price, "volume": 2000}
+            bar = {
+                "open": price - 0.05,
+                "high": price + 0.1,
+                "low": price - 0.1,
+                "close": price,
+                "volume": 2000,
+            }
             pipeline.step(bar)
 
         # Flash crash: 50% drop in one bar
         crash_price = price * 0.5
-        bar = {"open": price, "high": price, "low": crash_price * 0.95,
-               "close": crash_price, "volume": 100000}
+        bar = {
+            "open": price,
+            "high": price,
+            "low": crash_price * 0.95,
+            "close": crash_price,
+            "volume": 100000,
+        }
         state = pipeline.step(bar)
 
         if state.features is not None:
@@ -203,8 +218,13 @@ class TestShock:
         price = 100.0
         for _i in range(200):
             price = max(price * 0.97, 0.001)
-            bar = {"open": price * 1.01, "high": price * 1.02,
-                   "low": price * 0.98, "close": price, "volume": 5000}
+            bar = {
+                "open": price * 1.01,
+                "high": price * 1.02,
+                "low": price * 0.98,
+                "close": price,
+                "volume": 5000,
+            }
             state = pipeline.step(bar)
             if state.raw_probabilities is not None:
                 assert np.isfinite(state.raw_probabilities.probs).all()
@@ -216,14 +236,24 @@ class TestShock:
         price = 100.0
         for _ in range(80):
             price *= 1.001
-            bar = {"open": price - 0.05, "high": price + 0.1,
-                   "low": price - 0.1, "close": price, "volume": 2000}
+            bar = {
+                "open": price - 0.05,
+                "high": price + 0.1,
+                "low": price - 0.1,
+                "close": price,
+                "volume": 2000,
+            }
             pipeline.step(bar)
 
         # 10x spike
         spike_price = price * 10
-        bar = {"open": price, "high": spike_price * 1.1, "low": price * 0.9,
-               "close": spike_price, "volume": 200000}
+        bar = {
+            "open": price,
+            "high": spike_price * 1.1,
+            "low": price * 0.9,
+            "close": spike_price,
+            "volume": 200000,
+        }
         state = pipeline.step(bar)
 
         if state.features is not None:
@@ -250,8 +280,13 @@ class TestShock:
                 price *= 1.5
             else:
                 price *= 0.5
-            bar = {"open": price * 0.9, "high": price * 1.1,
-                   "low": price * 0.85, "close": price, "volume": 10000}
+            bar = {
+                "open": price * 0.9,
+                "high": price * 1.1,
+                "low": price * 0.85,
+                "close": price,
+                "volume": 10000,
+            }
             state = pipeline.step(bar)
             if state.raw_probabilities is not None:
                 assert np.isfinite(state.raw_probabilities.probs).all()
@@ -265,8 +300,13 @@ class TestStress:
 
         for _ in range(1000):
             price = 100 + rng.normal(0, 0.01)
-            bar = {"open": price, "high": price + 0.01, "low": price - 0.01,
-                   "close": price, "volume": 1000}
+            bar = {
+                "open": price,
+                "high": price + 0.01,
+                "low": price - 0.01,
+                "close": price,
+                "volume": 1000,
+            }
             state = pipeline.step(bar)
 
         # Should have converged on a regime
@@ -315,8 +355,13 @@ class TestStress:
 
         for _ in range(200):
             price = 100 + rng.normal(0, 2)
-            bar = {"open": price - 0.5, "high": price + 1, "low": price - 1,
-                   "close": price, "volume": 5000}
+            bar = {
+                "open": price - 0.5,
+                "high": price + 1,
+                "low": price - 1,
+                "close": price,
+                "volume": 5000,
+            }
             state = pipeline.step(bar)
             if state.raw_probabilities is not None:
                 assert np.isfinite(state.raw_probabilities.probs).all()
@@ -337,13 +382,15 @@ class TestStress:
         prices = 100 + np.cumsum(rng.normal(0, 0.5, n))
         prices = np.maximum(prices, 1.0)
 
-        df = pd.DataFrame({
-            "open": prices - 0.1,
-            "high": prices + abs(rng.normal(0, 0.3, n)),
-            "low": prices - abs(rng.normal(0, 0.3, n)),
-            "close": prices,
-            "volume": rng.integers(1000, 10000, n),
-        })
+        df = pd.DataFrame(
+            {
+                "open": prices - 0.1,
+                "high": prices + abs(rng.normal(0, 0.3, n)),
+                "low": prices - abs(rng.normal(0, 0.3, n)),
+                "close": prices,
+                "volume": rng.integers(1000, 10000, n),
+            }
+        )
 
         pipeline = FinancialDynamicsPipeline()
         results = pipeline.run(df)

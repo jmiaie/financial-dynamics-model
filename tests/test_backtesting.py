@@ -123,9 +123,7 @@ class TestBacktestEvaluator:
     def test_rolling_evaluation(self, synthetic_ohlcv):
         df, labels = synthetic_ohlcv
         evaluator = BacktestEvaluator()
-        rolling = evaluator.evaluate_rolling(
-            df, labels, window_size=120, step_size=60
-        )
+        rolling = evaluator.evaluate_rolling(df, labels, window_size=120, step_size=60)
         assert isinstance(rolling, pd.DataFrame)
         assert len(rolling) > 0
         assert "accuracy" in rolling.columns

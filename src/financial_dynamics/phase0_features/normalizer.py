@@ -41,7 +41,7 @@ class FeatureNormalizer:
         """
         self._history.append(raw_features.copy())
         if len(self._history) > self.window:
-            self._history = self._history[-self.window:]
+            self._history = self._history[-self.window :]
 
         if len(self._history) < 2:
             return np.clip(raw_features, 0.0, 1.0) * self.weights

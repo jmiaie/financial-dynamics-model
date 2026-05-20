@@ -89,9 +89,7 @@ class TestMarkovTransitionEngine:
         # Repeatedly observe 0 -> 1 transition
         for _ in range(100):
             state = BarState()
-            state.raw_probabilities = RegimeProbabilities(
-                probs=np.array([0.1, 0.7, 0.1, 0.1])
-            )
+            state.raw_probabilities = RegimeProbabilities(probs=np.array([0.1, 0.7, 0.1, 0.1]))
             engine.update(state)
 
         tm = engine.get_transition_matrix()

@@ -1,6 +1,5 @@
 """Tests for baseline classifiers and the benchmark runner."""
 
-
 from financial_dynamics.benchmarks.baselines import (
     GaussianMixtureClassifier,
     TrendVolGridClassifier,

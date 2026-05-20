@@ -35,19 +35,14 @@ class TestFitCentroids:
 
     def test_centroid_is_mean_of_labeled_features(self):
         features = pd.DataFrame(
-            [[0.1, 0.2, 0.3, 0.4, 0.5]] * 10
-            + [[0.9, 0.8, 0.7, 0.6, 0.5]] * 10,
+            [[0.1, 0.2, 0.3, 0.4, 0.5]] * 10 + [[0.9, 0.8, 0.7, 0.6, 0.5]] * 10,
             columns=FEATURE_COLUMNS,
         )
         labels = pd.Series(["CALM_TREND"] * 10 + ["RISK_OFF"] * 10)
 
         centroids = fit_centroids(features, labels)
-        np.testing.assert_array_almost_equal(
-            centroids["CALM_TREND"], [0.1, 0.2, 0.3, 0.4, 0.5]
-        )
-        np.testing.assert_array_almost_equal(
-            centroids["RISK_OFF"], [0.9, 0.8, 0.7, 0.6, 0.5]
-        )
+        np.testing.assert_array_almost_equal(centroids["CALM_TREND"], [0.1, 0.2, 0.3, 0.4, 0.5])
+        np.testing.assert_array_almost_equal(centroids["RISK_OFF"], [0.9, 0.8, 0.7, 0.6, 0.5])
 
     def test_missing_regime_falls_back_to_overall_mean(self):
         features = pd.DataFrame(
@@ -57,22 +52,17 @@ class TestFitCentroids:
         labels = pd.Series(["CALM_TREND"] * 10)
 
         centroids = fit_centroids(features, labels)
-        np.testing.assert_array_almost_equal(
-            centroids["RISK_OFF"], [0.5, 0.5, 0.5, 0.5, 0.5]
-        )
+        np.testing.assert_array_almost_equal(centroids["RISK_OFF"], [0.5, 0.5, 0.5, 0.5, 0.5])
 
     def test_skips_nan_features(self):
         features = pd.DataFrame(
-            [[np.nan] * 5] * 5
-            + [[0.2, 0.2, 0.2, 0.2, 0.2]] * 10,
+            [[np.nan] * 5] * 5 + [[0.2, 0.2, 0.2, 0.2, 0.2]] * 10,
             columns=FEATURE_COLUMNS,
         )
         labels = pd.Series(["CALM_TREND"] * 15)
 
         centroids = fit_centroids(features, labels)
-        np.testing.assert_array_almost_equal(
-            centroids["CALM_TREND"], [0.2, 0.2, 0.2, 0.2, 0.2]
-        )
+        np.testing.assert_array_almost_equal(centroids["CALM_TREND"], [0.2, 0.2, 0.2, 0.2, 0.2])
 
     def test_raises_on_missing_columns(self):
         features = pd.DataFrame({"feat_volatility": [0.1, 0.2]})
@@ -163,7 +153,4 @@ class TestCalibrator:
         calibrated_centroids = result.calibrated_config.regimes.centroids
 
         for regime_name in baseline_centroids:
-            assert (
-                calibrated_centroids[regime_name]
-                != baseline_centroids[regime_name]
-            )
+            assert calibrated_centroids[regime_name] != baseline_centroids[regime_name]

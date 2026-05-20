@@ -69,11 +69,13 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
             "persistence": {
                 "confirmed_regime": (
                     se._persistence._confirmed_regime.value
-                    if se._persistence._confirmed_regime is not None else None
+                    if se._persistence._confirmed_regime is not None
+                    else None
                 ),
                 "candidate": (
                     se._persistence._candidate.value
-                    if se._persistence._candidate is not None else None
+                    if se._persistence._candidate is not None
+                    else None
                 ),
                 "candidate_count": se._persistence._candidate_count,
             },
@@ -100,7 +102,9 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     te_state = state["transition_engine"]
     te.counts = np.array(te_state["counts"])
     te._transition_matrix = np.array(te_state["transition_matrix"])
-    te._prev_regime = Regime(te_state["prev_regime"]) if te_state["prev_regime"] is not None else None
+    te._prev_regime = (
+        Regime(te_state["prev_regime"]) if te_state["prev_regime"] is not None else None
+    )
 
     se = pipeline._stabilization_engine
     se_state = state["stabilization_engine"]

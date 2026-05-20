@@ -31,8 +31,7 @@ def fetch_ohlcv(
         import yfinance as yf
     except ImportError:
         raise ImportError(
-            "yfinance is required for live data. "
-            "Install it with: pip install yfinance"
+            "yfinance is required for live data. Install it with: pip install yfinance"
         ) from None
 
     ticker = yf.Ticker(symbol)
@@ -50,9 +49,7 @@ def fetch_ohlcv(
     required = {"open", "high", "low", "close", "volume"}
     missing = required - set(df.columns)
     if missing:
-        raise ValueError(
-            f"Yahoo Finance data missing expected columns: {sorted(missing)}"
-        )
+        raise ValueError(f"Yahoo Finance data missing expected columns: {sorted(missing)}")
 
     return df[["open", "high", "low", "close", "volume"]]
 
@@ -82,8 +79,7 @@ def fetch_multi_asset(
         import yfinance as yf
     except ImportError:
         raise ImportError(
-            "yfinance is required for live data. "
-            "Install it with: pip install yfinance"
+            "yfinance is required for live data. Install it with: pip install yfinance"
         ) from None
 
     df = fetch_ohlcv(symbol, period=period, interval=interval)

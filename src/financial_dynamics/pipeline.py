@@ -22,6 +22,7 @@ from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 class StateReport(TypedDict):
     """System state summary returned by get_state_report()."""
+
     bar_count: int
     warmup_bars: int
     is_warmed_up: bool
@@ -30,6 +31,7 @@ class StateReport(TypedDict):
 
 class BarRecord(TypedDict, total=False):
     """Flat record for DataFrame construction from BarState."""
+
     feat_volatility: float
     feat_trend: float
     feat_drawdown: float
@@ -106,16 +108,14 @@ class FinancialDynamicsPipeline:
         required = {"open", "high", "low", "close", "volume"}
         missing = required - set(df.columns)
         if missing:
-            raise ValueError(
-                f"DataFrame missing required OHLCV columns: {sorted(missing)}"
-            )
+            raise ValueError(f"DataFrame missing required OHLCV columns: {sorted(missing)}")
 
         self.reset()
 
         results: list[BarRecord] = []
         for idx, row in df.iterrows():
-            bar = row.to_dict()
-            state = self.step(bar, timestamp=idx)
+            bar: dict[str, float] = {str(k): float(v) for k, v in row.items()}
+            state = self.step(bar, timestamp=str(idx))
             results.append(self._state_to_record(state))
 
         return pd.DataFrame(results, index=df.index)
@@ -164,11 +164,11 @@ class FinancialDynamicsPipeline:
 
         if state.raw_probabilities is not None:
             for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
+                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]  # type: ignore[literal-required]
 
         if state.posterior_probabilities is not None:
             for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
+                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]  # type: ignore[literal-required]
 
         record["stabilized_regime"] = (
             state.stabilized_regime.name if state.stabilized_regime is not None else None

@@ -15,6 +15,7 @@ from financial_dynamics.config import PipelineConfig
 @dataclass
 class TuningResult:
     """Outcome of a hyperparameter search."""
+
     best_config: PipelineConfig
     best_accuracy: float
     best_params: dict[str, float | int]
@@ -104,9 +105,7 @@ class HyperparameterTuner:
         for path, value in params.items():
             section, key = path.split(".", 1)
             if not hasattr(new_config, section):
-                raise ValueError(
-                    f"Unknown config path '{path}' (no section '{section}')"
-                )
+                raise ValueError(f"Unknown config path '{path}' (no section '{section}')")
             section_obj = getattr(new_config, section)
             if not hasattr(section_obj, key):
                 raise ValueError(

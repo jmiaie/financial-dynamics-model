@@ -72,49 +72,60 @@ class SignalDetector:
     def _check_regime_change(self, regime: Regime, confidence: float) -> list[Signal]:
         """Detect regime change from previous bar."""
         if self._prev_regime is not None and regime != self._prev_regime:
-            return [Signal(
-                signal_type=SignalType.REGIME_CHANGE,
-                regime=regime,
-                previous_regime=self._prev_regime,
-                confidence=confidence,
-                message=f"Regime changed: {self._prev_regime.name} -> {regime.name}",
-                bar_index=self._bar_index,
-            )]
+            return [
+                Signal(
+                    signal_type=SignalType.REGIME_CHANGE,
+                    regime=regime,
+                    previous_regime=self._prev_regime,
+                    confidence=confidence,
+                    message=f"Regime changed: {self._prev_regime.name} -> {regime.name}",
+                    bar_index=self._bar_index,
+                )
+            ]
         return []
 
-    def _check_riskoff_warning(self, regime: Regime, probs: RegimeProbabilities | None) -> list[Signal]:
+    def _check_riskoff_warning(
+        self, regime: Regime, probs: RegimeProbabilities | None
+    ) -> list[Signal]:
         """Detect elevated Risk-Off probability."""
         if probs is None:
             return []
         riskoff_prob = probs[Regime.RISK_OFF]
         if regime != Regime.RISK_OFF and riskoff_prob > self.riskoff_probability_warning:
-            return [Signal(
-                signal_type=SignalType.RISKOFF_WARNING,
-                regime=regime,
-                previous_regime=self._prev_regime,
-                confidence=riskoff_prob,
-                message=(
-                    f"Risk-Off probability elevated: "
-                    f"{riskoff_prob:.1%} (threshold {self.riskoff_probability_warning:.1%})"
-                ),
-                bar_index=self._bar_index,
-            )]
+            return [
+                Signal(
+                    signal_type=SignalType.RISKOFF_WARNING,
+                    regime=regime,
+                    previous_regime=self._prev_regime,
+                    confidence=riskoff_prob,
+                    message=(
+                        f"Risk-Off probability elevated: "
+                        f"{riskoff_prob:.1%} (threshold {self.riskoff_probability_warning:.1%})"
+                    ),
+                    bar_index=self._bar_index,
+                )
+            ]
         return []
 
     def _check_confidence_drop(self, regime: Regime, confidence: float) -> list[Signal]:
         """Detect confidence drop below threshold."""
-        if self._prev_confidence > self.confidence_threshold and confidence < self.confidence_threshold:
-            return [Signal(
-                signal_type=SignalType.CONFIDENCE_DROP,
-                regime=regime,
-                previous_regime=self._prev_regime,
-                confidence=confidence,
-                message=(
-                    f"Confidence dropped below threshold: "
-                    f"{self._prev_confidence:.1%} -> {confidence:.1%}"
-                ),
-                bar_index=self._bar_index,
-            )]
+        if (
+            self._prev_confidence > self.confidence_threshold
+            and confidence < self.confidence_threshold
+        ):
+            return [
+                Signal(
+                    signal_type=SignalType.CONFIDENCE_DROP,
+                    regime=regime,
+                    previous_regime=self._prev_regime,
+                    confidence=confidence,
+                    message=(
+                        f"Confidence dropped below threshold: "
+                        f"{self._prev_confidence:.1%} -> {confidence:.1%}"
+                    ),
+                    bar_index=self._bar_index,
+                )
+            ]
         return []
 
     def _check_stabilization(self, regime: Regime, confidence: float) -> list[Signal]:
@@ -126,14 +137,16 @@ class SignalDetector:
             self._pending_count += 1
             if self._pending_count == 3 and regime != self._confirmed_regime:
                 self._confirmed_regime = regime
-                return [Signal(
-                    signal_type=SignalType.REGIME_STABILIZED,
-                    regime=regime,
-                    previous_regime=self._confirmed_regime,
-                    confidence=confidence,
-                    message=f"Regime {regime.name} stabilized (3 consecutive bars)",
-                    bar_index=self._bar_index,
-                )]
+                return [
+                    Signal(
+                        signal_type=SignalType.REGIME_STABILIZED,
+                        regime=regime,
+                        previous_regime=self._confirmed_regime,
+                        confidence=confidence,
+                        message=f"Regime {regime.name} stabilized (3 consecutive bars)",
+                        bar_index=self._bar_index,
+                    )
+                ]
         return []
 
     def reset(self) -> None:
