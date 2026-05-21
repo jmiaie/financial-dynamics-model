@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, Regime
 
 
 def regime_accuracy(
@@ -40,7 +40,7 @@ def regime_confusion_matrix(
     matrix = np.zeros((NUM_REGIMES, NUM_REGIMES), dtype=int)
     name_to_idx = {r.name: int(r) for r in Regime}
 
-    for true_val, pred_val in zip(t, p):
+    for true_val, pred_val in zip(t, p, strict=False):
         ti = name_to_idx.get(true_val)
         pi = name_to_idx.get(pred_val)
         if ti is not None and pi is not None:
@@ -60,7 +60,7 @@ def regime_classification_report(
     cm = regime_confusion_matrix(true_labels, predicted_labels)
     matrix = cm.values
 
-    rows = []
+    rows: list[dict[str, str | float | int]] = []
     total_support = matrix.sum()
     weighted_p, weighted_r, weighted_f1 = 0.0, 0.0, 0.0
 
@@ -72,28 +72,31 @@ def regime_classification_report(
 
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-        f1 = (2 * precision * recall / (precision + recall)
-              if (precision + recall) > 0 else 0.0)
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
 
-        rows.append({
-            "regime": regime.name,
-            "precision": precision,
-            "recall": recall,
-            "f1": f1,
-            "support": int(support),
-        })
+        rows.append(
+            {
+                "regime": regime.name,
+                "precision": precision,
+                "recall": recall,
+                "f1": f1,
+                "support": int(support),
+            }
+        )
 
         weight = support / total_support if total_support > 0 else 0.0
         weighted_p += precision * weight
         weighted_r += recall * weight
         weighted_f1 += f1 * weight
 
-    rows.append({
-        "regime": "weighted_avg",
-        "precision": weighted_p,
-        "recall": weighted_r,
-        "f1": weighted_f1,
-        "support": int(total_support),
-    })
+    rows.append(
+        {
+            "regime": "weighted_avg",
+            "precision": weighted_p,
+            "recall": weighted_r,
+            "f1": weighted_f1,
+            "support": int(total_support),
+        }
+    )
 
     return pd.DataFrame(rows).set_index("regime")

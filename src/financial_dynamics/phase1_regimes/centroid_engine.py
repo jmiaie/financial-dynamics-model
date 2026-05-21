@@ -9,8 +9,8 @@ from __future__ import annotations
 import numpy as np
 
 from financial_dynamics.config import RegimeConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, NUM_REGIMES
 from financial_dynamics.phase1_regimes.regime_definitions import get_centroids
+from financial_dynamics.types import NUM_REGIMES, BarState, RegimeProbabilities
 
 
 class CentroidEngine:
@@ -50,7 +50,5 @@ class CentroidEngine:
     def set_centroids(self, centroids: np.ndarray) -> None:
         """Allow dynamic centroid updates for recalibration."""
         if centroids.shape != (NUM_REGIMES, 5):
-            raise ValueError(
-                f"Expected centroid shape ({NUM_REGIMES}, 5), got {centroids.shape}"
-            )
+            raise ValueError(f"Expected centroid shape ({NUM_REGIMES}, 5), got {centroids.shape}")
         self.centroids = centroids.copy()

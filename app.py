@@ -1,0 +1,858 @@
+"""Streamlit app for Financial Dynamics Model demo.
+
+Interactive dashboard for market regime classification with live yfinance data.
+"""
+
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+import plotly.express as px
+import warnings
+
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
+from financial_dynamics.config import PipelineConfig
+from financial_dynamics.data_loader import fetch_ohlcv
+from financial_dynamics.types import Regime, REGIME_NAMES
+from financial_dynamics.signals.detector import SignalDetector, SignalType
+from financial_dynamics.visualization.phase_space_3d import build_phase_space_3d
+from financial_dynamics.visualization.regime_vol_map import build_regime_vol_map_plotly
+
+# Color scheme: slate and teal
+COLOR_SCHEME = {
+    "primary": "#1e3a5f",  # Dark slate blue
+    "secondary": "#0d7377",  # Teal
+    "accent": "#14919b",  # Light teal
+    "calm": "#10b981",  # Green (Calm Trend)
+    "volatile": "#f59e0b",  # Amber (Volatile Trend)
+    "chop": "#8b5cf6",  # Purple (Chop)
+    "riskoff": "#ef4444",  # Red (Risk-Off)
+    "background": "#0f172a",  # Very dark slate
+    "surface": "#1e293b",  # Dark slate
+    "text": "#f1f5f9",  # Light slate
+}
+
+REGIME_COLORS_PLOTLY = {
+    Regime.CALM_TREND: COLOR_SCHEME["calm"],
+    Regime.VOLATILE_TREND: COLOR_SCHEME["volatile"],
+    Regime.CHOP: COLOR_SCHEME["chop"],
+    Regime.RISK_OFF: COLOR_SCHEME["riskoff"],
+}
+
+
+def setup_page():
+    """Configure Streamlit page settings."""
+    st.set_page_config(
+        page_title="Financial Dynamics Model",
+        page_icon="📈",
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
+
+    st.markdown(
+        """
+    <style>
+    [data-testid="stAppViewContainer"] {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0f172a 0%, #1e3a5f 100%);
+    }
+    .main-title {
+        color: #f1f5f9;
+        text-align: center;
+        font-size: 2.5em;
+        margin-bottom: 0.2em;
+    }
+    .subtitle {
+        color: #cbd5e1;
+        text-align: center;
+        font-size: 1.1em;
+        margin-bottom: 2em;
+    }
+    .metric-card {
+        background: linear-gradient(135deg, #1e3a5f 0%, #0d7377 100%);
+        padding: 1.5em;
+        border-radius: 8px;
+        border-left: 4px solid #14919b;
+        color: #f1f5f9;
+    }
+    .metric-label {
+        font-size: 0.85em;
+        color: #cbd5e1;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .metric-value {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #f1f5f9;
+        margin-top: 0.5em;
+    }
+    .ticker-bar {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 1em 1.5em;
+        text-align: center;
+    }
+    .ticker-symbol {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #14919b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.3em;
+    }
+    .ticker-price {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #f1f5f9;
+    }
+    .ticker-label {
+        font-size: 0.75em;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .ticker-change-up {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #10b981;
+    }
+    .ticker-change-down {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #ef4444;
+    }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
+
+def _generate_synthetic_fallback() -> pd.DataFrame:
+    """Generate synthetic OHLCV data for use when live data is unavailable."""
+    rng = np.random.default_rng(42)
+    price = 100.0
+    rows = []
+    for i in range(240):
+        phase = (i // 60) % 4
+        if phase == 0:
+            ret = 0.0015 + rng.normal(0, 0.007)
+        elif phase == 1:
+            ret = 0.003 + rng.normal(0, 0.020)
+        elif phase == 2:
+            ret = rng.normal(0, 0.008)
+        else:
+            ret = -0.004 + rng.normal(0, 0.018)
+            if rng.random() < 0.25:
+                ret += rng.choice([-0.06, -0.05, 0.035])
+        close = price * (1 + ret)
+        high = max(price, close) * (1 + abs(rng.normal(0, 0.002)))
+        low = min(price, close) * (1 - abs(rng.normal(0, 0.002)))
+        rows.append([price, high, low, close, int(rng.integers(2000, 20000))])
+        price = close
+    df = pd.DataFrame(rows, columns=["open", "high", "low", "close", "volume"])
+    df.index = pd.date_range("2024-01-01", periods=len(df), freq="h")
+    df.index.name = "timestamp"
+    return df
+
+
+def _get_logo_html(base_path: str) -> str:
+    """Load logo as HTML, supporting SVG and base64 PNG."""
+    import os
+
+    svg_path = base_path + ".svg"
+    png_path = base_path + ".png"
+
+    if os.path.exists(svg_path):
+        with open(svg_path, "r") as f:
+            return f.read()
+    elif os.path.exists(png_path):
+        import base64
+
+        with open(png_path, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+            return f'<img src="data:image/png;base64,{b64}" width="120">'
+    return ""
+
+
+@st.cache_data(ttl=3600)
+def load_data(symbol: str, period: str, interval: str):
+    """Load OHLCV data from yfinance with caching."""
+    try:
+        df = fetch_ohlcv(symbol, period=period, interval=interval)
+        return df, None
+    except Exception as e:
+        return None, str(e)
+
+
+@st.cache_resource
+def get_pipeline():
+    """Get or create pipeline instance."""
+    config = PipelineConfig.from_yaml("config/default.yaml")
+    return FinancialDynamicsPipeline(config)
+
+
+def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
+    """Interactive price chart with regime background bands."""
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=df["close"],
+            mode="lines",
+            name="Close Price",
+            line=dict(color=COLOR_SCHEME["text"], width=2),
+            hovertemplate="<b>%{x|%Y-%m-%d}</b><br>Price: $%{y:.2f}<extra></extra>",
+        )
+    )
+
+    # Add regime background bands
+    regime_col = results["risk_adjusted_regime"]
+    valid = regime_col.dropna()
+
+    if len(valid) > 0:
+        y_min, y_max = df["close"].min() * 0.95, df["close"].max() * 1.05
+        for i in range(len(valid) - 1):
+            try:
+                regime = Regime[valid.iloc[i]]
+                color = REGIME_COLORS_PLOTLY[regime]
+                fig.add_vrect(
+                    x0=valid.index[i],
+                    x1=valid.index[i + 1],
+                    fillcolor=color,
+                    opacity=0.15,
+                    layer="below",
+                    line_width=0,
+                )
+            except KeyError:
+                warnings.warn(
+                    f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
+                    stacklevel=2,
+                )
+
+    fig.update_layout(
+        title="Market Price with Regime Classification",
+        xaxis_title="Date",
+        yaxis_title="Price (USD)",
+        template="plotly_dark",
+        hovermode="x unified",
+        plot_bgcolor=COLOR_SCHEME["background"],
+        paper_bgcolor=COLOR_SCHEME["surface"],
+        font=dict(color=COLOR_SCHEME["text"]),
+        height=400,
+    )
+
+    return fig
+
+
+def plot_regime_probabilities(results: pd.DataFrame):
+    """Stacked area chart of regime probabilities."""
+    prob_cols = [f"post_prob_{r.name}" for r in Regime]
+    valid = results.dropna(subset=prob_cols)
+
+    if len(valid) < 2:
+        return None
+
+    fig = go.Figure()
+    for regime in Regime:
+        col = f"post_prob_{regime.name}"
+        fig.add_trace(
+            go.Scatter(
+                x=valid.index,
+                y=valid[col],
+                mode="lines",
+                name=REGIME_NAMES[regime],
+                stackgroup="one",
+                fillcolor=REGIME_COLORS_PLOTLY[regime],
+                line=dict(width=0.5, color=REGIME_COLORS_PLOTLY[regime]),
+                hovertemplate=f"{REGIME_NAMES[regime]}: %{{y:.1%}}<extra></extra>",
+            )
+        )
+
+    fig.update_layout(
+        title="Regime Probability Distribution (Posterior)",
+        xaxis_title="Date",
+        yaxis_title="Probability",
+        template="plotly_dark",
+        hovermode="x unified",
+        plot_bgcolor=COLOR_SCHEME["background"],
+        paper_bgcolor=COLOR_SCHEME["surface"],
+        font=dict(color=COLOR_SCHEME["text"]),
+        height=350,
+        yaxis=dict(range=[0, 1]),
+    )
+
+    return fig
+
+
+def plot_transition_matrix(tm: np.ndarray):
+    """Heatmap of transition probabilities."""
+    labels = [REGIME_NAMES[r] for r in Regime]
+
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=tm,
+            x=labels,
+            y=labels,
+            colorscale="Greys",
+            zmin=0,
+            zmax=1,
+            text=np.round(tm, 2),
+            texttemplate="%{text:.2f}",
+            textfont={"size": 12},
+            colorbar=dict(title="Probability"),
+            hovertemplate="From %{y} → To %{x}: %{z:.2%}<extra></extra>",
+        )
+    )
+
+    fig.update_layout(
+        title="Transition Probability Matrix",
+        xaxis_title="To State",
+        yaxis_title="From State",
+        template="plotly_dark",
+        plot_bgcolor=COLOR_SCHEME["background"],
+        paper_bgcolor=COLOR_SCHEME["surface"],
+        font=dict(color=COLOR_SCHEME["text"]),
+        height=350,
+    )
+
+    return fig
+
+
+def plot_features(results: pd.DataFrame):
+    """Time series of the 5 engineered features."""
+    feat_cols = [
+        "feat_volatility",
+        "feat_trend",
+        "feat_drawdown",
+        "feat_corr_stress",
+        "feat_shock",
+    ]
+    feat_names = [
+        "Volatility",
+        "Trend Strength",
+        "Drawdown Pressure",
+        "Correlation Stress",
+        "Shock Intensity",
+    ]
+
+    valid = results.dropna(subset=feat_cols)
+    if len(valid) < 2:
+        return None
+
+    fig = go.Figure()
+    colors = [
+        COLOR_SCHEME["calm"],
+        COLOR_SCHEME["volatile"],
+        COLOR_SCHEME["chop"],
+        COLOR_SCHEME["riskoff"],
+        COLOR_SCHEME["accent"],
+    ]
+
+    for col, name, color in zip(feat_cols, feat_names, colors):
+        fig.add_trace(
+            go.Scatter(
+                x=valid.index,
+                y=valid[col],
+                mode="lines",
+                name=name,
+                line=dict(color=color, width=2),
+                hovertemplate=f"{name}: %{{y:.3f}}<extra></extra>",
+            )
+        )
+
+    fig.update_layout(
+        title="Engineered Features Over Time",
+        xaxis_title="Date",
+        yaxis_title="Normalized Value",
+        template="plotly_dark",
+        hovermode="x unified",
+        plot_bgcolor=COLOR_SCHEME["background"],
+        paper_bgcolor=COLOR_SCHEME["surface"],
+        font=dict(color=COLOR_SCHEME["text"]),
+        height=350,
+    )
+
+    return fig
+
+
+def main():
+    """Main Streamlit app."""
+    setup_page()
+
+    # Header
+    st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
+        unsafe_allow_html=True,
+    )
+    st.divider()
+
+    # Sidebar configuration
+    with st.sidebar:
+        st.header("⚙️ Configuration")
+
+        symbol = st.text_input(
+            "Stock/Ticker Symbol", value="SPY", help="e.g., SPY, QQQ, AAPL, etc."
+        ).upper()
+
+        col1, col2 = st.columns(2)
+        with col1:
+            period = st.selectbox(
+                "Data Period",
+                options=["3mo", "6mo", "1y", "2y", "5y"],
+                index=2,
+            )
+        with col2:
+            interval = st.selectbox(
+                "Bar Interval",
+                options=["1d", "1h", "5m"],
+                index=0,
+            )
+
+        st.divider()
+        st.markdown("**Pipeline Config**")
+
+        if st.button("🔄 Load Data & Run Pipeline", use_container_width=True):
+            st.session_state.run_pipeline = True
+
+        st.divider()
+        st.markdown("**About**")
+        st.info(
+            "This model classifies market regimes using a 5-phase Bayesian system:\n\n"
+            "1. **Feature Engineering** — 5D normalized features\n"
+            "2. **Centroid Classification** — Softmax probability mapping\n"
+            "3. **Markov Transitions** — Learned transition matrix\n"
+            "4. **Temporal Stabilization** — Noise filtering\n"
+            "5. **Risk Overlays** — Risk-Off confirmation & rebalancing"
+        )
+
+        st.divider()
+        import os
+
+        logo_base = os.path.join(os.path.dirname(__file__), "assets", "micap_logo")
+        logo_html = _get_logo_html(logo_base)
+        if logo_html:
+            st.markdown(
+                f'<a href="https://micap.ai" target="_blank">{logo_html}</a>',
+                unsafe_allow_html=True,
+            )
+        st.markdown(
+            '**Authors:** Jeff Milam & <a href="https://micap.ai" target="_blank">Micap.AI</a>',
+            unsafe_allow_html=True,
+        )
+
+    # Main content
+    if "run_pipeline" not in st.session_state:
+        st.session_state.run_pipeline = True
+
+    if st.session_state.run_pipeline:
+        with st.spinner(f"Loading {symbol} data and running pipeline..."):
+            df, error = load_data(symbol, period, interval)
+
+            if error:
+                st.warning(
+                    f"⚠️ Live data unavailable for **{symbol}** (Yahoo Finance rate limit on shared cloud IPs). "
+                    "Showing synthetic demo data instead.",
+                    icon="📊",
+                )
+                df = _generate_synthetic_fallback()
+
+            pipeline = get_pipeline()
+            results = pipeline.run(df)
+
+        # Stock ticker info bar
+        latest = df.iloc[-1]
+        prev_close = df["close"].iloc[-2] if len(df) > 1 else latest["close"]
+        day_change = latest["close"] - prev_close
+        day_change_pct = (day_change / prev_close) * 100 if prev_close != 0 else 0
+        change_class = "ticker-change-up" if day_change >= 0 else "ticker-change-down"
+        change_arrow = "▲" if day_change >= 0 else "▼"
+        change_sign = "+" if day_change >= 0 else ""
+
+        tc1, tc2, tc3, tc4, tc5, tc6 = st.columns(6)
+        with tc1:
+            st.markdown(
+                f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Ticker</div>
+                <div class="ticker-symbol">{symbol}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+        with tc2:
+            st.markdown(
+                f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Open</div>
+                <div class="ticker-price">${latest["open"]:.2f}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+        with tc3:
+            st.markdown(
+                f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">High</div>
+                <div class="ticker-price">${latest["high"]:.2f}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+        with tc4:
+            st.markdown(
+                f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Low</div>
+                <div class="ticker-price">${latest["low"]:.2f}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+        with tc5:
+            st.markdown(
+                f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Prev Close</div>
+                <div class="ticker-price">${prev_close:.2f}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+        with tc6:
+            st.markdown(
+                f"""
+            <div class="ticker-bar">
+                <div class="ticker-label">Day Change</div>
+                <div class="{change_class}">{change_arrow} {change_sign}{day_change_pct:.2f}%</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+        # Metrics row
+        st.divider()
+        col1, col2, col3, col4 = st.columns(4)
+
+        current_regime = results["risk_adjusted_regime"].iloc[-1] if len(results) > 0 else None
+        current_probs = None
+        confidence = 0.0
+
+        if current_regime:
+            current_regime = Regime[current_regime]
+            prob_cols = [f"post_prob_{r.name}" for r in Regime]
+            if all(col in results.columns for col in prob_cols):
+                probs = results[prob_cols].iloc[-1].values
+                current_probs = probs
+                confidence = probs[int(current_regime)]
+
+        with col1:
+            st.markdown(
+                f"""
+            <div class="metric-card">
+                <div class="metric-label">Current Regime</div>
+                <div class="metric-value">{REGIME_NAMES.get(current_regime, "Unknown")}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+        with col2:
+            st.markdown(
+                f"""
+            <div class="metric-card">
+                <div class="metric-label">Confidence</div>
+                <div class="metric-value">{confidence:.1%}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+        with col3:
+            bars_processed = len(results)
+            st.markdown(
+                f"""
+            <div class="metric-card">
+                <div class="metric-label">Bars Processed</div>
+                <div class="metric-value">{bars_processed:,}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+        with col4:
+            warmup = pipeline.warmup_bars
+            is_ready = "✓ Ready" if bars_processed >= warmup else f"Warming up..."
+            st.markdown(
+                f"""
+            <div class="metric-card">
+                <div class="metric-label">Status</div>
+                <div class="metric-value">{is_ready}</div>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+        st.divider()
+
+        # Charts
+        st.subheader("📈 Price & Regime Analysis")
+        fig_price = plot_price_with_regimes(df, results)
+        st.plotly_chart(fig_price, use_container_width=True)
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("📊 Regime Probabilities")
+            fig_probs = plot_regime_probabilities(results)
+            if fig_probs:
+                st.plotly_chart(fig_probs, use_container_width=True)
+
+        with col2:
+            st.subheader("🔄 Transition Matrix")
+            tm = pipeline._transition_engine.get_transition_matrix()
+            fig_tm = plot_transition_matrix(tm)
+            st.plotly_chart(fig_tm, use_container_width=True)
+
+        st.subheader("🎯 Engineered Features")
+        fig_features = plot_features(results)
+        if fig_features:
+            st.plotly_chart(fig_features, use_container_width=True)
+
+        # 3D phase-space attractor field
+        st.divider()
+        st.subheader("🌌 Phase-Space Attractor Field (3D)")
+        st.caption(
+            "5D feature space → 3D PCA. "
+            "Basins = regime regions · Arrows = Markov flows · "
+            "Marker size = confidence · Loading arrows = feature axes · "
+            "✕ markers = regime shifts · Trajectory color = velocity. "
+            "Drag to rotate · scroll to zoom · hover for details."
+        )
+
+        feat_cols = [
+            "feat_volatility",
+            "feat_trend",
+            "feat_drawdown",
+            "feat_corr_stress",
+            "feat_shock",
+        ]
+        valid_3d = results.dropna(subset=feat_cols + ["risk_adjusted_regime"])
+        if len(valid_3d) >= 10:
+            feature_history = valid_3d[feat_cols].to_numpy()
+            regime_seq = [Regime[r] for r in valid_3d["risk_adjusted_regime"]]
+
+            prob_cols_3d = [f"post_prob_{r.name}" for r in Regime]
+            if all(c in valid_3d.columns for c in prob_cols_3d):
+                conf_3d = valid_3d[prob_cols_3d].max(axis=1).to_numpy()
+            else:
+                conf_3d = None
+
+            row1 = st.columns(5)
+            with row1[0]:
+                show_basins = st.checkbox(
+                    "Basins", value=True, help="Convex-hull surfaces per regime."
+                )
+            with row1[1]:
+                show_ellipsoids = st.checkbox(
+                    "Ellipsoids",
+                    value=False,
+                    help="1.5σ covariance ellipsoids (smoother than hulls).",
+                )
+            with row1[2]:
+                show_arrows = st.checkbox("Flows", value=True, help="Markov transition arrows.")
+            with row1[3]:
+                show_loadings = st.checkbox(
+                    "Loadings", value=True, help="PCA loading vectors (feature axis labels)."
+                )
+            with row1[4]:
+                show_shifts = st.checkbox(
+                    "Shifts", value=True, help="✕ markers at regime transitions."
+                )
+
+            row2 = st.columns(5)
+            with row2[0]:
+                show_traj = st.checkbox(
+                    "Trajectory", value=True, help="Velocity-colored trajectory."
+                )
+            with row2[1]:
+                show_halos = st.checkbox(
+                    "Eq. halos", value=True, help="Stationary-distribution halos."
+                )
+            with row2[2]:
+                show_vol = st.checkbox(
+                    "Vol surface", value=False, help="High-vol danger zone isosurface."
+                )
+            with row2[3]:
+                animate = st.checkbox("Animate", value=False, help="Replay through time.")
+            with row2[4]:
+                st.empty()
+
+            fig_3d = build_phase_space_3d(
+                feature_history=feature_history,
+                regimes=regime_seq,
+                centroids=pipeline._centroid_engine.centroids,
+                confidences=conf_3d,
+                transition_matrix=pipeline._transition_engine.get_transition_matrix(),
+                show_trajectory=show_traj,
+                show_basins=show_basins,
+                show_ellipsoids=show_ellipsoids,
+                show_transition_arrows=show_arrows,
+                show_vol_surface=show_vol,
+                show_stationary_halos=show_halos,
+                show_loadings=show_loadings,
+                show_transitions_markers=show_shifts,
+                animate=animate,
+            )
+            st.plotly_chart(fig_3d, use_container_width=True)
+        else:
+            st.info("Need at least 10 valid bars for the 3D phase-space view.")
+
+        # Regime-Volatility Map
+        st.divider()
+        st.subheader("🌡️ Regime–Volatility Map")
+        st.caption(
+            "How volatility distributes across regimes, where regime boundaries "
+            "lie in vol-space, and how transitions correlate with vol shifts."
+        )
+
+        vol_figures = build_regime_vol_map_plotly(results, pipeline)
+        if vol_figures:
+            vol_col1, vol_col2 = st.columns(2)
+            with vol_col1:
+                if "vol_violin" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_violin"], use_container_width=True)
+                if "vol_timeseries" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_timeseries"], use_container_width=True)
+            with vol_col2:
+                if "vol_heatmap" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_heatmap"], use_container_width=True)
+                if "vol_transitions" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_transitions"], use_container_width=True)
+        else:
+            st.info("Insufficient data for regime-volatility mapping (need ≥10 valid bars).")
+
+        # Forecast section
+        st.divider()
+        st.subheader("🔮 Regime Forecast")
+
+        forecast = pipeline.forecast(horizon=10)
+        if forecast:
+            col1, col2 = st.columns([1, 2])
+
+            with col1:
+                st.markdown("**Expected Duration:**")
+                st.metric("Bars", f"{forecast.expected_duration:.1f}")
+                st.markdown("**Most Likely Path:**")
+                path_str = " → ".join([REGIME_NAMES[r] for r in forecast.most_likely_path[:5]])
+                st.caption(path_str)
+
+            with col2:
+                forecast_data = []
+                for i, probs in enumerate(forecast.horizon_probabilities, 1):
+                    for regime in Regime:
+                        forecast_data.append(
+                            {
+                                "Step": i,
+                                "Regime": REGIME_NAMES[regime],
+                                "Probability": probs[regime],
+                            }
+                        )
+
+                forecast_df = pd.DataFrame(forecast_data)
+                fig_forecast = px.bar(
+                    forecast_df,
+                    x="Step",
+                    y="Probability",
+                    color="Regime",
+                    color_discrete_map={REGIME_NAMES[r]: REGIME_COLORS_PLOTLY[r] for r in Regime},
+                    barmode="stack",
+                    labels={"Step": "Steps Ahead", "Probability": "Probability"},
+                )
+                fig_forecast.update_layout(
+                    template="plotly_dark",
+                    plot_bgcolor=COLOR_SCHEME["background"],
+                    paper_bgcolor=COLOR_SCHEME["surface"],
+                    font=dict(color=COLOR_SCHEME["text"]),
+                    height=300,
+                )
+                st.plotly_chart(fig_forecast, use_container_width=True)
+
+        # Signal detection
+        st.divider()
+        st.subheader("🔔 Signals & Alerts")
+
+        detector = SignalDetector()
+        signals = []
+        for idx, row in results.iterrows():
+            from financial_dynamics.types import BarState, RegimeProbabilities
+
+            bar_state = BarState(
+                timestamp=idx,
+                ohlcv=row.to_dict(),
+                stabilized_regime=Regime[row["stabilized_regime"]]
+                if pd.notna(row.get("stabilized_regime"))
+                else None,
+                risk_adjusted_regime=Regime[row["risk_adjusted_regime"]]
+                if pd.notna(row.get("risk_adjusted_regime"))
+                else None,
+            )
+
+            prob_cols = [f"post_prob_{r.name}" for r in Regime]
+            if all(col in row.index for col in prob_cols):
+                bar_state.posterior_probabilities = RegimeProbabilities(probs=row[prob_cols].values)
+
+            signals.extend(detector.check(bar_state))
+
+        if signals:
+            # Show recent signals
+            recent_signals = signals[-10:]
+            for signal in reversed(recent_signals):
+                icon = {
+                    SignalType.REGIME_CHANGE: "🔄",
+                    SignalType.RISKOFF_WARNING: "⚠️",
+                    SignalType.CONFIDENCE_DROP: "📉",
+                    SignalType.REGIME_STABILIZED: "✅",
+                }
+
+                st.info(
+                    f"{icon.get(signal.signal_type, '•')} **{signal.signal_type.name}** — {signal.message}\n\n"
+                    f"Bar {signal.bar_index} | Confidence: {signal.confidence:.1%}"
+                )
+        else:
+            st.info("No signals detected yet. Data is still warming up or regime is stable.")
+
+        # Data inspector
+        with st.expander("📋 Data Inspector"):
+            st.write("**Recent Pipeline Output**")
+            display_cols = [
+                "risk_adjusted_regime",
+                "stabilized_regime",
+                "feat_volatility",
+                "feat_trend",
+                "feat_drawdown",
+                "post_prob_CALM_TREND",
+                "post_prob_VOLATILE_TREND",
+                "post_prob_CHOP",
+                "post_prob_RISK_OFF",
+            ]
+            available_cols = [col for col in display_cols if col in results.columns]
+            st.dataframe(
+                results[available_cols].tail(20),
+                use_container_width=True,
+                height=300,
+            )
+
+
+if __name__ == "__main__":
+    main()

@@ -1,9 +1,11 @@
 """Bayesian update logic for the Markov transition matrix."""
 
+from __future__ import annotations
+
 import numpy as np
 
-from financial_dynamics.types import NUM_REGIMES
 from financial_dynamics._utils import safe_renormalize
+from financial_dynamics.types import NUM_REGIMES
 
 
 def initialize_count_matrix(prior_strength: float) -> np.ndarray:

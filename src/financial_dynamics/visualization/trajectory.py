@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
+import numpy as np
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 
-from financial_dynamics.types import Regime, REGIME_NAMES
-from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.types import REGIME_NAMES, Regime
 from financial_dynamics.visualization._utils import fit_pca_projection
+from financial_dynamics.visualization.phase_space import REGIME_COLORS
 
 
 class TrajectoryPlotter:
@@ -34,34 +34,45 @@ class TrajectoryPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = ax.get_figure()  # type: ignore[assignment]
 
         projected, centroid_proj, _ = fit_pca_projection(feature_history, centroids)
 
         for i in range(len(projected) - 1):
             color = REGIME_COLORS[regimes[i]]
             ax.plot(
-                projected[i:i+2, 0], projected[i:i+2, 1],
-                color=color, alpha=0.5, linewidth=0.8,
+                projected[i : i + 2, 0],
+                projected[i : i + 2, 1],
+                color=color,
+                alpha=0.5,
+                linewidth=0.8,
             )
 
-        ax.scatter(projected[0, 0], projected[0, 1],
-                   marker="o", s=100, c="green", zorder=10, label="Start")
-        ax.scatter(projected[-1, 0], projected[-1, 1],
-                   marker="s", s=100, c="red", zorder=10, label="End")
+        ax.scatter(
+            projected[0, 0], projected[0, 1], marker="o", s=100, c="green", zorder=10, label="Start"
+        )
+        ax.scatter(
+            projected[-1, 0], projected[-1, 1], marker="s", s=100, c="red", zorder=10, label="End"
+        )
 
         for i, regime in enumerate(Regime):
             ax.scatter(
-                centroid_proj[i, 0], centroid_proj[i, 1],
+                centroid_proj[i, 0],
+                centroid_proj[i, 1],
                 c=REGIME_COLORS[regime],
-                marker="*", s=300, edgecolors="black", linewidths=1.0,
+                marker="*",
+                s=300,
+                edgecolors="black",
+                linewidths=1.0,
                 zorder=10,
             )
             ax.annotate(
                 REGIME_NAMES[regime],
                 (centroid_proj[i, 0], centroid_proj[i, 1]),
-                textcoords="offset points", xytext=(8, 8),
-                fontsize=7, alpha=0.8,
+                textcoords="offset points",
+                xytext=(8, 8),
+                fontsize=7,
+                alpha=0.8,
             )
 
         ax.set_xlabel("PC1")

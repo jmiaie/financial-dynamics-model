@@ -3,9 +3,12 @@
 import numpy as np
 import pytest
 
-from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
-from financial_dynamics.phase1_regimes.regime_definitions import get_centroids, get_default_centroids
 from financial_dynamics.config import RegimeConfig
+from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
+from financial_dynamics.phase1_regimes.regime_definitions import (
+    get_centroids,
+    get_default_centroids,
+)
 from financial_dynamics.types import BarState, FeatureVector, Regime
 
 
@@ -19,6 +22,12 @@ class TestRegimeDefinitions:
         centroids = get_centroids(config)
         assert centroids.shape == (4, 5)
         np.testing.assert_array_equal(centroids, get_default_centroids())
+
+    def test_unknown_regime_name_raises_value_error(self):
+        config = RegimeConfig()
+        config.centroids["BOGUS_REGIME"] = [0.1, 0.2, 0.3, 0.4, 0.5]
+        with pytest.raises(ValueError, match="Unknown regime name 'BOGUS_REGIME'"):
+            get_centroids(config)
 
 
 class TestCentroidEngine:

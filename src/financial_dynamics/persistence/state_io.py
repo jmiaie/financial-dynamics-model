@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -43,7 +44,7 @@ def load_state(path: str | Path) -> FinancialDynamicsPipeline:
     return pipeline
 
 
-def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict:
+def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
     """Extract all mutable state from the pipeline into a serializable dict."""
     fe = pipeline._feature_engine
     te = pipeline._transition_engine
@@ -68,11 +69,13 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict:
             "persistence": {
                 "confirmed_regime": (
                     se._persistence._confirmed_regime.value
-                    if se._persistence._confirmed_regime is not None else None
+                    if se._persistence._confirmed_regime is not None
+                    else None
                 ),
                 "candidate": (
                     se._persistence._candidate.value
-                    if se._persistence._candidate is not None else None
+                    if se._persistence._candidate is not None
+                    else None
                 ),
                 "candidate_count": se._persistence._candidate_count,
             },
@@ -85,7 +88,7 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict:
     }
 
 
-def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict) -> None:
+def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -> None:
     """Restore mutable state into an existing pipeline instance."""
     pipeline._bar_count = state["bar_count"]
 
@@ -99,7 +102,9 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict) -> None:
     te_state = state["transition_engine"]
     te.counts = np.array(te_state["counts"])
     te._transition_matrix = np.array(te_state["transition_matrix"])
-    te._prev_regime = Regime(te_state["prev_regime"]) if te_state["prev_regime"] is not None else None
+    te._prev_regime = (
+        Regime(te_state["prev_regime"]) if te_state["prev_regime"] is not None else None
+    )
 
     se = pipeline._stabilization_engine
     se_state = state["stabilization_engine"]
@@ -124,7 +129,7 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict) -> None:
     re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
 
 
-def _extract_config(config: PipelineConfig) -> dict:
+def _extract_config(config: PipelineConfig) -> dict[str, Any]:
     """Serialize config to a plain dict."""
     return {
         "features": {
@@ -163,7 +168,7 @@ def _extract_config(config: PipelineConfig) -> dict:
     }
 
 
-def _restore_config(config: PipelineConfig, data: dict) -> None:
+def _restore_config(config: PipelineConfig, data: dict[str, Any]) -> None:
     """Apply saved config values onto an existing PipelineConfig."""
     section_map = {
         "features": config.features,

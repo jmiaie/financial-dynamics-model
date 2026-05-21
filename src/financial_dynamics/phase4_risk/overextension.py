@@ -6,8 +6,8 @@ from collections import Counter
 
 import numpy as np
 
-from financial_dynamics.types import Regime, NUM_REGIMES
-from financial_dynamics.phase4_risk._utils import safe_renormalize
+from financial_dynamics._utils import safe_renormalize
+from financial_dynamics.types import NUM_REGIMES, Regime
 
 
 class OverextensionRebalancer:
@@ -31,7 +31,7 @@ class OverextensionRebalancer:
         if len(self._history) < self.window:
             return probs.copy()
 
-        recent = self._history[-self.window:]
+        recent = self._history[-self.window :]
         counts = Counter(recent)
         adjusted = probs.copy()
 
@@ -49,7 +49,7 @@ class OverextensionRebalancer:
         """Record a regime observation."""
         self._history.append(regime)
         if len(self._history) > self.window * 2:
-            self._history = self._history[-self.window * 2:]
+            self._history = self._history[-self.window * 2 :]
 
     def reset(self) -> None:
         self._history.clear()

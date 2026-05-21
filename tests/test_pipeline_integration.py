@@ -5,7 +5,6 @@ import pandas as pd
 import pytest
 
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import Regime
 
 
@@ -30,7 +29,7 @@ class TestPipelineIntegration:
         results = pipeline.run(df)
         warmup = pipeline.warmup_bars
         # First warmup-1 rows should have no regime (last warmup row may produce)
-        assert results["risk_adjusted_regime"].iloc[:warmup - 1].isna().all()
+        assert results["risk_adjusted_regime"].iloc[: warmup - 1].isna().all()
 
     def test_post_warmup_has_regimes(self, synthetic_ohlcv):
         df, _ = synthetic_ohlcv
@@ -79,7 +78,7 @@ class TestPipelineIntegration:
 
         batch_regimes = results_batch["risk_adjusted_regime"].tolist()
         # Compare: batch uses NaN for missing, streaming uses None
-        for s, b in zip(stream_regimes, batch_regimes):
+        for s, b in zip(stream_regimes, batch_regimes, strict=True):
             if s is None:
                 assert b is None or (isinstance(b, float) and np.isnan(b))
             else:
@@ -105,13 +104,15 @@ class TestPipelineIntegration:
         assert "transition_matrix" in report
 
     def test_short_data_doesnt_crash(self):
-        df = pd.DataFrame({
-            "open": [100, 101],
-            "high": [102, 103],
-            "low": [99, 100],
-            "close": [101, 102],
-            "volume": [1000, 1100],
-        })
+        df = pd.DataFrame(
+            {
+                "open": [100, 101],
+                "high": [102, 103],
+                "low": [99, 100],
+                "close": [101, 102],
+                "volume": [1000, 1100],
+            }
+        )
         pipeline = FinancialDynamicsPipeline()
         results = pipeline.run(df)
         assert len(results) == 2

@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
+import numpy as np
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from sklearn.decomposition import PCA
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, REGIME_NAMES, Regime
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 
 
@@ -35,17 +35,22 @@ class VectorFieldPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
-            fig = ax.figure
+            fig = ax.get_figure()  # type: ignore[assignment]
 
         pca = PCA(n_components=2)
         centroid_proj = pca.fit_transform(centroids)
 
         for i, regime in enumerate(Regime):
             ax.scatter(
-                centroid_proj[i, 0], centroid_proj[i, 1],
+                centroid_proj[i, 0],
+                centroid_proj[i, 1],
                 c=REGIME_COLORS[regime],
-                marker="*", s=400, edgecolors="black", linewidths=1.0,
-                zorder=10, label=REGIME_NAMES[regime],
+                marker="*",
+                s=400,
+                edgecolors="black",
+                linewidths=1.0,
+                zorder=10,
+                label=REGIME_NAMES[regime],
             )
 
         for i in range(NUM_REGIMES):
@@ -72,9 +77,13 @@ class VectorFieldPlotter:
                 mid_y = (centroid_proj[i, 1] + centroid_proj[j, 1]) / 2
                 if prob > 0.15:
                     ax.text(
-                        mid_x, mid_y, f"{prob:.0%}",
-                        fontsize=6, alpha=0.7,
-                        ha="center", va="center",
+                        mid_x,
+                        mid_y,
+                        f"{prob:.0%}",
+                        fontsize=6,
+                        alpha=0.7,
+                        ha="center",
+                        va="center",
                     )
 
         ax.set_xlabel("PC1")

@@ -1,0 +1,19 @@
+name: Mirror to Public Repo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to public repo
+        run: |
+          git remote add public https://x-access-token:${{ secrets.PUBLIC_REPO_PAT }}@github.com/jmiaie/financial-dynamics-model.git
+          git push public main:main --force

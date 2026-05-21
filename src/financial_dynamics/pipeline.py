@@ -2,16 +2,52 @@
 
 from __future__ import annotations
 
+from typing import TypedDict
+
 import numpy as np
 import pandas as pd
 
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, REGIME_NAMES
+from financial_dynamics.forecasting import (
+    RegimeForecast,
+    forecast_regimes,
+)
 from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase1_regimes.centroid_engine import CentroidEngine
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
 from financial_dynamics.phase3_stabilization.stabilizer import StabilizationEngine
 from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
+
+
+class StateReport(TypedDict):
+    """System state summary returned by get_state_report()."""
+
+    bar_count: int
+    warmup_bars: int
+    is_warmed_up: bool
+    transition_matrix: np.ndarray
+
+
+class BarRecord(TypedDict, total=False):
+    """Flat record for DataFrame construction from BarState."""
+
+    feat_volatility: float
+    feat_trend: float
+    feat_drawdown: float
+    feat_corr_stress: float
+    feat_shock: float
+    raw_prob_CALM_TREND: float
+    raw_prob_VOLATILE_TREND: float
+    raw_prob_CHOP: float
+    raw_prob_RISK_OFF: float
+    post_prob_CALM_TREND: float
+    post_prob_VOLATILE_TREND: float
+    post_prob_CHOP: float
+    post_prob_RISK_OFF: float
+    stabilized_regime: str | None
+    risk_adjusted_regime: str | None
+    risk_overlays: dict[str, bool] | None
 
 
 class FinancialDynamicsPipeline:
@@ -72,21 +108,19 @@ class FinancialDynamicsPipeline:
         required = {"open", "high", "low", "close", "volume"}
         missing = required - set(df.columns)
         if missing:
-            raise ValueError(
-                f"DataFrame missing required OHLCV columns: {sorted(missing)}"
-            )
+            raise ValueError(f"DataFrame missing required OHLCV columns: {sorted(missing)}")
 
         self.reset()
 
-        results = []
+        results: list[BarRecord] = []
         for idx, row in df.iterrows():
-            bar = row.to_dict()
-            state = self.step(bar, timestamp=idx)
+            bar: dict[str, float] = {str(k): float(v) for k, v in row.items()}
+            state = self.step(bar, timestamp=str(idx))
             results.append(self._state_to_record(state))
 
         return pd.DataFrame(results, index=df.index)
 
-    def get_state_report(self) -> dict[str, object]:
+    def get_state_report(self) -> StateReport:
         """Return current system state summary."""
         return {
             "bar_count": self._bar_count,
@@ -94,6 +128,19 @@ class FinancialDynamicsPipeline:
             "is_warmed_up": self._bar_count >= self.warmup_bars,
             "transition_matrix": self._transition_engine.get_transition_matrix(),
         }
+
+    def forecast(self, horizon: int = 10) -> RegimeForecast | None:
+        """Forecast regime probabilities k steps ahead from current state.
+
+        Returns None if the pipeline hasn't processed enough data yet.
+        """
+        prev = self._transition_engine._prev_regime
+        if prev is None:
+            return None
+
+        tm = self._transition_engine.get_transition_matrix()
+        current_probs = RegimeProbabilities(probs=tm[int(prev)])
+        return forecast_regimes(tm, prev, current_probs, horizon=horizon)
 
     def reset(self) -> None:
         self._feature_engine.reset()
@@ -103,9 +150,9 @@ class FinancialDynamicsPipeline:
         self._bar_count = 0
 
     @staticmethod
-    def _state_to_record(state: BarState) -> dict[str, object]:
+    def _state_to_record(state: BarState) -> BarRecord:
         """Convert a BarState to a flat dict for DataFrame construction."""
-        record: dict[str, object] = {}
+        record: BarRecord = {}
 
         if state.features is not None:
             f = state.features
@@ -117,11 +164,11 @@ class FinancialDynamicsPipeline:
 
         if state.raw_probabilities is not None:
             for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
+                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]  # type: ignore[literal-required]
 
         if state.posterior_probabilities is not None:
             for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
+                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]  # type: ignore[literal-required]
 
         record["stabilized_regime"] = (
             state.stabilized_regime.name if state.stabilized_regime is not None else None

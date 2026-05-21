@@ -1,13 +1,11 @@
 """Tests for Phase 3: Stabilization."""
 
 import numpy as np
-import pytest
 
 from financial_dynamics.phase3_stabilization.hysteresis import HysteresisFilter
-from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
 from financial_dynamics.phase3_stabilization.majority_vote import MajorityVoteFilter
+from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
 from financial_dynamics.phase3_stabilization.stabilizer import StabilizationEngine
-from financial_dynamics.config import StabilizationConfig
 from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 
@@ -97,6 +95,15 @@ class TestMajorityVote:
         # Tie: 2 CALM, 2 CHOP. Most recent is CHOP
         assert result == Regime.CHOP
 
+    def test_three_way_tie_breaks_to_most_recent(self):
+        """Cover the reversed-buffer tie-breaking loop with a three-way tie."""
+        mv = MajorityVoteFilter(window=3)
+        mv.apply(Regime.CALM_TREND)
+        mv.apply(Regime.VOLATILE_TREND)
+        result = mv.apply(Regime.CHOP)
+        # 3-way tie: 1 each; most recent (CHOP) wins
+        assert result == Regime.CHOP
+
     def test_reset(self):
         mv = MajorityVoteFilter(window=5)
         for _ in range(5):
@@ -109,9 +116,7 @@ class TestStabilizationEngine:
     def test_produces_stabilized_regime(self):
         engine = StabilizationEngine()
         state = BarState()
-        state.posterior_probabilities = RegimeProbabilities(
-            probs=np.array([0.7, 0.1, 0.1, 0.1])
-        )
+        state.posterior_probabilities = RegimeProbabilities(probs=np.array([0.7, 0.1, 0.1, 0.1]))
         engine.update(state)
         assert state.stabilized_regime is not None
         assert isinstance(state.stabilized_regime, Regime)

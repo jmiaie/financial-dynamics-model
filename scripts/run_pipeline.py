@@ -40,6 +40,14 @@ def parse_args() -> argparse.Namespace:
              "Examples: 1d, 1h, 5m.",
     )
     parser.add_argument(
+        "--reference-symbols",
+        type=str,
+        nargs="*",
+        default=None,
+        help="Reference symbols for cross-asset correlation stress "
+             "(e.g. ^VIX TLT HYG). Requires --symbol.",
+    )
+    parser.add_argument(
         "--config",
         type=str,
         default=None,
@@ -70,11 +78,25 @@ def main() -> None:
 
     # Load data
     if args.symbol:
-        from financial_dynamics.data_loader import fetch_ohlcv
+        ref_syms = args.reference_symbols or []
+        if ref_syms:
+            from financial_dynamics.data_loader import fetch_multi_asset
 
-        print(f"\nFetching live data for {args.symbol} "
-              f"(period={args.period}, interval={args.interval})...")
-        df = fetch_ohlcv(args.symbol, period=args.period, interval=args.interval)
+            print(f"\nFetching live data for {args.symbol} "
+                  f"+ references {ref_syms} "
+                  f"(period={args.period}, interval={args.interval})...")
+            df = fetch_multi_asset(
+                args.symbol, ref_syms,
+                period=args.period, interval=args.interval,
+            )
+            ref_cols = [c for c in df.columns if c.startswith("ref_")]
+            print(f"  Reference columns loaded: {ref_cols}")
+        else:
+            from financial_dynamics.data_loader import fetch_ohlcv
+
+            print(f"\nFetching live data for {args.symbol} "
+                  f"(period={args.period}, interval={args.interval})...")
+            df = fetch_ohlcv(args.symbol, period=args.period, interval=args.interval)
         print(f"  {len(df)} bars fetched")
         print(f"  Date range: {df.index[0]} - {df.index[-1]}")
         print(f"  Price range: {df['close'].min():.2f} - {df['close'].max():.2f}")

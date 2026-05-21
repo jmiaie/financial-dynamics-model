@@ -6,8 +6,8 @@ from collections import deque
 
 import numpy as np
 
-from financial_dynamics.types import Regime, NUM_REGIMES
-from financial_dynamics.phase4_risk._utils import safe_renormalize
+from financial_dynamics._utils import safe_renormalize
+from financial_dynamics.types import Regime
 
 
 class ChopDominanceSuppressor:
@@ -31,10 +31,7 @@ class ChopDominanceSuppressor:
         if len(self._history) < self.window:
             return probs.copy()
 
-        calm_chop_count = sum(
-            1 for r in self._history
-            if r in (Regime.CALM_TREND, Regime.CHOP)
-        )
+        calm_chop_count = sum(1 for r in self._history if r in (Regime.CALM_TREND, Regime.CHOP))
         ratio = calm_chop_count / len(self._history)
 
         if ratio < 0.8:
@@ -45,7 +42,7 @@ class ChopDominanceSuppressor:
         adjusted[int(Regime.CALM_TREND)] *= max(1.0 - self.penalty, 0.2)
 
         # Boost Volatile Trend slightly to encourage structural movement
-        adjusted[int(Regime.VOLATILE_TREND)] *= (1.0 + self.penalty * 2)
+        adjusted[int(Regime.VOLATILE_TREND)] *= 1.0 + self.penalty * 2
 
         return safe_renormalize(adjusted)
 

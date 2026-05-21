@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from financial_dynamics.config import StabilizationConfig
-from financial_dynamics.types import BarState, Regime
 from financial_dynamics.phase3_stabilization.hysteresis import HysteresisFilter
-from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
 from financial_dynamics.phase3_stabilization.majority_vote import MajorityVoteFilter
+from financial_dynamics.phase3_stabilization.persistence import PersistenceFilter
+from financial_dynamics.types import BarState, Regime
 
 
 class StabilizationEngine:

@@ -3,14 +3,14 @@
 import numpy as np
 import pytest
 
+from financial_dynamics.config import TransitionConfig
 from financial_dynamics.phase2_transitions.bayesian_update import (
-    initialize_count_matrix,
-    counts_to_transition_matrix,
     bayesian_update,
     compute_posterior,
+    counts_to_transition_matrix,
+    initialize_count_matrix,
 )
 from financial_dynamics.phase2_transitions.transition_engine import MarkovTransitionEngine
-from financial_dynamics.config import TransitionConfig
 from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 
@@ -89,9 +89,7 @@ class TestMarkovTransitionEngine:
         # Repeatedly observe 0 -> 1 transition
         for _ in range(100):
             state = BarState()
-            state.raw_probabilities = RegimeProbabilities(
-                probs=np.array([0.1, 0.7, 0.1, 0.1])
-            )
+            state.raw_probabilities = RegimeProbabilities(probs=np.array([0.1, 0.7, 0.1, 0.1]))
             engine.update(state)
 
         tm = engine.get_transition_matrix()

@@ -3,10 +3,10 @@
 import numpy as np
 import pytest
 
-from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
-from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
-from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.config import RiskConfig
+from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
+from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
+from financial_dynamics.phase4_risk.risk_overlay import RiskConditioningEngine
 from financial_dynamics.types import BarState, FeatureVector, Regime, RegimeProbabilities
 
 
@@ -79,9 +79,7 @@ class TestRiskConditioningEngine:
         state = BarState()
         state.features = FeatureVector(0.1, 0.8, 0.05, 0.1, 0.1)
         state.stabilized_regime = Regime.CALM_TREND
-        state.posterior_probabilities = RegimeProbabilities(
-            probs=np.array([0.7, 0.1, 0.1, 0.1])
-        )
+        state.posterior_probabilities = RegimeProbabilities(probs=np.array([0.7, 0.1, 0.1, 0.1]))
         engine.update(state)
         assert state.risk_adjusted_regime is not None
         assert isinstance(state.risk_adjusted_regime, Regime)
@@ -92,14 +90,31 @@ class TestRiskConditioningEngine:
         engine.update(state)
         assert state.risk_adjusted_regime is None
 
+    def test_no_probs_assigns_stabilized_directly(self):
+        """Cover lines 46-47: when probs is None, risk_adjusted_regime = stabilized_regime."""
+        engine = RiskConditioningEngine()
+        state = BarState()
+        state.stabilized_regime = Regime.VOLATILE_TREND
+        # No posterior_probabilities or raw_probabilities set
+        engine.update(state)
+        assert state.risk_adjusted_regime == Regime.VOLATILE_TREND
+
+    def test_riskoff_confirmation_returns_false_when_features_none(self):
+        """Cover line 85: _check_riskoff_confirmation returns False when features is None."""
+        engine = RiskConditioningEngine()
+        state = BarState()
+        state.stabilized_regime = Regime.RISK_OFF
+        state.posterior_probabilities = RegimeProbabilities(probs=np.array([0.1, 0.1, 0.1, 0.7]))
+        # features is None
+        engine.update(state)
+        assert state.risk_overlays.get("riskoff_confirmed") is False
+
     def test_riskoff_not_confirmed_without_stressors(self):
         engine = RiskConditioningEngine()
         state = BarState()
         state.features = FeatureVector(0.1, 0.2, 0.1, 0.1, 0.1)  # Low stress
         state.stabilized_regime = Regime.RISK_OFF
-        state.posterior_probabilities = RegimeProbabilities(
-            probs=np.array([0.1, 0.1, 0.1, 0.7])
-        )
+        state.posterior_probabilities = RegimeProbabilities(probs=np.array([0.1, 0.1, 0.1, 0.7]))
         engine.update(state)
         assert state.risk_overlays.get("riskoff_confirmed") is False
 
@@ -121,9 +136,7 @@ class TestRiskConditioningEngine:
         state = BarState()
         state.features = FeatureVector(0.5, 0.5, 0.5, 0.5, 0.5)
         state.stabilized_regime = Regime.CALM_TREND
-        state.posterior_probabilities = RegimeProbabilities(
-            probs=np.array([0.7, 0.1, 0.1, 0.1])
-        )
+        state.posterior_probabilities = RegimeProbabilities(probs=np.array([0.7, 0.1, 0.1, 0.1]))
         engine.update(state)
         engine.reset()
         assert len(engine._overextension._history) == 0

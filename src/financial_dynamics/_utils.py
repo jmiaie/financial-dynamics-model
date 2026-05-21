@@ -1,5 +1,7 @@
 """Shared utilities used across multiple pipeline phases."""
 
+from __future__ import annotations
+
 import numpy as np
 
 from financial_dynamics.types import NUM_REGIMES

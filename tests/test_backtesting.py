@@ -1,15 +1,13 @@
 """Tests for the backtesting framework."""
 
-import numpy as np
 import pandas as pd
-import pytest
 
+from financial_dynamics.backtesting.evaluator import BacktestEvaluator, BacktestResult
 from financial_dynamics.backtesting.metrics import (
     regime_accuracy,
-    regime_confusion_matrix,
     regime_classification_report,
+    regime_confusion_matrix,
 )
-from financial_dynamics.backtesting.evaluator import BacktestEvaluator, BacktestResult
 from financial_dynamics.types import Regime
 
 
@@ -125,9 +123,7 @@ class TestBacktestEvaluator:
     def test_rolling_evaluation(self, synthetic_ohlcv):
         df, labels = synthetic_ohlcv
         evaluator = BacktestEvaluator()
-        rolling = evaluator.evaluate_rolling(
-            df, labels, window_size=120, step_size=60
-        )
+        rolling = evaluator.evaluate_rolling(df, labels, window_size=120, step_size=60)
         assert isinstance(rolling, pd.DataFrame)
         assert len(rolling) > 0
         assert "accuracy" in rolling.columns

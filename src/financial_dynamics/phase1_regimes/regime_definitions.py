@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from financial_dynamics.types import Regime, NUM_REGIMES
 from financial_dynamics.config import RegimeConfig
+from financial_dynamics.types import NUM_REGIMES, Regime
 
 
 def get_centroids(config: RegimeConfig) -> np.ndarray:

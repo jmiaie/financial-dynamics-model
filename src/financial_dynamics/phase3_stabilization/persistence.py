@@ -32,7 +32,6 @@ class PersistenceFilter:
             self._candidate_count = 0
             return self._confirmed_regime
 
-        # Different regime proposed
         if candidate_regime == self._candidate:
             self._candidate_count += 1
         else:

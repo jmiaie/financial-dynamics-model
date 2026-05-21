@@ -10,6 +10,7 @@ import numpy as np
 
 class Regime(IntEnum):
     """The four market regimes identified by the model."""
+
     CALM_TREND = 0
     VOLATILE_TREND = 1
     CHOP = 2
@@ -29,6 +30,7 @@ NUM_REGIMES = len(Regime)
 @dataclass
 class FeatureVector:
     """The 5-dimensional feature vector X_t produced by Phase 0."""
+
     volatility: float
     trend_strength: float
     drawdown_pressure: float
@@ -36,13 +38,15 @@ class FeatureVector:
     shock_intensity: float
 
     def to_array(self) -> np.ndarray:
-        return np.array([
-            self.volatility,
-            self.trend_strength,
-            self.drawdown_pressure,
-            self.correlation_stress,
-            self.shock_intensity,
-        ])
+        return np.array(
+            [
+                self.volatility,
+                self.trend_strength,
+                self.drawdown_pressure,
+                self.correlation_stress,
+                self.shock_intensity,
+            ]
+        )
 
     @classmethod
     def from_array(cls, arr: np.ndarray) -> FeatureVector:
@@ -58,6 +62,7 @@ class FeatureVector:
 @dataclass
 class RegimeProbabilities:
     """Probability distribution over the 4 regimes."""
+
     probs: np.ndarray  # shape (4,), sums to 1.0
 
     @property
@@ -76,6 +81,7 @@ class RegimeProbabilities:
 class BarState:
     """Accumulated state for a single bar flowing through the pipeline.
     Each phase populates its corresponding field."""
+
     timestamp: int | float | str | None = None
     ohlcv: dict[str, float] = field(default_factory=dict)
 

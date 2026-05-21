@@ -6,18 +6,19 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from financial_dynamics.config import PipelineConfig
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.backtesting.metrics import (
     regime_accuracy,
-    regime_confusion_matrix,
     regime_classification_report,
+    regime_confusion_matrix,
 )
+from financial_dynamics.config import PipelineConfig
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 
 
 @dataclass
 class BacktestResult:
     """Container for backtest outputs."""
+
     pipeline_results: pd.DataFrame
     accuracy: float
     confusion_matrix: pd.DataFrame
@@ -78,7 +79,7 @@ class BacktestEvaluator:
         Returns a DataFrame with columns [window_start, window_end, accuracy,
         evaluated_bars] for each window position.
         """
-        rows = []
+        rows: list[dict[str, int | float]] = []
         n = len(df)
 
         for start in range(0, n - window_size + 1, step_size):
@@ -87,11 +88,13 @@ class BacktestEvaluator:
             window_labels = true_labels.iloc[start:end]
 
             result = self.evaluate(window_df, window_labels)
-            rows.append({
-                "window_start": start,
-                "window_end": end,
-                "accuracy": result.accuracy,
-                "evaluated_bars": result.evaluated_bars,
-            })
+            rows.append(
+                {
+                    "window_start": start,
+                    "window_end": end,
+                    "accuracy": result.accuracy,
+                    "evaluated_bars": result.evaluated_bars,
+                }
+            )
 
         return pd.DataFrame(rows)

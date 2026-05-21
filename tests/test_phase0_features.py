@@ -4,16 +4,16 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from financial_dynamics.config import FeatureConfig
+from financial_dynamics.phase0_features.feature_engine import FeatureEngine
 from financial_dynamics.phase0_features.indicators import (
-    compute_ewma_volatility,
-    compute_trend_strength,
-    compute_drawdown_pressure,
     compute_correlation_stress,
+    compute_drawdown_pressure,
+    compute_ewma_volatility,
     compute_shock_intensity,
+    compute_trend_strength,
 )
 from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
-from financial_dynamics.phase0_features.feature_engine import FeatureEngine
-from financial_dynamics.config import FeatureConfig
 from financial_dynamics.types import BarState
 
 
@@ -101,6 +101,12 @@ class TestNormalizer:
         assert (result >= 0).all()
         assert (result <= 1.01).all()
 
+    def test_invalid_method_raises_value_error(self):
+        """Cover normalizer.py line 24: invalid normalization_method."""
+        config = FeatureConfig(normalization_method="invalid_method")
+        with pytest.raises(ValueError, match="Unsupported normalization_method"):
+            FeatureNormalizer(config)
+
     def test_reset_clears_state(self):
         config = FeatureConfig()
         norm = FeatureNormalizer(config)
@@ -115,10 +121,16 @@ class TestFeatureEngine:
         engine = FeatureEngine()
         result = engine.compute_batch(calm_trend_data)
         expected_cols = [
-            "volatility", "trend_strength", "drawdown_pressure",
-            "correlation_stress", "shock_intensity",
-            "norm_volatility", "norm_trend_strength", "norm_drawdown_pressure",
-            "norm_correlation_stress", "norm_shock_intensity",
+            "volatility",
+            "trend_strength",
+            "drawdown_pressure",
+            "correlation_stress",
+            "shock_intensity",
+            "norm_volatility",
+            "norm_trend_strength",
+            "norm_drawdown_pressure",
+            "norm_correlation_stress",
+            "norm_shock_intensity",
         ]
         for col in expected_cols:
             assert col in result.columns
@@ -147,7 +159,8 @@ class TestFeatureEngine:
         assert not np.isnan(arr).any()
 
     def test_warmup_bars_property(self):
-        config = FeatureConfig(volatility_span=20, trend_window=14,
-                               drawdown_window=60, correlation_window=20)
+        config = FeatureConfig(
+            volatility_span=20, trend_window=14, drawdown_window=60, correlation_window=20
+        )
         engine = FeatureEngine(config)
         assert engine.warmup_bars == 61

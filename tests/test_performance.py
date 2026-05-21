@@ -4,10 +4,8 @@ import time
 
 import numpy as np
 import pandas as pd
-import pytest
 
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
 
 
 def _make_ohlcv(n: int, seed: int = 42) -> pd.DataFrame:
@@ -73,7 +71,7 @@ class TestPerformanceTiming:
         # Streaming can be up to 3x slower due to per-row overhead
         assert stream_time < batch_time * 3.5, (
             f"Stream={stream_time:.2f}s vs Batch={batch_time:.2f}s "
-            f"(ratio: {stream_time/batch_time:.1f}x)"
+            f"(ratio: {stream_time / batch_time:.1f}x)"
         )
 
 
@@ -98,8 +96,7 @@ class TestPerformanceScaling:
         ratio = t_large / max(t_small, 0.001)
         # Allow up to 4x (generous for 2x input due to overhead)
         assert ratio < 4.0, (
-            f"Scaling ratio: {ratio:.1f}x for 2x input "
-            f"(small={t_small:.3f}s, large={t_large:.3f}s)"
+            f"Scaling ratio: {ratio:.1f}x for 2x input (small={t_small:.3f}s, large={t_large:.3f}s)"
         )
 
 
@@ -120,8 +117,8 @@ class TestPerformanceMemory:
 
     def test_normalizer_history_bounded(self):
         """The normalizer's history should not grow beyond its window."""
-        from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
         from financial_dynamics.config import FeatureConfig
+        from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
 
         config = FeatureConfig(normalization_window=100)
         norm = FeatureNormalizer(config)

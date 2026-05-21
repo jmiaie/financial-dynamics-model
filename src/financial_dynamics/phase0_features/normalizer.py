@@ -41,7 +41,7 @@ class FeatureNormalizer:
         """
         self._history.append(raw_features.copy())
         if len(self._history) > self.window:
-            self._history = self._history[-self.window:]
+            self._history = self._history[-self.window :]
 
         if len(self._history) < 2:
             return np.clip(raw_features, 0.0, 1.0) * self.weights
@@ -50,10 +50,8 @@ class FeatureNormalizer:
 
         if self.method == "zscore":
             normalized = self._zscore_normalize(raw_features, history)
-        elif self.method == "minmax":
-            normalized = self._minmax_normalize(raw_features, history)
         else:
-            raise ValueError(f"Unsupported normalization_method '{self.method}'")
+            normalized = self._minmax_normalize(raw_features, history)
 
         return normalized * self.weights
 

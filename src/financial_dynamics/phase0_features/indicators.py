@@ -4,6 +4,8 @@ Each function accepts pandas Series and returns pandas Series.
 No internal state -- purely functional.
 """
 
+from __future__ import annotations
+
 import numpy as np
 import pandas as pd
 
@@ -18,7 +20,7 @@ def compute_ewma_volatility(returns: pd.Series, span: int = 20) -> pd.Series:
     Returns:
         Series of annualized volatility estimates (sqrt of EWMA variance).
     """
-    squared = returns ** 2
+    squared = returns**2
     ewma_var = squared.ewm(span=span, min_periods=span).mean()
     return np.sqrt(ewma_var)
 
@@ -33,9 +35,10 @@ def compute_trend_strength(close: pd.Series, window: int = 14) -> pd.Series:
     Returns:
         Series with normalized absolute trend strength.
     """
+
     def _regression_slope(y: np.ndarray) -> float:
         if len(y) < 2 or np.isnan(y).any():
-            return np.nan
+            return float("nan")
         x = np.arange(len(y), dtype=float)
         x_mean = x.mean()
         y_mean = y.mean()
@@ -72,6 +75,43 @@ def compute_correlation_stress(returns: pd.Series, window: int = 20) -> pd.Serie
     kurt = returns.rolling(window, min_periods=window).kurt()
     # Fat tails only; platykurtic values are not meaningful here
     return kurt.clip(lower=0.0)
+
+
+def compute_cross_asset_stress(
+    returns: pd.Series,
+    reference_returns: dict[str, pd.Series],
+    window: int = 20,
+) -> pd.Series:
+    """Rolling cross-asset correlation stress.
+
+    Measures how strongly the primary asset co-moves with reference assets.
+    High absolute correlation across references signals systemic stress
+    (contagion / flight-to-safety).
+
+    Args:
+        returns: Primary asset returns.
+        reference_returns: Dict mapping reference name to its returns Series.
+        window: Rolling correlation window.
+
+    Returns:
+        Series of mean absolute rolling correlation across all references.
+    """
+    if not reference_returns:
+        return compute_correlation_stress(returns, window)
+
+    corrs: list[pd.Series] = []
+    for ref_returns in reference_returns.values():
+        aligned = pd.DataFrame({"primary": returns, "ref": ref_returns}).dropna()
+        if len(aligned) < window:
+            continue
+        rolling_corr = aligned["primary"].rolling(window, min_periods=window).corr(aligned["ref"])
+        corrs.append(rolling_corr.abs().reindex(returns.index))
+
+    if not corrs:
+        return compute_correlation_stress(returns, window)
+
+    stacked = pd.concat(corrs, axis=1)
+    return stacked.mean(axis=1).clip(lower=0.0)
 
 
 def compute_shock_intensity(returns: pd.Series, window: int = 20) -> pd.Series:

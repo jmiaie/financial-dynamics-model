@@ -18,20 +18,21 @@ class FeatureConfig:
     shock_threshold: float = 2.0
     normalization_method: str = "zscore"  # "zscore" or "minmax"
     normalization_window: int = 252
-    feature_weights: list[float] = field(
-        default_factory=lambda: [1.0, 1.0, 1.0, 1.0, 1.0]
-    )
+    feature_weights: list[float] = field(default_factory=lambda: [1.0, 1.0, 1.0, 1.0, 1.0])
+    reference_symbols: list[str] = field(default_factory=list)
 
 
 @dataclass
 class RegimeConfig:
     temperature: float = 1.0
-    centroids: dict[str, list[float]] = field(default_factory=lambda: {
-        "CALM_TREND":     [0.1, 0.8, 0.05, 0.1, 0.1],
-        "VOLATILE_TREND": [0.8, 0.7, 0.3,  0.5, 0.6],
-        "CHOP":           [0.4, 0.2, 0.15, 0.3, 0.3],
-        "RISK_OFF":       [0.9, 0.3, 0.8,  0.9, 0.9],
-    })
+    centroids: dict[str, list[float]] = field(
+        default_factory=lambda: {
+            "CALM_TREND": [0.1, 0.8, 0.05, 0.1, 0.1],
+            "VOLATILE_TREND": [0.8, 0.7, 0.3, 0.5, 0.6],
+            "CHOP": [0.4, 0.2, 0.15, 0.3, 0.3],
+            "RISK_OFF": [0.9, 0.3, 0.8, 0.9, 0.9],
+        }
+    )
 
 
 @dataclass
@@ -75,18 +76,13 @@ class PipelineConfig:
             with open(path) as f:
                 raw = yaml.safe_load(f)
         except FileNotFoundError:
-            raise FileNotFoundError(
-                f"Pipeline config not found: {path.resolve()}"
-            ) from None
+            raise FileNotFoundError(f"Pipeline config not found: {path.resolve()}") from None
         except yaml.YAMLError as exc:
-            raise ValueError(
-                f"Invalid YAML in {path.resolve()}: {exc}"
-            ) from exc
+            raise ValueError(f"Invalid YAML in {path.resolve()}: {exc}") from exc
 
         if raw is not None and not isinstance(raw, dict):
             raise ValueError(
-                f"Expected YAML mapping at top level of {path.resolve()}, "
-                f"got {type(raw).__name__}"
+                f"Expected YAML mapping at top level of {path.resolve()}, got {type(raw).__name__}"
             )
         data = raw or {}
 
@@ -105,8 +101,7 @@ class PipelineConfig:
                         setattr(section_obj, key, value)
                     else:
                         warnings.warn(
-                            f"Unknown config key '{key}' in section "
-                            f"'{section_name}'; ignoring.",
+                            f"Unknown config key '{key}' in section '{section_name}'; ignoring.",
                             stacklevel=2,
                         )
         return config
