@@ -5,6 +5,7 @@ Interactive dashboard for market regime classification with live yfinance data.
 
 import sys
 import os
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 import streamlit as st
@@ -20,19 +21,20 @@ from financial_dynamics.data_loader import fetch_ohlcv
 from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.signals.detector import SignalDetector, SignalType
 from financial_dynamics.visualization.phase_space_3d import build_phase_space_3d
+from financial_dynamics.visualization.regime_vol_map import build_regime_vol_map_plotly
 
 # Color scheme: slate and teal
 COLOR_SCHEME = {
-    "primary": "#1e3a5f",      # Dark slate blue
-    "secondary": "#0d7377",     # Teal
-    "accent": "#14919b",        # Light teal
-    "calm": "#10b981",          # Green (Calm Trend)
-    "volatile": "#f59e0b",      # Amber (Volatile Trend)
-    "chop": "#8b5cf6",          # Purple (Chop)
-    "riskoff": "#ef4444",       # Red (Risk-Off)
-    "background": "#0f172a",    # Very dark slate
-    "surface": "#1e293b",       # Dark slate
-    "text": "#f1f5f9",          # Light slate
+    "primary": "#1e3a5f",  # Dark slate blue
+    "secondary": "#0d7377",  # Teal
+    "accent": "#14919b",  # Light teal
+    "calm": "#10b981",  # Green (Calm Trend)
+    "volatile": "#f59e0b",  # Amber (Volatile Trend)
+    "chop": "#8b5cf6",  # Purple (Chop)
+    "riskoff": "#ef4444",  # Red (Risk-Off)
+    "background": "#0f172a",  # Very dark slate
+    "surface": "#1e293b",  # Dark slate
+    "text": "#f1f5f9",  # Light slate
 }
 
 REGIME_COLORS_PLOTLY = {
@@ -52,7 +54,8 @@ def setup_page():
         initial_sidebar_state="expanded",
     )
 
-    st.markdown("""
+    st.markdown(
+        """
     <style>
     [data-testid="stAppViewContainer"] {
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -128,7 +131,9 @@ def setup_page():
         color: #ef4444;
     }
     </style>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 def _generate_synthetic_fallback() -> pd.DataFrame:
@@ -162,6 +167,7 @@ def _generate_synthetic_fallback() -> pd.DataFrame:
 def _get_logo_html(base_path: str) -> str:
     """Load logo as HTML, supporting SVG and base64 PNG."""
     import os
+
     svg_path = base_path + ".svg"
     png_path = base_path + ".png"
 
@@ -170,11 +176,11 @@ def _get_logo_html(base_path: str) -> str:
             return f.read()
     elif os.path.exists(png_path):
         import base64
+
         with open(png_path, "rb") as f:
             b64 = base64.b64encode(f.read()).decode()
             return f'<img src="data:image/png;base64,{b64}" width="120">'
     return ""
-
 
 
 @st.cache_data(ttl=3600)
@@ -198,14 +204,16 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
     """Interactive price chart with regime background bands."""
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(
-        x=df.index,
-        y=df["close"],
-        mode="lines",
-        name="Close Price",
-        line=dict(color=COLOR_SCHEME["text"], width=2),
-        hovertemplate="<b>%{x|%Y-%m-%d}</b><br>Price: $%{y:.2f}<extra></extra>",
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=df["close"],
+            mode="lines",
+            name="Close Price",
+            line=dict(color=COLOR_SCHEME["text"], width=2),
+            hovertemplate="<b>%{x|%Y-%m-%d}</b><br>Price: $%{y:.2f}<extra></extra>",
+        )
+    )
 
     # Add regime background bands
     regime_col = results["risk_adjusted_regime"]
@@ -257,16 +265,18 @@ def plot_regime_probabilities(results: pd.DataFrame):
     fig = go.Figure()
     for regime in Regime:
         col = f"post_prob_{regime.name}"
-        fig.add_trace(go.Scatter(
-            x=valid.index,
-            y=valid[col],
-            mode="lines",
-            name=REGIME_NAMES[regime],
-            stackgroup="one",
-            fillcolor=REGIME_COLORS_PLOTLY[regime],
-            line=dict(width=0.5, color=REGIME_COLORS_PLOTLY[regime]),
-            hovertemplate=f"{REGIME_NAMES[regime]}: %{{y:.1%}}<extra></extra>",
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=valid.index,
+                y=valid[col],
+                mode="lines",
+                name=REGIME_NAMES[regime],
+                stackgroup="one",
+                fillcolor=REGIME_COLORS_PLOTLY[regime],
+                line=dict(width=0.5, color=REGIME_COLORS_PLOTLY[regime]),
+                hovertemplate=f"{REGIME_NAMES[regime]}: %{{y:.1%}}<extra></extra>",
+            )
+        )
 
     fig.update_layout(
         title="Regime Probability Distribution (Posterior)",
@@ -288,19 +298,21 @@ def plot_transition_matrix(tm: np.ndarray):
     """Heatmap of transition probabilities."""
     labels = [REGIME_NAMES[r] for r in Regime]
 
-    fig = go.Figure(data=go.Heatmap(
-        z=tm,
-        x=labels,
-        y=labels,
-        colorscale="Greys",
-        zmin=0,
-        zmax=1,
-        text=np.round(tm, 2),
-        texttemplate="%{text:.2f}",
-        textfont={"size": 12},
-        colorbar=dict(title="Probability"),
-        hovertemplate="From %{y} → To %{x}: %{z:.2%}<extra></extra>",
-    ))
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=tm,
+            x=labels,
+            y=labels,
+            colorscale="Greys",
+            zmin=0,
+            zmax=1,
+            text=np.round(tm, 2),
+            texttemplate="%{text:.2f}",
+            textfont={"size": 12},
+            colorbar=dict(title="Probability"),
+            hovertemplate="From %{y} → To %{x}: %{z:.2%}<extra></extra>",
+        )
+    )
 
     fig.update_layout(
         title="Transition Probability Matrix",
@@ -338,18 +350,25 @@ def plot_features(results: pd.DataFrame):
         return None
 
     fig = go.Figure()
-    colors = [COLOR_SCHEME["calm"], COLOR_SCHEME["volatile"], COLOR_SCHEME["chop"],
-              COLOR_SCHEME["riskoff"], COLOR_SCHEME["accent"]]
+    colors = [
+        COLOR_SCHEME["calm"],
+        COLOR_SCHEME["volatile"],
+        COLOR_SCHEME["chop"],
+        COLOR_SCHEME["riskoff"],
+        COLOR_SCHEME["accent"],
+    ]
 
     for col, name, color in zip(feat_cols, feat_names, colors):
-        fig.add_trace(go.Scatter(
-            x=valid.index,
-            y=valid[col],
-            mode="lines",
-            name=name,
-            line=dict(color=color, width=2),
-            hovertemplate=f"{name}: %{{y:.3f}}<extra></extra>",
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=valid.index,
+                y=valid[col],
+                mode="lines",
+                name=name,
+                line=dict(color=color, width=2),
+                hovertemplate=f"{name}: %{{y:.3f}}<extra></extra>",
+            )
+        )
 
     fig.update_layout(
         title="Engineered Features Over Time",
@@ -374,7 +393,7 @@ def main():
     st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
     st.markdown(
         '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
     st.divider()
 
@@ -383,9 +402,7 @@ def main():
         st.header("⚙️ Configuration")
 
         symbol = st.text_input(
-            "Stock/Ticker Symbol",
-            value="SPY",
-            help="e.g., SPY, QQQ, AAPL, etc."
+            "Stock/Ticker Symbol", value="SPY", help="e.g., SPY, QQQ, AAPL, etc."
         ).upper()
 
         col1, col2 = st.columns(2)
@@ -421,6 +438,7 @@ def main():
 
         st.divider()
         import os
+
         logo_base = os.path.join(os.path.dirname(__file__), "assets", "micap_logo")
         logo_html = _get_logo_html(logo_base)
         if logo_html:
@@ -463,47 +481,65 @@ def main():
 
         tc1, tc2, tc3, tc4, tc5, tc6 = st.columns(6)
         with tc1:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="ticker-bar">
                 <div class="ticker-label">Ticker</div>
                 <div class="ticker-symbol">{symbol}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
         with tc2:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="ticker-bar">
                 <div class="ticker-label">Open</div>
-                <div class="ticker-price">${latest['open']:.2f}</div>
+                <div class="ticker-price">${latest["open"]:.2f}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
         with tc3:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="ticker-bar">
                 <div class="ticker-label">High</div>
-                <div class="ticker-price">${latest['high']:.2f}</div>
+                <div class="ticker-price">${latest["high"]:.2f}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
         with tc4:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="ticker-bar">
                 <div class="ticker-label">Low</div>
-                <div class="ticker-price">${latest['low']:.2f}</div>
+                <div class="ticker-price">${latest["low"]:.2f}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
         with tc5:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="ticker-bar">
                 <div class="ticker-label">Prev Close</div>
                 <div class="ticker-price">${prev_close:.2f}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
         with tc6:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="ticker-bar">
                 <div class="ticker-label">Day Change</div>
                 <div class="{change_class}">{change_arrow} {change_sign}{day_change_pct:.2f}%</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
         # Metrics row
         st.divider()
@@ -522,39 +558,51 @@ def main():
                 confidence = probs[int(current_regime)]
 
         with col1:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="metric-card">
                 <div class="metric-label">Current Regime</div>
-                <div class="metric-value">{REGIME_NAMES.get(current_regime, 'Unknown')}</div>
+                <div class="metric-value">{REGIME_NAMES.get(current_regime, "Unknown")}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
         with col2:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="metric-card">
                 <div class="metric-label">Confidence</div>
                 <div class="metric-value">{confidence:.1%}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
         with col3:
             bars_processed = len(results)
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="metric-card">
                 <div class="metric-label">Bars Processed</div>
                 <div class="metric-value">{bars_processed:,}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
         with col4:
             warmup = pipeline.warmup_bars
             is_ready = "✓ Ready" if bars_processed >= warmup else f"Warming up..."
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="metric-card">
                 <div class="metric-label">Status</div>
                 <div class="metric-value">{is_ready}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
         st.divider()
 
@@ -593,8 +641,11 @@ def main():
         )
 
         feat_cols = [
-            "feat_volatility", "feat_trend", "feat_drawdown",
-            "feat_corr_stress", "feat_shock",
+            "feat_volatility",
+            "feat_trend",
+            "feat_drawdown",
+            "feat_corr_stress",
+            "feat_shock",
         ]
         valid_3d = results.dropna(subset=feat_cols + ["risk_adjusted_regime"])
         if len(valid_3d) >= 10:
@@ -609,34 +660,41 @@ def main():
 
             row1 = st.columns(5)
             with row1[0]:
-                show_basins = st.checkbox("Basins", value=True,
-                    help="Convex-hull surfaces per regime.")
+                show_basins = st.checkbox(
+                    "Basins", value=True, help="Convex-hull surfaces per regime."
+                )
             with row1[1]:
-                show_ellipsoids = st.checkbox("Ellipsoids", value=False,
-                    help="1.5σ covariance ellipsoids (smoother than hulls).")
+                show_ellipsoids = st.checkbox(
+                    "Ellipsoids",
+                    value=False,
+                    help="1.5σ covariance ellipsoids (smoother than hulls).",
+                )
             with row1[2]:
-                show_arrows = st.checkbox("Flows", value=True,
-                    help="Markov transition arrows.")
+                show_arrows = st.checkbox("Flows", value=True, help="Markov transition arrows.")
             with row1[3]:
-                show_loadings = st.checkbox("Loadings", value=True,
-                    help="PCA loading vectors (feature axis labels).")
+                show_loadings = st.checkbox(
+                    "Loadings", value=True, help="PCA loading vectors (feature axis labels)."
+                )
             with row1[4]:
-                show_shifts = st.checkbox("Shifts", value=True,
-                    help="✕ markers at regime transitions.")
+                show_shifts = st.checkbox(
+                    "Shifts", value=True, help="✕ markers at regime transitions."
+                )
 
             row2 = st.columns(5)
             with row2[0]:
-                show_traj = st.checkbox("Trajectory", value=True,
-                    help="Velocity-colored trajectory.")
+                show_traj = st.checkbox(
+                    "Trajectory", value=True, help="Velocity-colored trajectory."
+                )
             with row2[1]:
-                show_halos = st.checkbox("Eq. halos", value=True,
-                    help="Stationary-distribution halos.")
+                show_halos = st.checkbox(
+                    "Eq. halos", value=True, help="Stationary-distribution halos."
+                )
             with row2[2]:
-                show_vol = st.checkbox("Vol surface", value=False,
-                    help="High-vol danger zone isosurface.")
+                show_vol = st.checkbox(
+                    "Vol surface", value=False, help="High-vol danger zone isosurface."
+                )
             with row2[3]:
-                animate = st.checkbox("Animate", value=False,
-                    help="Replay through time.")
+                animate = st.checkbox("Animate", value=False, help="Replay through time.")
             with row2[4]:
                 st.empty()
 
@@ -660,6 +718,30 @@ def main():
         else:
             st.info("Need at least 10 valid bars for the 3D phase-space view.")
 
+        # Regime-Volatility Map
+        st.divider()
+        st.subheader("🌡️ Regime–Volatility Map")
+        st.caption(
+            "How volatility distributes across regimes, where regime boundaries "
+            "lie in vol-space, and how transitions correlate with vol shifts."
+        )
+
+        vol_figures = build_regime_vol_map_plotly(results, pipeline)
+        if vol_figures:
+            vol_col1, vol_col2 = st.columns(2)
+            with vol_col1:
+                if "vol_violin" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_violin"], use_container_width=True)
+                if "vol_timeseries" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_timeseries"], use_container_width=True)
+            with vol_col2:
+                if "vol_heatmap" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_heatmap"], use_container_width=True)
+                if "vol_transitions" in vol_figures:
+                    st.plotly_chart(vol_figures["vol_transitions"], use_container_width=True)
+        else:
+            st.info("Insufficient data for regime-volatility mapping (need ≥10 valid bars).")
+
         # Forecast section
         st.divider()
         st.subheader("🔮 Regime Forecast")
@@ -679,11 +761,13 @@ def main():
                 forecast_data = []
                 for i, probs in enumerate(forecast.horizon_probabilities, 1):
                     for regime in Regime:
-                        forecast_data.append({
-                            "Step": i,
-                            "Regime": REGIME_NAMES[regime],
-                            "Probability": probs[regime],
-                        })
+                        forecast_data.append(
+                            {
+                                "Step": i,
+                                "Regime": REGIME_NAMES[regime],
+                                "Probability": probs[regime],
+                            }
+                        )
 
                 forecast_df = pd.DataFrame(forecast_data)
                 fig_forecast = px.bar(
@@ -716,15 +800,17 @@ def main():
             bar_state = BarState(
                 timestamp=idx,
                 ohlcv=row.to_dict(),
-                stabilized_regime=Regime[row["stabilized_regime"]] if pd.notna(row.get("stabilized_regime")) else None,
-                risk_adjusted_regime=Regime[row["risk_adjusted_regime"]] if pd.notna(row.get("risk_adjusted_regime")) else None,
+                stabilized_regime=Regime[row["stabilized_regime"]]
+                if pd.notna(row.get("stabilized_regime"))
+                else None,
+                risk_adjusted_regime=Regime[row["risk_adjusted_regime"]]
+                if pd.notna(row.get("risk_adjusted_regime"))
+                else None,
             )
 
             prob_cols = [f"post_prob_{r.name}" for r in Regime]
             if all(col in row.index for col in prob_cols):
-                bar_state.posterior_probabilities = RegimeProbabilities(
-                    probs=row[prob_cols].values
-                )
+                bar_state.posterior_probabilities = RegimeProbabilities(probs=row[prob_cols].values)
 
             signals.extend(detector.check(bar_state))
 

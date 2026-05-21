@@ -13,6 +13,10 @@ from financial_dynamics.types import Regime
 from financial_dynamics.visualization.dashboard import SystemDashboard
 from financial_dynamics.visualization.phase_space import PhaseSpacePlotter
 from financial_dynamics.visualization.phase_space_3d import build_phase_space_3d
+from financial_dynamics.visualization.regime_vol_map import (
+    build_regime_vol_map,
+    build_regime_vol_map_plotly,
+)
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
 
@@ -234,3 +238,80 @@ class TestSystemDashboard:
         dashboard.save(str(output))
         assert output.exists()
         plt.close("all")
+
+
+class TestRegimeVolMap:
+    @pytest.fixture
+    def pipeline_results(self, synthetic_ohlcv):
+        df, _ = synthetic_ohlcv
+        pipeline = FinancialDynamicsPipeline()
+        results = pipeline.run(df)
+        return results, pipeline
+
+    def test_matplotlib_returns_figure(self, pipeline_results):
+        results, pipeline = pipeline_results
+        fig = build_regime_vol_map(results, pipeline)
+        assert isinstance(fig, plt.Figure)
+        assert len(fig.axes) >= 4
+        plt.close(fig)
+
+    def test_matplotlib_without_pipeline(self, pipeline_results):
+        results, _ = pipeline_results
+        fig = build_regime_vol_map(results)
+        assert isinstance(fig, plt.Figure)
+        plt.close(fig)
+
+    def test_matplotlib_insufficient_data(self):
+        import pandas as pd
+
+        sparse = pd.DataFrame(
+            {
+                "risk_adjusted_regime": ["CALM_TREND"] * 3,
+                "feat_volatility": [0.1, 0.2, 0.3],
+            }
+        )
+        fig = build_regime_vol_map(sparse)
+        assert isinstance(fig, plt.Figure)
+        plt.close(fig)
+
+    def test_plotly_returns_dict(self, pipeline_results):
+        results, pipeline = pipeline_results
+        figures = build_regime_vol_map_plotly(results, pipeline)
+        assert isinstance(figures, dict)
+        expected_keys = {"vol_violin", "vol_heatmap", "vol_timeseries", "vol_transitions"}
+        assert expected_keys == set(figures.keys())
+
+    def test_plotly_figures_have_data(self, pipeline_results):
+        results, pipeline = pipeline_results
+        figures = build_regime_vol_map_plotly(results, pipeline)
+        for key, fig in figures.items():
+            assert len(fig.data) >= 1, f"{key} has no traces"
+
+    def test_plotly_insufficient_data(self):
+        import pandas as pd
+
+        sparse = pd.DataFrame(
+            {
+                "risk_adjusted_regime": ["CALM_TREND"] * 3,
+                "feat_volatility": [0.1, 0.2, 0.3],
+            }
+        )
+        figures = build_regime_vol_map_plotly(sparse)
+        assert figures == {}
+
+    def test_plotly_dark_template(self, pipeline_results):
+        results, pipeline = pipeline_results
+        figures = build_regime_vol_map_plotly(results, pipeline)
+        for key, fig in figures.items():
+            assert fig.layout.template.layout.paper_bgcolor is not None or "plotly_dark" in str(
+                fig.layout.template
+            ), f"{key} not dark themed"
+
+    def test_exports_available(self):
+        from financial_dynamics.visualization import (
+            build_regime_vol_map,
+            build_regime_vol_map_plotly,
+        )
+
+        assert callable(build_regime_vol_map)
+        assert callable(build_regime_vol_map_plotly)
