@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import logging
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 def fetch_ohlcv(
@@ -94,7 +97,12 @@ def fetch_multi_asset(
                 ref_df.columns = [c.lower() for c in ref_df.columns]
                 col_name = f"ref_{ref_sym.replace('^', '')}_close"
                 df[col_name] = ref_df["close"].reindex(df.index)
-        except (KeyError, ValueError, AttributeError):
+        except (KeyError, ValueError, AttributeError) as exc:
+            logger.warning(
+                "Failed to fetch reference symbol '%s': %s. Skipping.",
+                ref_sym,
+                exc,
+            )
             continue
 
     return df
