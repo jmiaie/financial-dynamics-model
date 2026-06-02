@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import warnings
+
 import pandas as pd
 
 
@@ -90,11 +92,21 @@ def fetch_multi_asset(
         try:
             ref_ticker = yf.Ticker(ref_sym)
             ref_df = ref_ticker.history(period=period, interval=interval)
-            if not ref_df.empty:
-                ref_df.columns = [c.lower() for c in ref_df.columns]
-                col_name = f"ref_{ref_sym.replace('^', '')}_close"
-                df[col_name] = ref_df["close"].reindex(df.index)
-        except (KeyError, ValueError, AttributeError):
+        except Exception as exc:
+            warnings.warn(
+                f"Could not load reference symbol '{ref_sym}': {exc}",
+                stacklevel=2,
+            )
             continue
+        if not ref_df.empty:
+            ref_df.columns = [c.lower() for c in ref_df.columns]
+            if "close" not in ref_df.columns:
+                warnings.warn(
+                    f"Reference symbol '{ref_sym}' has no 'close' column; skipping.",
+                    stacklevel=2,
+                )
+                continue
+            col_name = f"ref_{ref_sym.replace('^', '')}_close"
+            df[col_name] = ref_df["close"].reindex(df.index)
 
     return df
