@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
@@ -125,46 +126,12 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
 
 
-def _extract_config(config: PipelineConfig) -> dict:
+def _extract_config(config: PipelineConfig) -> dict[str, Any]:
     """Serialize config to a plain dict."""
-    return {
-        "features": {
-            "volatility_span": config.features.volatility_span,
-            "trend_window": config.features.trend_window,
-            "drawdown_window": config.features.drawdown_window,
-            "correlation_window": config.features.correlation_window,
-            "shock_threshold": config.features.shock_threshold,
-            "normalization_method": config.features.normalization_method,
-            "normalization_window": config.features.normalization_window,
-            "feature_weights": config.features.feature_weights,
-        },
-        "regimes": {
-            "temperature": config.regimes.temperature,
-            "centroids": config.regimes.centroids,
-        },
-        "transitions": {
-            "prior_strength": config.transitions.prior_strength,
-            "learning_rate": config.transitions.learning_rate,
-        },
-        "stabilization": {
-            "hysteresis_threshold": config.stabilization.hysteresis_threshold,
-            "min_persistence_bars": config.stabilization.min_persistence_bars,
-            "majority_vote_window": config.stabilization.majority_vote_window,
-        },
-        "risk": {
-            "drawdown_threshold": config.risk.drawdown_threshold,
-            "correlation_stress_threshold": config.risk.correlation_stress_threshold,
-            "shock_threshold": config.risk.shock_threshold,
-            "riskoff_confirmation_count": config.risk.riskoff_confirmation_count,
-            "overextension_window": config.risk.overextension_window,
-            "overextension_decay": config.risk.overextension_decay,
-            "chop_penalty_window": config.risk.chop_penalty_window,
-            "chop_penalty_factor": config.risk.chop_penalty_factor,
-        },
-    }
+    return asdict(config)
 
 
-def _restore_config(config: PipelineConfig, data: dict) -> None:
+def _restore_config(config: PipelineConfig, data: dict[str, Any]) -> None:
     """Apply saved config values onto an existing PipelineConfig."""
     section_map = {
         "features": config.features,

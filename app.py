@@ -196,7 +196,6 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
                     line_width=0,
                 )
             except KeyError:
-                import warnings
                 warnings.warn(
                     f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
                     stacklevel=2,
@@ -337,19 +336,8 @@ def plot_features(results: pd.DataFrame):
     return fig
 
 
-def main():
-    """Main Streamlit app."""
-    setup_page()
-
-    # Header
-    st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
-        unsafe_allow_html=True
-    )
-    st.divider()
-
-    # Sidebar configuration
+def _render_sidebar() -> tuple[str, str, str]:
+    """Render sidebar controls, return (symbol, period, interval)."""
     with st.sidebar:
         st.header("⚙️ Configuration")
 
@@ -391,7 +379,205 @@ def main():
             "**Authors:** Jeff Milam & Micap AI LLC"
         )
 
-    # Main content
+    return symbol, period, interval
+
+
+def _render_metrics(results: pd.DataFrame, pipeline) -> None:
+    """Render the 4-column metrics row."""
+    col1, col2, col3, col4 = st.columns(4)
+
+    current_regime_str = results["risk_adjusted_regime"].iloc[-1] if len(results) > 0 else None
+    current_regime = Regime[current_regime_str] if current_regime_str else None
+    confidence = 0.0
+    if current_regime is not None:
+        prob_cols = [f"post_prob_{r.name}" for r in Regime]
+        if all(col in results.columns for col in prob_cols):
+            probs = results[prob_cols].iloc[-1].values
+            confidence = probs[int(current_regime)]
+
+    bars_processed = len(results)
+    warmup = pipeline.warmup_bars
+    is_ready = "✓ Ready" if bars_processed >= warmup else "Warming up..."
+
+    with col1:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Current Regime</div>
+            <div class="metric-value">{REGIME_NAMES.get(current_regime, 'Unknown')}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Confidence</div>
+            <div class="metric-value">{confidence:.1%}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Bars Processed</div>
+            <div class="metric-value">{bars_processed:,}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col4:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Status</div>
+            <div class="metric-value">{is_ready}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+def _render_charts(df: pd.DataFrame, results: pd.DataFrame, pipeline) -> None:
+    """Render the price, probability, transition, and feature charts."""
+    st.subheader("📈 Price & Regime Analysis")
+    fig_price = plot_price_with_regimes(df, results)
+    st.plotly_chart(fig_price, use_container_width=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("📊 Regime Probabilities")
+        fig_probs = plot_regime_probabilities(results)
+        if fig_probs:
+            st.plotly_chart(fig_probs, use_container_width=True)
+
+    with col2:
+        st.subheader("🔄 Transition Matrix")
+        tm = pipeline._transition_engine.get_transition_matrix()
+        fig_tm = plot_transition_matrix(tm)
+        st.plotly_chart(fig_tm, use_container_width=True)
+
+    st.subheader("🎯 Engineered Features")
+    fig_features = plot_features(results)
+    if fig_features:
+        st.plotly_chart(fig_features, use_container_width=True)
+
+
+def _render_forecast(pipeline) -> None:
+    """Render the 10-step regime forecast section."""
+    st.subheader("🔮 Regime Forecast")
+
+    forecast = pipeline.forecast(horizon=10)
+    if not forecast:
+        return
+
+    col1, col2 = st.columns([1, 2])
+
+    with col1:
+        st.markdown("**Expected Duration:**")
+        st.metric("Bars", f"{forecast.expected_duration:.1f}")
+        st.markdown("**Most Likely Path:**")
+        path_str = " → ".join([REGIME_NAMES[r] for r in forecast.most_likely_path[:5]])
+        st.caption(path_str)
+
+    with col2:
+        forecast_data = []
+        for i, probs in enumerate(forecast.horizon_probabilities, 1):
+            for regime in Regime:
+                forecast_data.append({
+                    "Step": i,
+                    "Regime": REGIME_NAMES[regime],
+                    "Probability": probs[regime],
+                })
+
+        forecast_df = pd.DataFrame(forecast_data)
+        fig_forecast = px.bar(
+            forecast_df,
+            x="Step",
+            y="Probability",
+            color="Regime",
+            color_discrete_map={REGIME_NAMES[r]: REGIME_COLORS_PLOTLY[r] for r in Regime},
+            barmode="stack",
+            labels={"Step": "Steps Ahead", "Probability": "Probability"},
+        )
+        fig_forecast.update_layout(
+            template="plotly_dark",
+            plot_bgcolor=COLOR_SCHEME["background"],
+            paper_bgcolor=COLOR_SCHEME["surface"],
+            font=dict(color=COLOR_SCHEME["text"]),
+            height=300,
+        )
+        st.plotly_chart(fig_forecast, use_container_width=True)
+
+
+def _render_signals(results: pd.DataFrame) -> None:
+    """Detect and render actionable signals from pipeline output."""
+    from financial_dynamics.types import BarState, RegimeProbabilities
+
+    st.subheader("🔔 Signals & Alerts")
+
+    detector = SignalDetector()
+    signals = []
+    prob_cols = [f"post_prob_{r.name}" for r in Regime]
+
+    for idx, row in results.iterrows():
+        bar_state = BarState(
+            timestamp=idx,
+            ohlcv=row.to_dict(),
+            stabilized_regime=Regime[row["stabilized_regime"]] if pd.notna(row.get("stabilized_regime")) else None,
+            risk_adjusted_regime=Regime[row["risk_adjusted_regime"]] if pd.notna(row.get("risk_adjusted_regime")) else None,
+        )
+        if all(col in row.index for col in prob_cols):
+            bar_state.posterior_probabilities = RegimeProbabilities(probs=row[prob_cols].values)
+        signals.extend(detector.check(bar_state))
+
+    signal_icons = {
+        SignalType.REGIME_CHANGE: "🔄",
+        SignalType.RISKOFF_WARNING: "⚠️",
+        SignalType.CONFIDENCE_DROP: "📉",
+        SignalType.REGIME_STABILIZED: "✅",
+    }
+
+    if signals:
+        for signal in reversed(signals[-10:]):
+            st.info(
+                f"{signal_icons.get(signal.signal_type, '•')} **{signal.signal_type.name}** — {signal.message}\n\n"
+                f"Bar {signal.bar_index} | Confidence: {signal.confidence:.1%}"
+            )
+    else:
+        st.info("No signals detected yet. Data is still warming up or regime is stable.")
+
+
+def _render_data_inspector(results: pd.DataFrame) -> None:
+    """Render the raw data inspector expander."""
+    with st.expander("📋 Data Inspector"):
+        st.write("**Recent Pipeline Output**")
+        display_cols = [
+            "risk_adjusted_regime",
+            "stabilized_regime",
+            "feat_volatility",
+            "feat_trend",
+            "feat_drawdown",
+            "post_prob_CALM_TREND",
+            "post_prob_VOLATILE_TREND",
+            "post_prob_CHOP",
+            "post_prob_RISK_OFF",
+        ]
+        available_cols = [col for col in display_cols if col in results.columns]
+        st.dataframe(
+            results[available_cols].tail(20),
+            use_container_width=True,
+            height=300,
+        )
+
+
+def main():
+    """Main Streamlit app."""
+    setup_page()
+
+    st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
+        unsafe_allow_html=True
+    )
+    st.divider()
+
+    symbol, period, interval = _render_sidebar()
+
     if "run_pipeline" not in st.session_state:
         st.session_state.run_pipeline = True
 
@@ -410,188 +596,15 @@ def main():
             pipeline = get_pipeline()
             results = pipeline.run(df)
 
-        # Metrics row
         st.divider()
-        col1, col2, col3, col4 = st.columns(4)
-
-        current_regime = results["risk_adjusted_regime"].iloc[-1] if len(results) > 0 else None
-        current_probs = None
-        confidence = 0.0
-
-        if current_regime:
-            current_regime = Regime[current_regime]
-            prob_cols = [f"post_prob_{r.name}" for r in Regime]
-            if all(col in results.columns for col in prob_cols):
-                probs = results[prob_cols].iloc[-1].values
-                current_probs = probs
-                confidence = probs[int(current_regime)]
-
-        with col1:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Current Regime</div>
-                <div class="metric-value">{REGIME_NAMES.get(current_regime, 'Unknown')}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with col2:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Confidence</div>
-                <div class="metric-value">{confidence:.1%}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with col3:
-            bars_processed = len(results)
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Bars Processed</div>
-                <div class="metric-value">{bars_processed:,}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with col4:
-            warmup = pipeline.warmup_bars
-            is_ready = "✓ Ready" if bars_processed >= warmup else f"Warming up..."
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Status</div>
-                <div class="metric-value">{is_ready}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
+        _render_metrics(results, pipeline)
         st.divider()
-
-        # Charts
-        st.subheader("📈 Price & Regime Analysis")
-        fig_price = plot_price_with_regimes(df, results)
-        st.plotly_chart(fig_price, use_container_width=True)
-
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader("📊 Regime Probabilities")
-            fig_probs = plot_regime_probabilities(results)
-            if fig_probs:
-                st.plotly_chart(fig_probs, use_container_width=True)
-
-        with col2:
-            st.subheader("🔄 Transition Matrix")
-            tm = pipeline._transition_engine.get_transition_matrix()
-            fig_tm = plot_transition_matrix(tm)
-            st.plotly_chart(fig_tm, use_container_width=True)
-
-        st.subheader("🎯 Engineered Features")
-        fig_features = plot_features(results)
-        if fig_features:
-            st.plotly_chart(fig_features, use_container_width=True)
-
-        # Forecast section
+        _render_charts(df, results, pipeline)
         st.divider()
-        st.subheader("🔮 Regime Forecast")
-
-        forecast = pipeline.forecast(horizon=10)
-        if forecast:
-            col1, col2 = st.columns([1, 2])
-
-            with col1:
-                st.markdown("**Expected Duration:**")
-                st.metric("Bars", f"{forecast.expected_duration:.1f}")
-                st.markdown("**Most Likely Path:**")
-                path_str = " → ".join([REGIME_NAMES[r] for r in forecast.most_likely_path[:5]])
-                st.caption(path_str)
-
-            with col2:
-                forecast_data = []
-                for i, probs in enumerate(forecast.horizon_probabilities, 1):
-                    for regime in Regime:
-                        forecast_data.append({
-                            "Step": i,
-                            "Regime": REGIME_NAMES[regime],
-                            "Probability": probs[regime],
-                        })
-
-                forecast_df = pd.DataFrame(forecast_data)
-                fig_forecast = px.bar(
-                    forecast_df,
-                    x="Step",
-                    y="Probability",
-                    color="Regime",
-                    color_discrete_map={REGIME_NAMES[r]: REGIME_COLORS_PLOTLY[r] for r in Regime},
-                    barmode="stack",
-                    labels={"Step": "Steps Ahead", "Probability": "Probability"},
-                )
-                fig_forecast.update_layout(
-                    template="plotly_dark",
-                    plot_bgcolor=COLOR_SCHEME["background"],
-                    paper_bgcolor=COLOR_SCHEME["surface"],
-                    font=dict(color=COLOR_SCHEME["text"]),
-                    height=300,
-                )
-                st.plotly_chart(fig_forecast, use_container_width=True)
-
-        # Signal detection
+        _render_forecast(pipeline)
         st.divider()
-        st.subheader("🔔 Signals & Alerts")
-
-        detector = SignalDetector()
-        signals = []
-        for idx, row in results.iterrows():
-            from financial_dynamics.types import BarState, RegimeProbabilities
-
-            bar_state = BarState(
-                timestamp=idx,
-                ohlcv=row.to_dict(),
-                stabilized_regime=Regime[row["stabilized_regime"]] if pd.notna(row.get("stabilized_regime")) else None,
-                risk_adjusted_regime=Regime[row["risk_adjusted_regime"]] if pd.notna(row.get("risk_adjusted_regime")) else None,
-            )
-
-            prob_cols = [f"post_prob_{r.name}" for r in Regime]
-            if all(col in row.index for col in prob_cols):
-                bar_state.posterior_probabilities = RegimeProbabilities(
-                    probs=row[prob_cols].values
-                )
-
-            signals.extend(detector.check(bar_state))
-
-        if signals:
-            # Show recent signals
-            recent_signals = signals[-10:]
-            for signal in reversed(recent_signals):
-                icon = {
-                    SignalType.REGIME_CHANGE: "🔄",
-                    SignalType.RISKOFF_WARNING: "⚠️",
-                    SignalType.CONFIDENCE_DROP: "📉",
-                    SignalType.REGIME_STABILIZED: "✅",
-                }
-
-                st.info(
-                    f"{icon.get(signal.signal_type, '•')} **{signal.signal_type.name}** — {signal.message}\n\n"
-                    f"Bar {signal.bar_index} | Confidence: {signal.confidence:.1%}"
-                )
-        else:
-            st.info("No signals detected yet. Data is still warming up or regime is stable.")
-
-        # Data inspector
-        with st.expander("📋 Data Inspector"):
-            st.write("**Recent Pipeline Output**")
-            display_cols = [
-                "risk_adjusted_regime",
-                "stabilized_regime",
-                "feat_volatility",
-                "feat_trend",
-                "feat_drawdown",
-                "post_prob_CALM_TREND",
-                "post_prob_VOLATILE_TREND",
-                "post_prob_CHOP",
-                "post_prob_RISK_OFF",
-            ]
-            available_cols = [col for col in display_cols if col in results.columns]
-            st.dataframe(
-                results[available_cols].tail(20),
-                use_container_width=True,
-                height=300,
-            )
+        _render_signals(results)
+        _render_data_inspector(results)
 
 
 if __name__ == "__main__":

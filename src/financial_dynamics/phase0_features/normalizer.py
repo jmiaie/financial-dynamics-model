@@ -50,10 +50,8 @@ class FeatureNormalizer:
 
         if self.method == "zscore":
             normalized = self._zscore_normalize(raw_features, history)
-        elif self.method == "minmax":
-            normalized = self._minmax_normalize(raw_features, history)
         else:
-            raise ValueError(f"Unsupported normalization_method '{self.method}'")
+            normalized = self._minmax_normalize(raw_features, history)
 
         return normalized * self.weights
 

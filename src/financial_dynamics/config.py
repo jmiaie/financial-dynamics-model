@@ -93,13 +93,13 @@ class PipelineConfig:
 
         config = cls()
         section_map = {
-            "features": (config.features, FeatureConfig),
-            "regimes": (config.regimes, RegimeConfig),
-            "transitions": (config.transitions, TransitionConfig),
-            "stabilization": (config.stabilization, StabilizationConfig),
-            "risk": (config.risk, RiskConfig),
+            "features": config.features,
+            "regimes": config.regimes,
+            "transitions": config.transitions,
+            "stabilization": config.stabilization,
+            "risk": config.risk,
         }
-        for section_name, (section_obj, _) in section_map.items():
+        for section_name, section_obj in section_map.items():
             if section_name in data:
                 for key, value in data[section_name].items():
                     if hasattr(section_obj, key):
