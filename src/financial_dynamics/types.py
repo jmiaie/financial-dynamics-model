@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import IntEnum
+from typing import TypedDict
 
 import numpy as np
 
@@ -70,6 +71,14 @@ class RegimeProbabilities:
 
     def __getitem__(self, regime: Regime) -> float:
         return float(self.probs[int(regime)])
+
+
+class StateReport(TypedDict):
+    """System state summary returned by FinancialDynamicsPipeline.get_state_report()."""
+    bar_count: int
+    warmup_bars: int
+    is_warmed_up: bool
+    transition_matrix: np.ndarray
 
 
 @dataclass

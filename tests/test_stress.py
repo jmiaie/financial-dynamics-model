@@ -18,7 +18,7 @@ from financial_dynamics.phase3_stabilization.persistence import PersistenceFilte
 from financial_dynamics.phase3_stabilization.majority_vote import MajorityVoteFilter
 from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
 from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
-from financial_dynamics.phase4_risk._utils import safe_renormalize
+from financial_dynamics._utils import safe_renormalize
 from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
 
 

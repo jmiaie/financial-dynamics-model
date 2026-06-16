@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import warnings
+
 import pandas as pd
 
 
@@ -94,7 +96,8 @@ def fetch_multi_asset(
                 ref_df.columns = [c.lower() for c in ref_df.columns]
                 col_name = f"ref_{ref_sym.replace('^', '')}_close"
                 df[col_name] = ref_df["close"].reindex(df.index)
-        except (KeyError, ValueError, AttributeError):
+        except (KeyError, ValueError, AttributeError) as e:
+            warnings.warn(f"Skipping reference symbol '{ref_sym}': {e}", stacklevel=2)
             continue
 
     return df

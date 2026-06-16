@@ -12,11 +12,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
-from datetime import datetime, timedelta
 import warnings
-
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
 
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
@@ -196,7 +192,6 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
                     line_width=0,
                 )
             except KeyError:
-                import warnings
                 warnings.warn(
                     f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
                     stacklevel=2,
@@ -415,7 +410,6 @@ def main():
         col1, col2, col3, col4 = st.columns(4)
 
         current_regime = results["risk_adjusted_regime"].iloc[-1] if len(results) > 0 else None
-        current_probs = None
         confidence = 0.0
 
         if current_regime:
@@ -423,7 +417,6 @@ def main():
             prob_cols = [f"post_prob_{r.name}" for r in Regime]
             if all(col in results.columns for col in prob_cols):
                 probs = results[prob_cols].iloc[-1].values
-                current_probs = probs
                 confidence = probs[int(current_regime)]
 
         with col1:
