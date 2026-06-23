@@ -10,6 +10,7 @@ from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import setup_phase_space_axes
 
 
 class VectorFieldPlotter:
@@ -35,6 +36,7 @@ class VectorFieldPlotter:
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         else:
+            assert isinstance(ax.figure, Figure)
             fig = ax.figure
 
         pca = PCA(n_components=2)
@@ -77,10 +79,7 @@ class VectorFieldPlotter:
                         ha="center", va="center",
                     )
 
-        ax.set_xlabel("PC1")
-        ax.set_ylabel("PC2")
-        ax.set_title("Transition Vector Field")
+        setup_phase_space_axes(ax, "Transition Vector Field")
         ax.legend(loc="best", fontsize=8)
-        ax.grid(True, alpha=0.3)
 
         return fig

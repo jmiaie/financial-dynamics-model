@@ -54,7 +54,10 @@ class FeatureEngine:
         returns: pd.Series,
         ref_returns: dict[str, pd.Series] | None = None,
     ) -> pd.Series:
-        """Compute correlation stress using cross-asset or single-asset method.
+        """Dispatch to cross-asset or single-asset correlation stress.
+
+        Cross-asset (when refs are available) captures contagion and
+        flight-to-safety patterns invisible to single-asset kurtosis.
 
         Args:
             returns: Primary asset returns.
@@ -113,8 +116,8 @@ class FeatureEngine:
     def update(self, bar_state: BarState) -> BarState:
         """Incremental update for a single bar.
 
-        Reads bar_state.ohlcv, computes features, writes bar_state.features.
-        Returns None for features if not enough warmup data.
+        Sets bar_state.features = None during warmup; populates it once enough
+        history has accumulated to compute all indicators.
         """
         if "close" not in bar_state.ohlcv:
             raise KeyError(
@@ -137,13 +140,13 @@ class FeatureEngine:
         close_series = pd.Series(list(self._close_buffer))
         returns = close_series.pct_change().dropna()
 
-        ref_returns = None
+        ref_returns: dict[str, pd.Series] | None = None
         if self._ref_buffers:
-            ref_returns = {}
-            for ref_key, buf in self._ref_buffers.items():
-                if len(buf) >= self.warmup_bars:
-                    ref_series = pd.Series(list(buf))
-                    ref_returns[ref_key] = ref_series.pct_change().dropna()
+            ref_returns = {
+                ref_key: pd.Series(list(buf)).pct_change().dropna()
+                for ref_key, buf in self._ref_buffers.items()
+                if len(buf) >= self.warmup_bars
+            }
             if not ref_returns:
                 ref_returns = None
 

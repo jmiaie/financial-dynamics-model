@@ -3,6 +3,7 @@
 Interactive dashboard for market regime classification with live yfinance data.
 """
 
+import logging
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
@@ -12,7 +13,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
-from datetime import datetime, timedelta
+
 import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -25,7 +26,6 @@ from financial_dynamics.types import Regime, REGIME_NAMES
 from financial_dynamics.signals.detector import SignalDetector, SignalType
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 
-# Color scheme: slate and teal
 COLOR_SCHEME = {
     "primary": "#1e3a5f",      # Dark slate blue
     "secondary": "#0d7377",     # Teal
@@ -129,11 +129,23 @@ def _generate_synthetic_fallback() -> pd.DataFrame:
 
 @st.cache_data(ttl=3600)
 def load_data(symbol: str, period: str, interval: str):
-    """Load OHLCV data from yfinance with caching."""
+    """Load OHLCV data from yfinance with caching.
+
+    Returns (df, None) on success or (None, error_message) on failure.
+    Catches all exceptions at this UI boundary because yfinance raises a
+    wide variety of network, HTTP, and data errors.  The exception is
+    logged so bugs in the fetch path are not silently swallowed.
+    """
     try:
         df = fetch_ohlcv(symbol, period=period, interval=interval)
         return df, None
+    except (ImportError, ValueError) as e:
+        return None, str(e)
     except Exception as e:
+        logging.getLogger(__name__).exception(
+            "Unexpected error fetching %r (period=%r, interval=%r)",
+            symbol, period, interval,
+        )
         return None, str(e)
 
 

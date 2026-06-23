@@ -18,7 +18,6 @@ from financial_dynamics.forecasting import (
     RegimeForecast,
     forecast_regimes,
     compute_expected_duration,
-    compute_stationary_distribution,
 )
 
 
@@ -47,7 +46,7 @@ class BarRecord(TypedDict, total=False):
     post_prob_RISK_OFF: float
     stabilized_regime: str | None
     risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+    risk_overlays: dict[str, bool] | None
 
 
 class FinancialDynamicsPipeline:
@@ -152,6 +151,18 @@ class FinancialDynamicsPipeline:
         self._bar_count = 0
 
     @staticmethod
+    def _unpack_probabilities(
+        probs: RegimeProbabilities | None,
+        prefix: str,
+        record: BarRecord,
+    ) -> None:
+        """Write per-regime probability values into record with a given prefix."""
+        if probs is None:
+            return
+        for regime in Regime:
+            record[f"{prefix}{regime.name}"] = probs[regime]  # type: ignore[literal-required]
+
+    @staticmethod
     def _state_to_record(state: BarState) -> BarRecord:
         """Convert a BarState to a flat dict for DataFrame construction."""
         record: BarRecord = {}
@@ -164,13 +175,12 @@ class FinancialDynamicsPipeline:
             record["feat_corr_stress"] = f.correlation_stress
             record["feat_shock"] = f.shock_intensity
 
-        if state.raw_probabilities is not None:
-            for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
-
-        if state.posterior_probabilities is not None:
-            for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
+        FinancialDynamicsPipeline._unpack_probabilities(
+            state.raw_probabilities, "raw_prob_", record
+        )
+        FinancialDynamicsPipeline._unpack_probabilities(
+            state.posterior_probabilities, "post_prob_", record
+        )
 
         record["stabilized_regime"] = (
             state.stabilized_regime.name if state.stabilized_regime is not None else None
