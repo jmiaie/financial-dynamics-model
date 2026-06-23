@@ -64,5 +64,3 @@ def chop_data() -> pd.DataFrame:
         "close": prices,
         "volume": rng.integers(2000, 5000, n),
     })
-
-

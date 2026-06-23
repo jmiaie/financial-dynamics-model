@@ -78,7 +78,7 @@ def compute_expected_duration(
 
     For a Markov chain, E[duration] = 1 / (1 - T[i, i]).
     """
-    self_transition = transition_matrix[int(regime), int(regime)]
+    self_transition = float(transition_matrix[int(regime), int(regime)])
     if self_transition >= 1.0:
         return float("inf")
     return 1.0 / (1.0 - self_transition)

@@ -5,6 +5,7 @@ from __future__ import annotations
 import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -111,3 +112,41 @@ class PipelineConfig:
                             stacklevel=2,
                         )
         return config
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize config to a plain dict suitable for YAML output."""
+        return {
+            "features": {
+                "volatility_span": self.features.volatility_span,
+                "trend_window": self.features.trend_window,
+                "drawdown_window": self.features.drawdown_window,
+                "correlation_window": self.features.correlation_window,
+                "shock_threshold": self.features.shock_threshold,
+                "normalization_method": self.features.normalization_method,
+                "normalization_window": self.features.normalization_window,
+                "feature_weights": self.features.feature_weights,
+            },
+            "regimes": {
+                "temperature": self.regimes.temperature,
+                "centroids": self.regimes.centroids,
+            },
+            "transitions": {
+                "prior_strength": self.transitions.prior_strength,
+                "learning_rate": self.transitions.learning_rate,
+            },
+            "stabilization": {
+                "hysteresis_threshold": self.stabilization.hysteresis_threshold,
+                "min_persistence_bars": self.stabilization.min_persistence_bars,
+                "majority_vote_window": self.stabilization.majority_vote_window,
+            },
+            "risk": {
+                "drawdown_threshold": self.risk.drawdown_threshold,
+                "correlation_stress_threshold": self.risk.correlation_stress_threshold,
+                "shock_threshold": self.risk.shock_threshold,
+                "riskoff_confirmation_count": self.risk.riskoff_confirmation_count,
+                "overextension_window": self.risk.overextension_window,
+                "overextension_decay": self.risk.overextension_decay,
+                "chop_penalty_window": self.risk.chop_penalty_window,
+                "chop_penalty_factor": self.risk.chop_penalty_factor,
+            },
+        }

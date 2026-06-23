@@ -80,7 +80,7 @@ def main() -> None:
     if args.data and args.labels:
         print(f"\nLoading data from {args.data}")
         df = pd.read_csv(args.data, index_col=0, parse_dates=True)
-        true_labels = pd.read_csv(args.labels, index_col=0, squeeze=False).iloc[:, 0]
+        true_labels = pd.read_csv(args.labels, index_col=0).iloc[:, 0]
         print(f"  {len(df)} bars loaded")
     else:
         from scripts.generate_synthetic_data import generate_synthetic_ohlcv

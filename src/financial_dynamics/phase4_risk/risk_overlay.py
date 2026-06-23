@@ -34,9 +34,10 @@ class RiskConditioningEngine:
     def update(self, bar_state: BarState) -> BarState:
         """Apply risk overlays to produce final regime assignment.
 
-        Reads bar_state.stabilized_regime, bar_state.features,
-        and bar_state.posterior_probabilities.
-        Writes bar_state.risk_adjusted_regime and bar_state.risk_overlays.
+        Three overlays guard against false signals: Risk-Off confirmation
+        requires feature-level confluence (not just probability), overextension
+        rebalancing suppresses regime stagnation, and chop suppression breaks
+        Calm-Chop oscillation loops.
         """
         if bar_state.stabilized_regime is None:
             return bar_state
@@ -85,17 +86,12 @@ class RiskConditioningEngine:
             return False
 
         f = bar_state.features
-        stressor_count = 0
-
-        if f.drawdown_pressure > self.config.drawdown_threshold:
-            stressor_count += 1
-        if f.correlation_stress > self.config.correlation_stress_threshold:
-            stressor_count += 1
-        if f.shock_intensity > self.config.shock_threshold:
-            stressor_count += 1
-        if f.volatility > 0.7:
-            stressor_count += 1
-
+        stressor_count = sum([
+            f.drawdown_pressure > self.config.drawdown_threshold,
+            f.correlation_stress > self.config.correlation_stress_threshold,
+            f.shock_intensity > self.config.shock_threshold,
+            f.volatility > 0.7,
+        ])
         return stressor_count >= self.config.riskoff_confirmation_count
 
     def reset(self) -> None:

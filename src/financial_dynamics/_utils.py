@@ -10,7 +10,7 @@ def safe_renormalize(probs: np.ndarray) -> np.ndarray:  # probs: shape (4,)
 
     If the sum is near zero, returns a uniform distribution.
     """
-    total = probs.sum()
+    total = float(probs.sum())
     if total > 1e-10:
-        return probs / total
+        return np.asarray(probs / total)
     return np.full(NUM_REGIMES, 1.0 / NUM_REGIMES)

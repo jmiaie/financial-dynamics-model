@@ -44,7 +44,7 @@ class FeatureNormalizer:
             self._history = self._history[-self.window:]
 
         if len(self._history) < 2:
-            return np.clip(raw_features, 0.0, 1.0) * self.weights
+            return np.asarray(np.clip(raw_features, 0.0, 1.0) * self.weights)
 
         history = np.array(self._history)
 
@@ -55,7 +55,7 @@ class FeatureNormalizer:
         else:
             raise ValueError(f"Unsupported normalization_method '{self.method}'")
 
-        return normalized * self.weights
+        return np.asarray(normalized * self.weights)
 
     def _zscore_normalize(self, x: np.ndarray, history: np.ndarray) -> np.ndarray:
         """Z-score normalize then squash through sigmoid to [0, 1]."""
@@ -63,7 +63,7 @@ class FeatureNormalizer:
         std = history.std(axis=0)
         std = np.where(std < 1e-10, 1.0, std)
         z = (x - mean) / std
-        return 1.0 / (1.0 + np.exp(-z))
+        return np.asarray(1.0 / (1.0 + np.exp(-z)))
 
     def _minmax_normalize(self, x: np.ndarray, history: np.ndarray) -> np.ndarray:
         """Min-Max normalize to [0, 1]."""
@@ -71,7 +71,7 @@ class FeatureNormalizer:
         maxs = history.max(axis=0)
         range_ = maxs - mins
         range_ = np.where(range_ < 1e-10, 1.0, range_)
-        return np.clip((x - mins) / range_, 0.0, 1.0)
+        return np.asarray(np.clip((x - mins) / range_, 0.0, 1.0))
 
     def reset(self) -> None:
         self._history.clear()
