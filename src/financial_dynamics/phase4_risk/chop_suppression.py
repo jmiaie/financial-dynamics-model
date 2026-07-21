@@ -29,13 +29,13 @@ class ChopDominanceSuppressor:
             Adjusted probability vector summing to 1.0.
         """
         if len(self._history) < self.window:
-            return probs.copy()
+            return np.asarray(probs.copy())
 
         calm_chop_count = sum(1 for r in self._history if r in (Regime.CALM_TREND, Regime.CHOP))
         ratio = calm_chop_count / len(self._history)
 
         if ratio < 0.8:
-            return probs.copy()
+            return np.asarray(probs.copy())
 
         adjusted = probs.copy()
         adjusted[int(Regime.CHOP)] *= max(1.0 - self.penalty * 3, 0.05)

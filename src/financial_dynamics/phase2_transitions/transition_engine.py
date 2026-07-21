@@ -63,7 +63,7 @@ class MarkovTransitionEngine:
         return bar_state
 
     def get_transition_matrix(self) -> np.ndarray:
-        return self._transition_matrix.copy()
+        return np.asarray(self._transition_matrix.copy())
 
     def predict_next(self, current_regime: Regime) -> RegimeProbabilities:
         """One-step-ahead prediction from the transition matrix."""
