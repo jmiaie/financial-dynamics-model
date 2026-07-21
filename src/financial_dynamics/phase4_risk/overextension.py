@@ -29,7 +29,7 @@ class OverextensionRebalancer:
             Adjusted probability vector summing to 1.0.
         """
         if len(self._history) < self.window:
-            return probs.copy()
+            return np.asarray(probs.copy())
 
         recent = self._history[-self.window :]
         counts = Counter(recent)
