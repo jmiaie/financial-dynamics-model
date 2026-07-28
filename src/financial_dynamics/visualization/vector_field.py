@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from sklearn.decomposition import PCA
 
 from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.visualization._utils import get_or_create_axes, style_phase_space_axes
 
 
 class VectorFieldPlotter:
@@ -32,10 +32,7 @@ class VectorFieldPlotter:
             transition_matrix: shape (4, 4) row-stochastic matrix.
             ax: optional axes.
         """
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-        else:
-            fig = ax.figure
+        fig, ax = get_or_create_axes(ax)
 
         pca = PCA(n_components=2)
         centroid_proj = pca.fit_transform(centroids)
@@ -77,10 +74,6 @@ class VectorFieldPlotter:
                         ha="center", va="center",
                     )
 
-        ax.set_xlabel("PC1")
-        ax.set_ylabel("PC2")
-        ax.set_title("Transition Vector Field")
-        ax.legend(loc="best", fontsize=8)
-        ax.grid(True, alpha=0.3)
+        style_phase_space_axes(ax, "Transition Vector Field")
 
         return fig

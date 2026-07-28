@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
-from datetime import datetime, timedelta
 import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -144,26 +143,6 @@ def get_pipeline():
     return FinancialDynamicsPipeline(config)
 
 
-def render_regime_badge(regime: Regime, confidence: float):
-    """Render a colored badge for a regime."""
-    color = REGIME_COLORS_PLOTLY.get(regime, COLOR_SCHEME["secondary"])
-    name = REGIME_NAMES.get(regime, "Unknown")
-    html = f"""
-    <div style="
-        background: {color};
-        color: white;
-        padding: 0.75em 1.5em;
-        border-radius: 8px;
-        display: inline-block;
-        margin: 0.5em;
-        font-weight: bold;
-    ">
-        {name} — {confidence:.1%} confidence
-    </div>
-    """
-    return html
-
-
 def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
     """Interactive price chart with regime background bands."""
     fig = go.Figure()
@@ -182,7 +161,6 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
     valid = regime_col.dropna()
 
     if len(valid) > 0:
-        y_min, y_max = df["close"].min() * 0.95, df["close"].max() * 1.05
         for i in range(len(valid) - 1):
             try:
                 regime = Regime[valid.iloc[i]]
@@ -581,11 +559,7 @@ def main():
                 "feat_volatility",
                 "feat_trend",
                 "feat_drawdown",
-                "post_prob_CALM_TREND",
-                "post_prob_VOLATILE_TREND",
-                "post_prob_CHOP",
-                "post_prob_RISK_OFF",
-            ]
+            ] + [f"post_prob_{r.name}" for r in Regime]
             available_cols = [col for col in display_cols if col in results.columns]
             st.dataframe(
                 results[available_cols].tail(20),

@@ -60,8 +60,8 @@ def _generate_calm_trend(
     rng: np.random.Generator,
     price: float,
     n: int,
-    segments: list,
-    labels: list,
+    segments: list[list[float]],
+    labels: list[str],
 ) -> float:
     """Calm Trend: consistent positive drift, moderate vol, no shocks.
 
@@ -87,8 +87,8 @@ def _generate_volatile_trend(
     rng: np.random.Generator,
     price: float,
     n: int,
-    segments: list,
-    labels: list,
+    segments: list[list[float]],
+    labels: list[str],
 ) -> float:
     """Volatile Trend: strong uptrend with large swings, occasional pullbacks.
 
@@ -117,8 +117,8 @@ def _generate_chop(
     rng: np.random.Generator,
     price: float,
     n: int,
-    segments: list,
-    labels: list,
+    segments: list[list[float]],
+    labels: list[str],
 ) -> float:
     """Chop: mean-reverting, directionless market.
 
@@ -150,8 +150,8 @@ def _generate_riskoff(
     rng: np.random.Generator,
     price: float,
     n: int,
-    segments: list,
-    labels: list,
+    segments: list[list[float]],
+    labels: list[str],
 ) -> float:
     """Risk-Off: crash with shock clusters, deep drawdowns, fat tails.
 

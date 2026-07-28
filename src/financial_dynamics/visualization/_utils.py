@@ -3,7 +3,38 @@
 from __future__ import annotations
 
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from sklearn.decomposition import PCA
+
+
+def get_or_create_axes(
+    ax: Axes | None,
+    figsize: tuple[float, float] = (8, 6),
+) -> tuple[Figure, Axes]:
+    """Return (figure, axes), creating a new figure if ax is not provided.
+
+    A caller-supplied Axes can live inside a SubFigure, so we assert the
+    narrowing to Figure explicitly rather than declaring it away.
+    """
+    if ax is None:
+        fig: Figure
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+        return fig, ax
+    raw_fig = ax.figure
+    assert isinstance(raw_fig, Figure)
+    return raw_fig, ax
+
+
+def style_phase_space_axes(ax: Axes, title: str) -> None:
+    """Apply the shared axis labels, legend, and grid styling used by
+    every phase-space-derived plot (phase space, trajectory, vector field)."""
+    ax.set_xlabel("PC1")
+    ax.set_ylabel("PC2")
+    ax.set_title(title)
+    ax.legend(loc="best", fontsize=8)
+    ax.grid(True, alpha=0.3)
 
 
 def fit_pca_projection(

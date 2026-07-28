@@ -47,7 +47,7 @@ class BarRecord(TypedDict, total=False):
     post_prob_RISK_OFF: float
     stabilized_regime: str | None
     risk_adjusted_regime: str | None
-    risk_overlays: dict | None
+    risk_overlays: dict[str, bool] | None
 
 
 class FinancialDynamicsPipeline:
@@ -165,12 +165,18 @@ class FinancialDynamicsPipeline:
             record["feat_shock"] = f.shock_intensity
 
         if state.raw_probabilities is not None:
-            for regime in Regime:
-                record[f"raw_prob_{regime.name}"] = state.raw_probabilities[regime]
+            p = state.raw_probabilities
+            record["raw_prob_CALM_TREND"] = p[Regime.CALM_TREND]
+            record["raw_prob_VOLATILE_TREND"] = p[Regime.VOLATILE_TREND]
+            record["raw_prob_CHOP"] = p[Regime.CHOP]
+            record["raw_prob_RISK_OFF"] = p[Regime.RISK_OFF]
 
         if state.posterior_probabilities is not None:
-            for regime in Regime:
-                record[f"post_prob_{regime.name}"] = state.posterior_probabilities[regime]
+            p = state.posterior_probabilities
+            record["post_prob_CALM_TREND"] = p[Regime.CALM_TREND]
+            record["post_prob_VOLATILE_TREND"] = p[Regime.VOLATILE_TREND]
+            record["post_prob_CHOP"] = p[Regime.CHOP]
+            record["post_prob_RISK_OFF"] = p[Regime.RISK_OFF]
 
         record["stabilized_regime"] = (
             state.stabilized_regime.name if state.stabilized_regime is not None else None
