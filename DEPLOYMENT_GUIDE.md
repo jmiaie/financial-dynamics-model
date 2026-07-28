@@ -20,7 +20,7 @@ Free hosting directly on Streamlit Cloud, perfect for demos.
 
 1. **Push code to GitHub:**
    ```bash
-   git push origin claude/financial-dynamics-model-fnA1n
+   git push origin main
    ```
 
 2. **Create a public repo** (if not already) with the code
@@ -38,42 +38,7 @@ Your app will be at: `https://<your-username>-financial-dynamics-model.streamlit
 
 ---
 
-### Option 2: Vercel + GitHub Integration
-
-For deployment to `micapai.com` via GitHub → Vercel (if you're using that setup):
-
-1. **Add a Vercel config** (`vercel.json`):
-   ```json
-   {
-     "buildCommand": "pip install -r requirements.txt",
-     "framework": "streamlit",
-     "functions": {
-       "app.py": {
-         "runtime": "python3.11"
-       }
-     }
-   }
-   ```
-
-2. **Push to GitHub:**
-   ```bash
-   git push origin main
-   ```
-
-3. **Connect your GitHub repo to Vercel:**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project" → Select your repo
-   - Vercel auto-detects it's a Streamlit app
-   - Click "Deploy"
-
-4. **Add custom domain** in Vercel settings:
-   - Go to Project Settings → Domains
-   - Add `demo.micapai.com` or your domain
-   - Follow DNS configuration instructions
-
----
-
-### Option 3: Docker (Advanced)
+### Option 2: Docker (Advanced)
 
 For production on any cloud (AWS, GCP, Azure, DigitalOcean):
 

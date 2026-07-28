@@ -256,9 +256,6 @@ git push origin main
 # → https://share.streamlit.io → Connect repo → Deploy
 ```
 
-**Vercel + Custom Domain:**
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-
 **Docker:**
 ```bash
 docker build -t financial-dynamics .
@@ -267,17 +264,9 @@ docker run -p 8501:8501 financial-dynamics
 
 ---
 
-## 📄 Marketing Materials
-
-- **RESUME_FINAL.txt** — One-liner for CV
-- **LINKEDIN_FINAL.md** — LinkedIn launch post
-- **HIGHLIGHTS_FOR_RECRUITERS.md** — Portfolio block (hedge funds, quant firms, fintech)
-
----
-
 ## 📚 Documentation
 
-- `DEPLOYMENT_GUIDE.md` — How to deploy (Streamlit Cloud, Vercel, Docker)
+- `DEPLOYMENT_GUIDE.md` — How to deploy (Streamlit Cloud, Docker)
 - `scripts/run_pipeline.py --help` — CLI options
 - `tests/` — Usage examples in unit tests
 - `config/default.yaml` — All tunable parameters

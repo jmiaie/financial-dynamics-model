@@ -47,7 +47,8 @@ class MarkovTransitionEngine:
             )
             self._transition_matrix = counts_to_transition_matrix(self.counts)
 
-        # Compute posterior probabilities
+        # Blend raw likelihood with the prior regime's transition row
+        # (no-op on the first bar, before any transition has been observed)
         if self._prev_regime is not None:
             transition_row = self._transition_matrix[int(self._prev_regime)]
             posterior = compute_posterior(
