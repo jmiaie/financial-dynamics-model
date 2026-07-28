@@ -6,13 +6,13 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from financial_dynamics.config import PipelineConfig
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.backtesting.metrics import (
     regime_accuracy,
-    regime_confusion_matrix,
     regime_classification_report,
+    regime_confusion_matrix,
 )
+from financial_dynamics.config import PipelineConfig
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 
 
 @dataclass

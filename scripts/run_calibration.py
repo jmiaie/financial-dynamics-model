@@ -44,17 +44,12 @@ def main() -> None:
     print("  Financial Dynamics Model -- Calibration")
     print("=" * 70)
 
-    if args.config:
-        base_config = PipelineConfig.from_yaml(args.config)
-        print(f"\nLoaded base config from {args.config}")
+    default_config_path = Path(__file__).parent.parent / "config" / "default.yaml"
+    base_config, config_path = PipelineConfig.resolve(args.config, default_config_path)
+    if config_path:
+        print(f"\nLoaded base config from {config_path}")
     else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-        if config_path.exists():
-            base_config = PipelineConfig.from_yaml(config_path)
-            print(f"\nLoaded base config from {config_path}")
-        else:
-            base_config = PipelineConfig()
-            print("\nUsing default config")
+        print("\nUsing default config")
 
     from scripts.generate_synthetic_data import generate_synthetic_ohlcv
 
@@ -81,7 +76,7 @@ def main() -> None:
     print(f"  + tuned hyperparameters:  {result.tuned_accuracy:.1%}  "
           f"(delta {result.tuned_accuracy - result.baseline_accuracy:+.1%})")
 
-    print(f"\n  Confusion matrix (calibrated):")
+    print("\n  Confusion matrix (calibrated):")
     print(f"  {result.tuned_result.confusion_matrix.to_string()}")
 
     output_path = Path(args.output)

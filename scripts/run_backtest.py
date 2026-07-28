@@ -11,7 +11,6 @@ import pandas as pd
 
 from financial_dynamics.backtesting import BacktestEvaluator
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import REGIME_NAMES, Regime
 
 
 def parse_args() -> argparse.Namespace:
@@ -63,18 +62,12 @@ def main() -> None:
     print("  Financial Dynamics Model -- Backtest Evaluation")
     print("=" * 70)
 
-    # Load config
-    if args.config:
-        config = PipelineConfig.from_yaml(args.config)
-        print(f"\nLoaded config from {args.config}")
+    default_config_path = Path(__file__).parent.parent / "config" / "default.yaml"
+    config, config_path = PipelineConfig.resolve(args.config, default_config_path)
+    if config_path:
+        print(f"\nLoaded config from {config_path}")
     else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-        if config_path.exists():
-            config = PipelineConfig.from_yaml(config_path)
-            print(f"\nLoaded config from {config_path}")
-        else:
-            config = PipelineConfig()
-            print("\nUsing default config")
+        print("\nUsing default config")
 
     # Load data
     if args.data and args.labels:
@@ -102,10 +95,10 @@ def main() -> None:
     print(f"  Evaluated bars: {result.evaluated_bars}")
     print(f"  Overall accuracy: {result.accuracy:.1%}")
 
-    print(f"\n  Confusion Matrix:")
+    print("\n  Confusion Matrix:")
     print(f"  {result.confusion_matrix.to_string()}")
 
-    print(f"\n  Classification Report:")
+    print("\n  Classification Report:")
     print(f"  {result.classification_report.to_string()}")
 
     # Rolling evaluation

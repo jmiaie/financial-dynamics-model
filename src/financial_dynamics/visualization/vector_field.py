@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 import numpy as np
-from matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from sklearn.decomposition import PCA
 
-from financial_dynamics.types import Regime, REGIME_NAMES, NUM_REGIMES
+from financial_dynamics.types import NUM_REGIMES, REGIME_NAMES, Regime
+from financial_dynamics.visualization._utils import (
+    get_or_create_axes,
+    style_phase_space_axes,
+)
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
-from financial_dynamics.visualization._utils import get_or_create_axes, style_phase_space_axes
 
 
 class VectorFieldPlotter:

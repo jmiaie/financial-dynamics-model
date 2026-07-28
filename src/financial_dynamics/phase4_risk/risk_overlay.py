@@ -5,10 +5,10 @@ from __future__ import annotations
 import numpy as np
 
 from financial_dynamics.config import RiskConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, NUM_REGIMES
 from financial_dynamics.phase4_risk._utils import safe_renormalize
-from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
 from financial_dynamics.phase4_risk.chop_suppression import ChopDominanceSuppressor
+from financial_dynamics.phase4_risk.overextension import OverextensionRebalancer
+from financial_dynamics.types import BarState, Regime
 
 
 class RiskConditioningEngine:

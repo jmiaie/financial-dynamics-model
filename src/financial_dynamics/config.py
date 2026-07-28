@@ -111,3 +111,22 @@ class PipelineConfig:
                             stacklevel=2,
                         )
         return config
+
+    @classmethod
+    def resolve(
+        cls,
+        config_arg: str | Path | None,
+        default_path: str | Path | None = None,
+    ) -> tuple[PipelineConfig, Path | None]:
+        """Resolve a config from an explicit path, else a default file, else built-in defaults.
+
+        Returns (config, source_path); source_path is None when neither
+        config_arg nor default_path pointed at an existing file.
+        """
+        if config_arg:
+            return cls.from_yaml(config_arg), Path(config_arg)
+        if default_path is not None:
+            default_path = Path(default_path)
+            if default_path.exists():
+                return cls.from_yaml(default_path), default_path
+        return cls(), None

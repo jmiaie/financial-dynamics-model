@@ -5,13 +5,13 @@ from __future__ import annotations
 import numpy as np
 
 from financial_dynamics.config import TransitionConfig
-from financial_dynamics.types import BarState, Regime, RegimeProbabilities, NUM_REGIMES
 from financial_dynamics.phase2_transitions.bayesian_update import (
     bayesian_update,
     compute_posterior,
     counts_to_transition_matrix,
     initialize_count_matrix,
 )
+from financial_dynamics.types import BarState, Regime, RegimeProbabilities
 
 
 class MarkovTransitionEngine:

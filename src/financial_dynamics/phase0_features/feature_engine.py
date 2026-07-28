@@ -8,16 +8,16 @@ import numpy as np
 import pandas as pd
 
 from financial_dynamics.config import FeatureConfig
-from financial_dynamics.types import BarState, FeatureVector
 from financial_dynamics.phase0_features.indicators import (
+    compute_correlation_stress,
     compute_cross_asset_stress,
     compute_drawdown_pressure,
-    compute_correlation_stress,
     compute_ewma_volatility,
     compute_shock_intensity,
     compute_trend_strength,
 )
 from financial_dynamics.phase0_features.normalizer import FeatureNormalizer
+from financial_dynamics.types import BarState, FeatureVector
 
 
 class FeatureEngine:

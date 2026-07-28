@@ -31,17 +31,12 @@ def main() -> None:
     print("  Financial Dynamics Model -- Benchmark vs. Baselines")
     print("=" * 70)
 
-    if args.config:
-        config = PipelineConfig.from_yaml(args.config)
-        print(f"\nLoaded config from {args.config}")
+    default_config_path = Path(__file__).parent.parent / "config" / "default.yaml"
+    config, config_path = PipelineConfig.resolve(args.config, default_config_path)
+    if config_path:
+        print(f"\nLoaded config from {config_path}")
     else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-        if config_path.exists():
-            config = PipelineConfig.from_yaml(config_path)
-            print(f"\nLoaded config from {config_path}")
-        else:
-            config = PipelineConfig()
-            print("\nUsing default config")
+        print("\nUsing default config")
 
     from scripts.generate_synthetic_data import generate_synthetic_ohlcv
 

@@ -2,9 +2,9 @@
 
 from financial_dynamics.benchmarks.baselines import (
     BaselineClassifier,
-    VolatilityBucketClassifier,
-    TrendVolGridClassifier,
     GaussianMixtureClassifier,
+    TrendVolGridClassifier,
+    VolatilityBucketClassifier,
 )
 from financial_dynamics.benchmarks.runner import (
     BenchmarkRunner,
@@ -13,9 +13,9 @@ from financial_dynamics.benchmarks.runner import (
 
 __all__ = [
     "BaselineClassifier",
-    "VolatilityBucketClassifier",
-    "TrendVolGridClassifier",
-    "GaussianMixtureClassifier",
     "BenchmarkRunner",
     "BenchmarkSummary",
+    "GaussianMixtureClassifier",
+    "TrendVolGridClassifier",
+    "VolatilityBucketClassifier",
 ]

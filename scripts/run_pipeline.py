@@ -7,10 +7,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import numpy as np
+import pandas as pd
 
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.types import REGIME_NAMES, Regime
 
 
@@ -63,20 +63,26 @@ def main() -> None:
     print("  Financial Dynamics Model -- System Dynamics Pipeline")
     print("=" * 70)
 
-    # Load config
-    if args.config:
-        config_path = Path(args.config)
-    else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-
-    if config_path.exists():
-        config = PipelineConfig.from_yaml(config_path)
+    default_config_path = Path(__file__).parent.parent / "config" / "default.yaml"
+    config, config_path = PipelineConfig.resolve(args.config, default_config_path)
+    if config_path:
         print(f"\nLoaded config from {config_path}")
     else:
-        config = PipelineConfig()
         print("\nUsing default config")
 
-    # Load data
+    df = _load_data(args)
+
+    print("\nRunning pipeline...")
+    pipeline = FinancialDynamicsPipeline(config)
+    results = pipeline.run(df)
+
+    _print_report_and_dashboard(pipeline, results, df)
+
+    print("\nDone.")
+
+
+def _load_data(args: argparse.Namespace) -> pd.DataFrame:
+    """Fetch live data for --symbol, or generate synthetic data otherwise."""
     if args.symbol:
         ref_syms = args.reference_symbols or []
         if ref_syms:
@@ -108,23 +114,25 @@ def main() -> None:
         print(f"  {len(df)} bars generated")
         print(f"  Price range: {df['close'].min():.2f} - {df['close'].max():.2f}")
         print(f"  True regime distribution:\n{true_labels.value_counts().to_string()}")
+    return df
 
-    # Run pipeline
-    print("\nRunning pipeline...")
-    pipeline = FinancialDynamicsPipeline(config)
-    results = pipeline.run(df)
 
-    # Report
+def _print_report_and_dashboard(
+    pipeline: FinancialDynamicsPipeline,
+    results: pd.DataFrame,
+    df: pd.DataFrame,
+) -> None:
+    """Print the regime-distribution/transition-matrix report and save a dashboard PNG."""
     report = pipeline.get_state_report()
     valid = results.dropna(subset=["risk_adjusted_regime"])
     print(f"\n  Warmup bars: {report['warmup_bars']}")
     print(f"  Valid predictions: {len(valid)} / {len(results)}")
 
     if len(valid) > 0:
-        print(f"\n  Predicted regime distribution:")
+        print("\n  Predicted regime distribution:")
         print(f"  {valid['risk_adjusted_regime'].value_counts().to_string()}")
 
-        print(f"\n  Transition Matrix (learned):")
+        print("\n  Transition Matrix (learned):")
         tm = report["transition_matrix"]
         header = "  " + " ".join(f"{REGIME_NAMES[r]:>14}" for r in Regime)
         print(header)
@@ -132,7 +140,6 @@ def main() -> None:
             row = " ".join(f"{tm[i, j]:14.3f}" for j in range(4))
             print(f"  {REGIME_NAMES[regime]:<14} {row}")
 
-    # Generate visualization
     print("\nGenerating dashboard...")
     try:
         from financial_dynamics.visualization.dashboard import SystemDashboard
@@ -140,15 +147,13 @@ def main() -> None:
         print(f"  Visualization skipped (missing dependency): {e}")
     else:
         dashboard = SystemDashboard(pipeline)
-        fig = dashboard.plot(df, results)
+        dashboard.plot(df, results)
         output_path = Path("financial_dynamics_dashboard.png")
         try:
             dashboard.save(str(output_path))
             print(f"  Dashboard saved to {output_path}")
         except OSError as e:
             print(f"  Warning: could not save dashboard to {output_path}: {e}")
-
-    print("\nDone.")
 
 
 if __name__ == "__main__":

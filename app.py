@@ -3,26 +3,27 @@
 Interactive dashboard for market regime classification with live yfinance data.
 """
 
-import sys
 import os
+import sys
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
-import streamlit as st
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-import plotly.express as px
 import warnings
+
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
 
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
 from financial_dynamics.data_loader import fetch_ohlcv
-from financial_dynamics.types import Regime, REGIME_NAMES
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.signals.detector import SignalDetector, SignalType
-from financial_dynamics.visualization.phase_space import REGIME_COLORS
+from financial_dynamics.types import REGIME_NAMES, Regime
 
 # Color scheme: slate and teal
 COLOR_SCHEME = {
@@ -393,7 +394,6 @@ def main():
         col1, col2, col3, col4 = st.columns(4)
 
         current_regime = results["risk_adjusted_regime"].iloc[-1] if len(results) > 0 else None
-        current_probs = None
         confidence = 0.0
 
         if current_regime:
@@ -401,7 +401,6 @@ def main():
             prob_cols = [f"post_prob_{r.name}" for r in Regime]
             if all(col in results.columns for col in prob_cols):
                 probs = results[prob_cols].iloc[-1].values
-                current_probs = probs
                 confidence = probs[int(current_regime)]
 
         with col1:
@@ -431,7 +430,7 @@ def main():
 
         with col4:
             warmup = pipeline.warmup_bars
-            is_ready = "✓ Ready" if bars_processed >= warmup else f"Warming up..."
+            is_ready = "✓ Ready" if bars_processed >= warmup else "Warming up..."
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">Status</div>

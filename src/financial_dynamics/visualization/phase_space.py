@@ -3,11 +3,15 @@
 from __future__ import annotations
 
 import numpy as np
-from matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 
-from financial_dynamics.types import Regime, REGIME_NAMES
-from financial_dynamics.visualization._utils import fit_pca_projection, get_or_create_axes, style_phase_space_axes
+from financial_dynamics.types import REGIME_NAMES, Regime
+from financial_dynamics.visualization._utils import (
+    fit_pca_projection,
+    get_or_create_axes,
+    style_phase_space_axes,
+)
 
 REGIME_COLORS = {
     Regime.CALM_TREND: "#2ecc71",
