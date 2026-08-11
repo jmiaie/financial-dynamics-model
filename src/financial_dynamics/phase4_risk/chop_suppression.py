@@ -6,7 +6,7 @@ from collections import deque
 
 import numpy as np
 
-from financial_dynamics.types import Regime, NUM_REGIMES
+from financial_dynamics.types import Regime
 from financial_dynamics.phase4_risk._utils import safe_renormalize
 
 

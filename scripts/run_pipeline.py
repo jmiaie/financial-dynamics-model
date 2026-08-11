@@ -7,11 +7,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import numpy as np
-
 from financial_dynamics.pipeline import FinancialDynamicsPipeline
-from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import REGIME_NAMES, Regime
+from scripts._cli_common import load_config, print_banner
 
 
 def parse_args() -> argparse.Namespace:
@@ -59,22 +57,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    print("=" * 70)
-    print("  Financial Dynamics Model -- System Dynamics Pipeline")
-    print("=" * 70)
+    print_banner("Financial Dynamics Model -- System Dynamics Pipeline")
 
-    # Load config
-    if args.config:
-        config_path = Path(args.config)
-    else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-
-    if config_path.exists():
-        config = PipelineConfig.from_yaml(config_path)
-        print(f"\nLoaded config from {config_path}")
-    else:
-        config = PipelineConfig()
-        print("\nUsing default config")
+    config = load_config(args.config)
 
     # Load data
     if args.symbol:
@@ -140,7 +125,7 @@ def main() -> None:
         print(f"  Visualization skipped (missing dependency): {e}")
     else:
         dashboard = SystemDashboard(pipeline)
-        fig = dashboard.plot(df, results)
+        dashboard.plot(df, results)
         output_path = Path("financial_dynamics_dashboard.png")
         try:
             dashboard.save(str(output_path))

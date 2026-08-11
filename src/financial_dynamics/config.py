@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import warnings
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -92,22 +93,33 @@ class PipelineConfig:
         data = raw or {}
 
         config = cls()
-        section_map = {
-            "features": (config.features, FeatureConfig),
-            "regimes": (config.regimes, RegimeConfig),
-            "transitions": (config.transitions, TransitionConfig),
-            "stabilization": (config.stabilization, StabilizationConfig),
-            "risk": (config.risk, RiskConfig),
-        }
-        for section_name, (section_obj, _) in section_map.items():
-            if section_name in data:
-                for key, value in data[section_name].items():
-                    if hasattr(section_obj, key):
-                        setattr(section_obj, key, value)
-                    else:
-                        warnings.warn(
-                            f"Unknown config key '{key}' in section "
-                            f"'{section_name}'; ignoring.",
-                            stacklevel=2,
-                        )
+        apply_config_dict(config, data, warn_unknown=True)
         return config
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize to a plain nested dict (e.g. for persistence or YAML dump)."""
+        return asdict(self)
+
+
+def apply_config_dict(
+    config: PipelineConfig, data: dict[str, Any], *, warn_unknown: bool = False
+) -> None:
+    """Apply a nested {section: {key: value}} dict onto an existing config in place."""
+    section_map = {
+        "features": config.features,
+        "regimes": config.regimes,
+        "transitions": config.transitions,
+        "stabilization": config.stabilization,
+        "risk": config.risk,
+    }
+    for section_name, section_obj in section_map.items():
+        if section_name in data:
+            for key, value in data[section_name].items():
+                if hasattr(section_obj, key):
+                    setattr(section_obj, key, value)
+                elif warn_unknown:
+                    warnings.warn(
+                        f"Unknown config key '{key}' in section "
+                        f"'{section_name}'; ignoring.",
+                        stacklevel=2,
+                    )

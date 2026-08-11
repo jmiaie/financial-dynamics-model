@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import yaml
 
 from financial_dynamics.calibration import Calibrator
-from financial_dynamics.config import PipelineConfig
+from scripts._cli_common import load_config, print_banner
 
 
 def parse_args() -> argparse.Namespace:
@@ -40,21 +40,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    print("=" * 70)
-    print("  Financial Dynamics Model -- Calibration")
-    print("=" * 70)
+    print_banner("Financial Dynamics Model -- Calibration")
 
-    if args.config:
-        base_config = PipelineConfig.from_yaml(args.config)
-        print(f"\nLoaded base config from {args.config}")
-    else:
-        config_path = Path(__file__).parent.parent / "config" / "default.yaml"
-        if config_path.exists():
-            base_config = PipelineConfig.from_yaml(config_path)
-            print(f"\nLoaded base config from {config_path}")
-        else:
-            base_config = PipelineConfig()
-            print("\nUsing default config")
+    base_config = load_config(args.config)
 
     from scripts.generate_synthetic_data import generate_synthetic_ohlcv
 
@@ -87,41 +75,7 @@ def main() -> None:
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    config_dict = {
-        "features": {
-            "volatility_span": result.calibrated_config.features.volatility_span,
-            "trend_window": result.calibrated_config.features.trend_window,
-            "drawdown_window": result.calibrated_config.features.drawdown_window,
-            "correlation_window": result.calibrated_config.features.correlation_window,
-            "shock_threshold": result.calibrated_config.features.shock_threshold,
-            "normalization_method": result.calibrated_config.features.normalization_method,
-            "normalization_window": result.calibrated_config.features.normalization_window,
-            "feature_weights": result.calibrated_config.features.feature_weights,
-        },
-        "regimes": {
-            "temperature": result.calibrated_config.regimes.temperature,
-            "centroids": result.calibrated_config.regimes.centroids,
-        },
-        "transitions": {
-            "prior_strength": result.calibrated_config.transitions.prior_strength,
-            "learning_rate": result.calibrated_config.transitions.learning_rate,
-        },
-        "stabilization": {
-            "hysteresis_threshold": result.calibrated_config.stabilization.hysteresis_threshold,
-            "min_persistence_bars": result.calibrated_config.stabilization.min_persistence_bars,
-            "majority_vote_window": result.calibrated_config.stabilization.majority_vote_window,
-        },
-        "risk": {
-            "drawdown_threshold": result.calibrated_config.risk.drawdown_threshold,
-            "correlation_stress_threshold": result.calibrated_config.risk.correlation_stress_threshold,
-            "shock_threshold": result.calibrated_config.risk.shock_threshold,
-            "riskoff_confirmation_count": result.calibrated_config.risk.riskoff_confirmation_count,
-            "overextension_window": result.calibrated_config.risk.overextension_window,
-            "overextension_decay": result.calibrated_config.risk.overextension_decay,
-            "chop_penalty_window": result.calibrated_config.risk.chop_penalty_window,
-            "chop_penalty_factor": result.calibrated_config.risk.chop_penalty_factor,
-        },
-    }
+    config_dict = result.calibrated_config.to_dict()
 
     with open(output_path, "w") as f:
         yaml.safe_dump(config_dict, f, sort_keys=False)
