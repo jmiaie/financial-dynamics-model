@@ -7,37 +7,31 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import numpy as np
 
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.types import REGIME_NAMES, Regime
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Run the Financial Dynamics Model pipeline."
-    )
+    parser = argparse.ArgumentParser(description="Run the Financial Dynamics Model pipeline.")
     parser.add_argument(
         "--symbol",
         type=str,
         default=None,
-        help="Ticker symbol to fetch live data (e.g. SPY, AAPL). "
-             "If omitted, uses synthetic data.",
+        help="Ticker symbol to fetch live data (e.g. SPY, AAPL). If omitted, uses synthetic data.",
     )
     parser.add_argument(
         "--period",
         type=str,
         default="1y",
-        help="Lookback period for live data (default: 1y). "
-             "Examples: 6mo, 1y, 2y, 5y.",
+        help="Lookback period for live data (default: 1y). Examples: 6mo, 1y, 2y, 5y.",
     )
     parser.add_argument(
         "--interval",
         type=str,
         default="1d",
-        help="Bar interval for live data (default: 1d). "
-             "Examples: 1d, 1h, 5m.",
+        help="Bar interval for live data (default: 1d). Examples: 1d, 1h, 5m.",
     )
     parser.add_argument(
         "--reference-symbols",
@@ -45,7 +39,7 @@ def parse_args() -> argparse.Namespace:
         nargs="*",
         default=None,
         help="Reference symbols for cross-asset correlation stress "
-             "(e.g. ^VIX TLT HYG). Requires --symbol.",
+        "(e.g. ^VIX TLT HYG). Requires --symbol.",
     )
     parser.add_argument(
         "--config",
@@ -82,20 +76,26 @@ def main() -> None:
         if ref_syms:
             from financial_dynamics.data_loader import fetch_multi_asset
 
-            print(f"\nFetching live data for {args.symbol} "
-                  f"+ references {ref_syms} "
-                  f"(period={args.period}, interval={args.interval})...")
+            print(
+                f"\nFetching live data for {args.symbol} "
+                f"+ references {ref_syms} "
+                f"(period={args.period}, interval={args.interval})..."
+            )
             df = fetch_multi_asset(
-                args.symbol, ref_syms,
-                period=args.period, interval=args.interval,
+                args.symbol,
+                ref_syms,
+                period=args.period,
+                interval=args.interval,
             )
             ref_cols = [c for c in df.columns if c.startswith("ref_")]
             print(f"  Reference columns loaded: {ref_cols}")
         else:
             from financial_dynamics.data_loader import fetch_ohlcv
 
-            print(f"\nFetching live data for {args.symbol} "
-                  f"(period={args.period}, interval={args.interval})...")
+            print(
+                f"\nFetching live data for {args.symbol} "
+                f"(period={args.period}, interval={args.interval})..."
+            )
             df = fetch_ohlcv(args.symbol, period=args.period, interval=args.interval)
         print(f"  {len(df)} bars fetched")
         print(f"  Date range: {df.index[0]} - {df.index[-1]}")
@@ -121,10 +121,10 @@ def main() -> None:
     print(f"  Valid predictions: {len(valid)} / {len(results)}")
 
     if len(valid) > 0:
-        print(f"\n  Predicted regime distribution:")
+        print("\n  Predicted regime distribution:")
         print(f"  {valid['risk_adjusted_regime'].value_counts().to_string()}")
 
-        print(f"\n  Transition Matrix (learned):")
+        print("\n  Transition Matrix (learned):")
         tm = report["transition_matrix"]
         header = "  " + " ".join(f"{REGIME_NAMES[r]:>14}" for r in Regime)
         print(header)
@@ -140,7 +140,7 @@ def main() -> None:
         print(f"  Visualization skipped (missing dependency): {e}")
     else:
         dashboard = SystemDashboard(pipeline)
-        fig = dashboard.plot(df, results)
+        dashboard.plot(df, results)
         output_path = Path("financial_dynamics_dashboard.png")
         try:
             dashboard.save(str(output_path))

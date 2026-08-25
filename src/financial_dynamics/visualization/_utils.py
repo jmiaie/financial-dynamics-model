@@ -2,8 +2,28 @@
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 from sklearn.decomposition import PCA
+
+from financial_dynamics.types import Regime
+
+
+def safe_regime_lookup(regime_label: str, index_value: object) -> Regime | None:
+    """Look up a regime by its serialized label, warning on unknown labels.
+
+    Returns None (with a UserWarning) instead of raising, so callers can
+    skip rendering a single bad point rather than aborting the whole plot.
+    """
+    try:
+        return Regime[regime_label]
+    except KeyError:
+        warnings.warn(
+            f"Unknown regime '{regime_label}' at index {index_value}",
+            stacklevel=2,
+        )
+        return None
 
 
 def fit_pca_projection(
