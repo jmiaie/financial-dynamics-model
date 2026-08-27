@@ -58,7 +58,8 @@ dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
     "hypothesis>=6.0",
-    "mypy>=1.0",
+    "mypy>=1.14,<2",
+    "pandas-stubs>=2.0",
     "types-PyYAML>=6.0",
 ]
 all = [
@@ -97,6 +98,9 @@ markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
 
 [tool.mypy]
 python_version = "3.10"
+mypy_path = "src"
+explicit_package_bases = true
+packages = ["financial_dynamics"]
 warn_unused_configs = true
 disallow_untyped_defs = true
 check_untyped_defs = true
@@ -108,5 +112,6 @@ module = [
     "scipy.*",
     "sklearn.*",
     "yfinance.*",
+    "streamlit.*",
 ]
 ignore_missing_imports = true
