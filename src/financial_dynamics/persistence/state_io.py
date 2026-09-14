@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
@@ -37,7 +38,7 @@ def load_state(path: str | Path) -> FinancialDynamicsPipeline:
         state = json.load(f)
 
     config = PipelineConfig()
-    _restore_config(config, state.get("config", {}))
+    config.apply_overrides(state.get("config", {}))
 
     pipeline = FinancialDynamicsPipeline(config)
     _restore_state(pipeline, state)
@@ -54,7 +55,7 @@ def _extract_state(pipeline: FinancialDynamicsPipeline) -> dict[str, Any]:
     return {
         "version": 1,
         "bar_count": pipeline._bar_count,
-        "config": _extract_config(pipeline.config),
+        "config": asdict(pipeline.config),
         "feature_engine": {
             "close_buffer": list(fe._close_buffer),
             "normalizer_history": [arr.tolist() for arr in fe.normalizer._history],
@@ -123,58 +124,3 @@ def _restore_state(pipeline: FinancialDynamicsPipeline, state: dict[str, Any]) -
     re._overextension._history = [Regime(r) for r in re_state["overextension_history"]]
     re._chop_suppressor._history.clear()
     re._chop_suppressor._history.extend(Regime(r) for r in re_state["chop_history"])
-
-
-def _extract_config(config: PipelineConfig) -> dict:
-    """Serialize config to a plain dict."""
-    return {
-        "features": {
-            "volatility_span": config.features.volatility_span,
-            "trend_window": config.features.trend_window,
-            "drawdown_window": config.features.drawdown_window,
-            "correlation_window": config.features.correlation_window,
-            "shock_threshold": config.features.shock_threshold,
-            "normalization_method": config.features.normalization_method,
-            "normalization_window": config.features.normalization_window,
-            "feature_weights": config.features.feature_weights,
-        },
-        "regimes": {
-            "temperature": config.regimes.temperature,
-            "centroids": config.regimes.centroids,
-        },
-        "transitions": {
-            "prior_strength": config.transitions.prior_strength,
-            "learning_rate": config.transitions.learning_rate,
-        },
-        "stabilization": {
-            "hysteresis_threshold": config.stabilization.hysteresis_threshold,
-            "min_persistence_bars": config.stabilization.min_persistence_bars,
-            "majority_vote_window": config.stabilization.majority_vote_window,
-        },
-        "risk": {
-            "drawdown_threshold": config.risk.drawdown_threshold,
-            "correlation_stress_threshold": config.risk.correlation_stress_threshold,
-            "shock_threshold": config.risk.shock_threshold,
-            "riskoff_confirmation_count": config.risk.riskoff_confirmation_count,
-            "overextension_window": config.risk.overextension_window,
-            "overextension_decay": config.risk.overextension_decay,
-            "chop_penalty_window": config.risk.chop_penalty_window,
-            "chop_penalty_factor": config.risk.chop_penalty_factor,
-        },
-    }
-
-
-def _restore_config(config: PipelineConfig, data: dict) -> None:
-    """Apply saved config values onto an existing PipelineConfig."""
-    section_map = {
-        "features": config.features,
-        "regimes": config.regimes,
-        "transitions": config.transitions,
-        "stabilization": config.stabilization,
-        "risk": config.risk,
-    }
-    for section_name, section_obj in section_map.items():
-        if section_name in data:
-            for key, value in data[section_name].items():
-                if hasattr(section_obj, key):
-                    setattr(section_obj, key, value)

@@ -92,14 +92,25 @@ class PipelineConfig:
         data = raw or {}
 
         config = cls()
+        config.apply_overrides(data)
+        return config
+
+    def apply_overrides(self, data: dict) -> None:
+        """Apply a nested {section_name: {key: value}} dict onto this config in place.
+
+        Shared by :meth:`from_yaml` and the state-persistence loader
+        (:mod:`financial_dynamics.persistence.state_io`) so both restore
+        paths use one definition of "how a saved/loaded config maps onto
+        a PipelineConfig", rather than two independently maintained copies.
+        """
         section_map = {
-            "features": (config.features, FeatureConfig),
-            "regimes": (config.regimes, RegimeConfig),
-            "transitions": (config.transitions, TransitionConfig),
-            "stabilization": (config.stabilization, StabilizationConfig),
-            "risk": (config.risk, RiskConfig),
+            "features": self.features,
+            "regimes": self.regimes,
+            "transitions": self.transitions,
+            "stabilization": self.stabilization,
+            "risk": self.risk,
         }
-        for section_name, (section_obj, _) in section_map.items():
+        for section_name, section_obj in section_map.items():
             if section_name in data:
                 for key, value in data[section_name].items():
                     if hasattr(section_obj, key):
@@ -110,4 +121,3 @@ class PipelineConfig:
                             f"'{section_name}'; ignoring.",
                             stacklevel=2,
                         )
-        return config
