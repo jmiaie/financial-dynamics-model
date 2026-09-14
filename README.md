@@ -24,7 +24,7 @@
 
 <table>
 <tr>
-<td align="center"><strong>80.6%</strong><br><sub>Accuracy</sub></td>
+<td align="center"><strong>Chronology-Safe</strong><br><sub>Validation</sub></td>
 <td align="center"><strong>275</strong><br><sub>Unit Tests</sub></td>
 <td align="center"><strong>5</strong><br><sub>Pipeline Phases</sub></td>
 <td align="center"><strong>4</strong><br><sub>Market Regimes</sub></td>
@@ -33,6 +33,16 @@
 </table>
 
 </div>
+
+---
+
+## Research Validation
+
+- **Temporal separation is explicit.** `TemporalSplit` and `TemporalCalibrator` separate formation, validation, and final test windows so centroids and hyperparameters are fit before the final out-of-sample evaluation.
+- **Walk-forward evaluation is prior-only.** `TemporalValidator.walk_forward()` uses expanding or rolling windows that fit on past data and evaluate the next unseen block. The legacy `Calibrator.calibrate()` and `BacktestEvaluator.evaluate_rolling()` APIs remain available, but they are documented as in-sample utilities.
+- **Synthetic and historical claims are separated.** Labeled synthetic regime-recovery can report accuracy, balanced accuracy, macro F1, confusion matrices, log loss, Brier score, and calibration tables. Historical studies should use inferred-regime characterization (`historical_regime_statistics`) rather than fabricated ground-truth labels.
+- **Benchmarks share the same out-of-sample periods.** The temporal benchmark workflow compares the pipeline against persistence, volatility-bucket, trend+volatility-grid, and Gaussian-mixture baselines on identical untouched evaluation windows.
+- **Limitations are part of the report.** Reproducible historical results belong in the research report artifacts; until those runs are captured, headline claims should be treated as synthetic or pending rather than production OOS evidence.
 
 ---
 
@@ -137,6 +147,8 @@ python scripts/run_backtest.py --data historical.csv --labels regimes.csv --roll
 python scripts/run_calibration.py --output calibrated.yaml
 python scripts/run_benchmark.py --config config/default.yaml
 ```
+
+`scripts/run_backtest.py --rolling` remains the legacy in-sample rolling summary. For chronology-safe research workflows, use the Python temporal-validation APIs documented in `docs/research/market-regime-temporal-validation.md`.
 
 ---
 

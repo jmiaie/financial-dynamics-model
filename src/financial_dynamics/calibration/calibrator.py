@@ -30,7 +30,7 @@ class CalibrationResult:
 
 
 class Calibrator:
-    """End-to-end calibration: fit centroids, then tune hyperparameters."""
+    """End-to-end in-sample calibration: fit centroids, then tune hyperparameters."""
 
     def __init__(self, base_config: PipelineConfig | None = None):
         self.base_config = base_config or PipelineConfig()
@@ -41,14 +41,15 @@ class Calibrator:
         labels: pd.Series,
         search_space: SearchSpace | None = None,
     ) -> CalibrationResult:
-        """Run the full calibration pipeline.
+        """Run the full in-sample calibration pipeline.
 
         Steps:
-          1. Score baseline (default config) on the training data.
-          2. Fit centroids from the data, score with new centroids.
-          3. Grid-search hyperparameters on top of fitted centroids.
+          1. Score baseline (default config) on the same labeled data.
+          2. Fit centroids from the same data, score with new centroids.
+          3. Grid-search hyperparameters on that same data.
 
         Returns a CalibrationResult comparing all three stages.
+        For chronology-safe research validation, use TemporalCalibrator instead.
         """
         baseline_eval = BacktestEvaluator(self.base_config)
         baseline_result = baseline_eval.evaluate(df, labels)

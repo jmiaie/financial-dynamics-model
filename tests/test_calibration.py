@@ -14,6 +14,14 @@ from financial_dynamics.calibration.hyperparameter_tuner import (
     HyperparameterTuner,
     TuningResult,
 )
+from financial_dynamics.calibration.temporal import (
+    SensitivityAnalyzer,
+    TemporalCalibrationResult,
+    TemporalCalibrator,
+    TemporalSplit,
+    TemporalValidator,
+    WalkForwardResult,
+)
 from financial_dynamics.config import PipelineConfig
 from financial_dynamics.types import Regime
 
@@ -135,6 +143,18 @@ class TestHyperparameterTuner:
         # Default space has 4*3*3*3 = 108 combos
         assert len(result.all_trials) == 108
 
+    def test_supports_history_only_tuning(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        tuner = HyperparameterTuner()
+        result = tuner.tune(
+            df.iloc[120:180],
+            labels.iloc[120:180],
+            search_space={"regimes.temperature": [0.5, 1.0]},
+            history_df=df.iloc[:120],
+        )
+        assert isinstance(result, TuningResult)
+        assert len(result.all_trials) == 2
+
     def test_raises_on_unknown_key_in_valid_section(self, synthetic_ohlcv):
         """Cover line 112: valid section but unknown attribute key."""
         df, labels = synthetic_ohlcv
@@ -170,3 +190,131 @@ class TestCalibrator:
 
         for regime_name in baseline_centroids:
             assert calibrated_centroids[regime_name] != baseline_centroids[regime_name]
+
+
+class TestTemporalSplit:
+    def test_non_overlap_and_boundaries(self, synthetic_ohlcv):
+        df, _ = synthetic_ohlcv
+        split = TemporalSplit.from_frame(df)
+        assert split.formation.end == split.validation.start
+        assert split.validation.end == split.test.start
+        assert split.formation.end_boundary < split.validation.start_boundary
+        assert split.validation.end_boundary < split.test.start_boundary
+
+    def test_rejects_duplicate_or_unsorted_index(self, synthetic_ohlcv):
+        df, _ = synthetic_ohlcv
+        bad = df.copy()
+        bad.index = list(df.index[:-1]) + [df.index[-2]]
+        with pytest.raises(ValueError, match="unique chronological index"):
+            TemporalSplit.from_frame(bad)
+
+
+class TestTemporalCalibrator:
+    def test_calibrate_separates_validation_and_test(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        split = TemporalSplit.from_frame(
+            df, formation_ratio=0.5, validation_ratio=0.25, test_ratio=0.25
+        )
+        calibrator = TemporalCalibrator()
+        result = calibrator.calibrate(
+            df,
+            labels,
+            split=split,
+            search_space={"regimes.temperature": [0.5, 1.0]},
+        )
+        assert isinstance(result, TemporalCalibrationResult)
+        assert result.final_test_result.history_bars == split.formation.size + split.validation.size
+        assert "persistence" in set(result.test_benchmarks.summary["model"])
+
+    def test_test_window_does_not_change_tuned_config(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        split = TemporalSplit.from_frame(
+            df, formation_ratio=0.5, validation_ratio=0.25, test_ratio=0.25
+        )
+        calibrator = TemporalCalibrator()
+        baseline = calibrator.calibrate(
+            df,
+            labels,
+            split=split,
+            search_space={"regimes.temperature": [0.5, 1.0]},
+        )
+
+        mutated_df = df.copy()
+        mutated_df.iloc[split.test.start :, mutated_df.columns.get_loc("close")] *= 5
+        mutated_labels = labels.copy()
+        mutated_labels.iloc[split.test.start :] = "RISK_OFF"
+        mutated = calibrator.calibrate(
+            mutated_df,
+            mutated_labels,
+            split=split,
+            search_space={"regimes.temperature": [0.5, 1.0]},
+        )
+
+        assert (
+            baseline.calibrated_config.regimes.temperature
+            == mutated.calibrated_config.regimes.temperature
+        )
+        assert baseline.fitted_centroids == mutated.fitted_centroids
+        assert baseline.tuned_validation_result.accuracy == pytest.approx(
+            mutated.tuned_validation_result.accuracy
+        )
+
+
+class TestTemporalValidator:
+    def test_walk_forward_returns_steps(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        result = TemporalValidator().walk_forward(
+            df,
+            labels,
+            initial_train_size=120,
+            step_size=40,
+            eval_size=40,
+        )
+        assert isinstance(result, WalkForwardResult)
+        assert len(result.steps) > 0
+        assert "balanced_accuracy" in result.summary.columns
+
+    def test_walk_forward_is_future_safe(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        validator = TemporalValidator()
+        baseline = validator.walk_forward(
+            df, labels, initial_train_size=120, step_size=40, eval_size=40
+        )
+
+        mutated_df = df.copy()
+        first_eval_end = baseline.steps[0].eval_window.end
+        mutated_df.iloc[first_eval_end:, mutated_df.columns.get_loc("close")] *= 3
+        mutated = validator.walk_forward(
+            mutated_df,
+            labels,
+            initial_train_size=120,
+            step_size=40,
+            eval_size=40,
+        )
+
+        assert (
+            baseline.steps[0].calibrated_config.regimes.centroids
+            == mutated.steps[0].calibrated_config.regimes.centroids
+        )
+        assert baseline.steps[0].result.accuracy == pytest.approx(mutated.steps[0].result.accuracy)
+
+
+class TestSensitivityAnalyzer:
+    def test_returns_stability_summary(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        split = TemporalSplit.from_frame(
+            df, formation_ratio=0.5, validation_ratio=0.25, test_ratio=0.25
+        )
+        result = SensitivityAnalyzer().analyze(
+            df,
+            labels,
+            split=split,
+            parameter_grid={
+                "regimes.temperature": [1.0],
+                "transitions.learning_rate": [0.05],
+                "centroid_perturbation_scale": [0.0, 0.02],
+            },
+        )
+        assert "median_accuracy" in result.summary.columns
+        assert "accuracy_dispersion" in result.summary.columns
+        assert set(result.summary["status"]) == {"ok"}

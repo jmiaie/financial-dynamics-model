@@ -1,12 +1,20 @@
 """Tests for the backtesting framework."""
 
 import pandas as pd
+import pytest
 
 from financial_dynamics.backtesting.evaluator import BacktestEvaluator, BacktestResult
 from financial_dynamics.backtesting.metrics import (
+    historical_regime_statistics,
     regime_accuracy,
+    regime_balanced_accuracy,
+    regime_calibration_table,
     regime_classification_report,
     regime_confusion_matrix,
+    regime_log_loss,
+    regime_macro_f1,
+    regime_multiclass_brier_score,
+    validate_probability_frame,
 )
 from financial_dynamics.types import Regime
 
@@ -88,6 +96,64 @@ class TestClassificationReport:
         assert list(report.index) == expected
 
 
+class TestProbabilityMetrics:
+    def test_balanced_accuracy(self):
+        labels = pd.Series(["CALM_TREND", "CALM_TREND", "RISK_OFF", "RISK_OFF"])
+        preds = pd.Series(["CALM_TREND", "RISK_OFF", "RISK_OFF", "RISK_OFF"])
+        assert regime_balanced_accuracy(labels, preds) == 0.75
+
+    def test_probability_validation_rejects_bad_rows(self):
+        probabilities = pd.DataFrame(
+            {
+                "post_prob_CALM_TREND": [0.6],
+                "post_prob_VOLATILE_TREND": [0.3],
+                "post_prob_CHOP": [0.2],
+                "post_prob_RISK_OFF": [-0.1],
+            }
+        )
+        with pytest.raises(ValueError, match="between 0 and 1"):
+            validate_probability_frame(probabilities)
+
+    def test_probability_metrics(self):
+        labels = pd.Series(["CALM_TREND", "RISK_OFF"])
+        probabilities = pd.DataFrame(
+            {
+                "post_prob_CALM_TREND": [0.7, 0.05],
+                "post_prob_VOLATILE_TREND": [0.1, 0.1],
+                "post_prob_CHOP": [0.1, 0.15],
+                "post_prob_RISK_OFF": [0.1, 0.7],
+            }
+        )
+        assert regime_log_loss(labels, probabilities) is not None
+        assert regime_multiclass_brier_score(labels, probabilities) is not None
+        calibration = regime_calibration_table(labels, probabilities, bins=2)
+        assert not calibration.empty
+        assert regime_macro_f1(labels, pd.Series(["CALM_TREND", "RISK_OFF"])) == 1.0
+
+
+class TestHistoricalRegimeStatistics:
+    def test_returns_summary_and_transitions(self):
+        index = pd.date_range("2024-01-01", periods=8, freq="D")
+        close = pd.Series([100, 101, 102, 101, 100, 99, 100, 101], index=index)
+        inferred = pd.Series(
+            [
+                "CALM_TREND",
+                "CALM_TREND",
+                "CHOP",
+                "CHOP",
+                "RISK_OFF",
+                "RISK_OFF",
+                "CALM_TREND",
+                "CALM_TREND",
+            ],
+            index=index,
+        )
+        stats = historical_regime_statistics(close, inferred, horizons=(1, 2))
+        assert not stats.summary.empty
+        assert "mean_duration" in stats.summary.columns
+        assert stats.transitions.loc["CALM_TREND", "CHOP"] >= 0.0
+
+
 class TestBacktestEvaluator:
     def test_evaluate_returns_backtest_result(self, synthetic_ohlcv):
         df, labels = synthetic_ohlcv
@@ -95,9 +161,14 @@ class TestBacktestEvaluator:
         result = evaluator.evaluate(df, labels)
         assert isinstance(result, BacktestResult)
         assert 0.0 <= result.accuracy <= 1.0
+        assert 0.0 <= result.balanced_accuracy <= 1.0
+        assert 0.0 <= result.macro_f1 <= 1.0
         assert result.total_bars == len(df)
         assert result.evaluated_bars > 0
         assert result.warmup_bars > 0
+        assert result.log_loss is not None
+        assert result.brier_score is not None
+        assert not result.calibration_report.empty
 
     def test_confusion_matrix_shape(self, synthetic_ohlcv):
         df, labels = synthetic_ohlcv
@@ -129,3 +200,14 @@ class TestBacktestEvaluator:
         assert "accuracy" in rolling.columns
         assert "evaluated_bars" in rolling.columns
         assert all(0.0 <= a <= 1.0 for a in rolling["accuracy"])
+
+    def test_evaluate_with_history_uses_prior_window(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        evaluator = BacktestEvaluator()
+        history = df.iloc[:120]
+        eval_df = df.iloc[120:180]
+        eval_labels = labels.iloc[120:180]
+        result = evaluator.evaluate_with_history(history, eval_df, eval_labels)
+        assert result.total_bars == len(eval_df)
+        assert result.history_bars == len(history)
+        assert result.pipeline_results.index.equals(eval_df.index)
