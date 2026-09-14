@@ -47,6 +47,7 @@ class HyperparameterTuner:
         df: pd.DataFrame,
         labels: pd.Series,
         search_space: SearchSpace | None = None,
+        history_df: pd.DataFrame | None = None,
     ) -> TuningResult:
         """Run a grid search over the search space.
 
@@ -79,7 +80,10 @@ class HyperparameterTuner:
             params = dict(zip(param_names, values, strict=True))
             trial_config = self._apply_params(self.base_config, params)
             evaluator = BacktestEvaluator(trial_config)
-            result = evaluator.evaluate(df, labels)
+            if history_df is None:
+                result = evaluator.evaluate(df, labels)
+            else:
+                result = evaluator.evaluate_with_history(history_df, df, labels)
 
             trials.append({**params, "accuracy": result.accuracy})
 
