@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -141,7 +142,7 @@ class SystemDashboard:
 
         ax.stackplot(
             valid.index,
-            *[valid[col].values for col in prob_cols],
+            *[np.asarray(valid[col].to_numpy(), dtype=float) for col in prob_cols],
             labels=labels,
             colors=colors,
             alpha=0.7,
