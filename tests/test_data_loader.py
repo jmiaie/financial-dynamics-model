@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from financial_dynamics.data_loader import fetch_multi_asset, fetch_ohlcv
+from financial_dynamics.data_loader import fetch_multi_asset, fetch_ohlcv, validate_ohlcv_frame
 
 
 @pytest.fixture
@@ -110,6 +110,20 @@ class TestFetchOhlcv:
             mock_yf.Ticker.return_value = mock_ticker
             with pytest.raises(ValueError, match="missing expected columns"):
                 fetch_ohlcv("SPY")
+
+    def test_validate_ohlcv_rejects_duplicate_index(self, mock_yf_data):
+        bad = mock_yf_data.copy()
+        bad.columns = [c.lower() for c in bad.columns]
+        bad.index = list(bad.index[:-1]) + [bad.index[-2]]
+        with pytest.raises(ValueError, match="must not contain duplicates"):
+            validate_ohlcv_frame(bad)
+
+    def test_validate_ohlcv_rejects_missing_values_without_backfill(self, mock_yf_data):
+        bad = mock_yf_data.copy()
+        bad.columns = [c.lower() for c in bad.columns]
+        bad.loc[bad.index[0], "close"] = np.nan
+        with pytest.raises(ValueError, match="refusing to backfill future data"):
+            validate_ohlcv_frame(bad)
 
 
 class TestFetchMultiAsset:

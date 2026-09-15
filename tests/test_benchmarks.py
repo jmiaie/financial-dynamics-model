@@ -2,10 +2,12 @@
 
 from financial_dynamics.benchmarks.baselines import (
     GaussianMixtureClassifier,
+    PersistenceClassifier,
     TrendVolGridClassifier,
     VolatilityBucketClassifier,
 )
 from financial_dynamics.benchmarks.runner import BenchmarkRunner, BenchmarkSummary
+from financial_dynamics.calibration import TemporalSplit
 from financial_dynamics.types import Regime
 
 VALID_REGIME_NAMES = {r.name for r in Regime}
@@ -61,6 +63,14 @@ class TestGaussianMixtureClassifier:
         assert (preds1 == preds2).all()
 
 
+class TestPersistenceClassifier:
+    def test_persists_last_training_label(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        clf = PersistenceClassifier().fit(df.iloc[:100], labels.iloc[:100])
+        preds = clf.predict(df.iloc[100:110])
+        assert (preds == labels.iloc[99]).all()
+
+
 class TestBenchmarkRunner:
     def test_returns_benchmark_summary(self, synthetic_ohlcv):
         df, labels = synthetic_ohlcv
@@ -76,6 +86,7 @@ class TestBenchmarkRunner:
         result = runner.run(df, labels)
         models = set(result.summary["model"])
         assert "financial_dynamics_pipeline" in models
+        assert "persistence" in models
         assert "volatility_bucket" in models
         assert "trend_vol_grid" in models
         assert "gaussian_mixture" in models
@@ -100,3 +111,17 @@ class TestBenchmarkRunner:
         runner = BenchmarkRunner(baselines=[VolatilityBucketClassifier()])
         result = runner.run(df, labels)
         assert len(result.summary) == 2  # pipeline + 1 baseline
+
+    def test_temporal_runner_uses_fixed_oos_windows(self, synthetic_ohlcv):
+        df, labels = synthetic_ohlcv
+        split = TemporalSplit.from_frame(df)
+        runner = BenchmarkRunner()
+        result = runner.run_temporal(
+            split.slice_frame(df, "formation"),
+            split.slice_frame(df, "validation"),
+            split.slice_series(labels, "formation"),
+            split.slice_series(labels, "validation"),
+        )
+        assert isinstance(result, BenchmarkSummary)
+        assert "history_bars" in result.summary.columns
+        assert set(result.summary["history_bars"]) == {split.formation.size}

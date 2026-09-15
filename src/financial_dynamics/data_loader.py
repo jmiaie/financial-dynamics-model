@@ -7,6 +7,45 @@ import warnings
 import pandas as pd
 
 
+def validate_ohlcv_frame(
+    df: pd.DataFrame,
+    *,
+    missing_policy: str = "raise",
+    keep_extra_columns: bool = False,
+) -> pd.DataFrame:
+    """Validate chronology and missing-data assumptions for OHLCV research data."""
+    required = {"open", "high", "low", "close", "volume"}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError(f"Yahoo Finance data missing expected columns: {sorted(missing)}")
+
+    if not isinstance(df.index, pd.DatetimeIndex):
+        raise ValueError("OHLCV data must use a DatetimeIndex")
+    if not df.index.is_monotonic_increasing:
+        raise ValueError("OHLCV data index must be monotonic increasing")
+    if df.index.has_duplicates:
+        raise ValueError("OHLCV data index must not contain duplicates")
+
+    cleaned = (
+        df.copy()
+        if keep_extra_columns
+        else df.loc[:, ["open", "high", "low", "close", "volume"]].copy()
+    )
+    if keep_extra_columns:
+        ordered_columns = ["open", "high", "low", "close", "volume"] + [
+            col for col in cleaned.columns if col not in {"open", "high", "low", "close", "volume"}
+        ]
+        cleaned = cleaned.loc[:, ordered_columns]
+    if cleaned.isna().any().any():
+        if missing_policy == "drop":
+            cleaned = cleaned.dropna()
+        elif missing_policy != "raise":
+            raise ValueError(f"Unsupported missing_policy '{missing_policy}'")
+        else:
+            raise ValueError("OHLCV data contains missing values; refusing to backfill future data")
+    return cleaned
+
+
 def fetch_ohlcv(
     symbol: str,
     period: str = "1y",
@@ -45,13 +84,7 @@ def fetch_ohlcv(
         )
 
     df.columns = [c.lower() for c in df.columns]
-
-    required = {"open", "high", "low", "close", "volume"}
-    missing = required - set(df.columns)
-    if missing:
-        raise ValueError(f"Yahoo Finance data missing expected columns: {sorted(missing)}")
-
-    return df[["open", "high", "low", "close", "volume"]]
+    return validate_ohlcv_frame(df)
 
 
 def fetch_multi_asset(
@@ -99,4 +132,4 @@ def fetch_multi_asset(
             )
             continue
 
-    return df
+    return validate_ohlcv_frame(df, missing_policy="drop", keep_extra_columns=True)
