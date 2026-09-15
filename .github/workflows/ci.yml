@@ -72,7 +72,7 @@ jobs:
           pip install -e ".[all]"
 
       - name: Run mypy
-        run: mypy -p financial_dynamics
+        run: mypy -p financial_dynamics --explicit-package-bases
 
   build:
     runs-on: ubuntu-latest
