@@ -153,6 +153,19 @@ class TestHistoricalRegimeStatistics:
         assert "mean_duration" in stats.summary.columns
         assert stats.transitions.loc["CALM_TREND", "CHOP"] >= 0.0
 
+    def test_transition_matrix_records_switches(self):
+        """Identically named regime Series must still yield off-diagonal mass."""
+        idx = pd.date_range("2020-01-01", periods=6, freq="D")
+        close = pd.Series([100.0, 101.0, 102.0, 101.0, 100.0, 99.0], index=idx)
+        inferred = pd.Series(
+            ["CHOP", "CHOP", "VOLATILE_TREND", "VOLATILE_TREND", "RISK_OFF", "RISK_OFF"],
+            index=idx,
+            name="risk_adjusted_regime",
+        )
+        stats = historical_regime_statistics(close, inferred, horizons=(1,))
+        assert stats.transitions.loc["CHOP", "VOLATILE_TREND"] > 0.0
+        assert stats.transitions.loc["VOLATILE_TREND", "RISK_OFF"] > 0.0
+
 
 class TestBacktestEvaluator:
     def test_evaluate_returns_backtest_result(self, synthetic_ohlcv):
