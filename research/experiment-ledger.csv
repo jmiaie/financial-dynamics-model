@@ -1,0 +1,2 @@
+experiment_id,repo,branch,dataset_id,config_path,status,formation_period,validation_period,holdout_period,horizons,notes,created_utc
+fdm_hist_regime_v1_prereg,financial-dynamics-model,research/historical-regime-validation,yf_fd_etfs_daily_2015_2025_v1,configs/experiments/fdm_historical_regime_study_v1.yaml,PRE-REGISTERED_DRAFT_NOT_YET_FROZEN_FOR_HOLDOUT,2015-01-01/2023-12-31,2024-01-01/2024-12-31,2025-01-01/2025-12-31,1|5|20,Skeleton pre-registration; development parameters not frozen for holdout; no 2025 evaluation,2026-09-16T02:37:09Z
