@@ -36,22 +36,41 @@ instruments and a different research design).
 **Periods:** development/formation 2015-01-01 to 2023-12-31; validation 2024-01-01 to
 2024-12-31; holdout 2025-01-01 to 2025-12-31.
 
-A later independent re-acquisition attempt of this dataset produced a **different** file
-hash (`945cf990…` vs. the frozen `91caa6cd…`). This is reported, unresolved evidence — most
-likely `auto_adjust=True` retroactive dividend-adjustment drift (adjusted historical closes
-shift whenever a new distribution posts, so a fresh pull months later will not
-byte-for-byte match an old freeze), but this has not been independently confirmed by
-inspecting value-level differences. The results below are drawn from the **originally
+**Original acquisition/freeze:** `retrieval_timestamp_utc: 2026-09-16T02:36:57Z`,
+`freeze_timestamp_utc: 2026-09-16T02:37:02Z` (same manifest file as above).
+
+A later independent re-acquisition attempt of this dataset, made within the same working
+session — hours, not months, after the original freeze; a prior version of this report
+said "a fresh pull months later," which was an unverified guess unsupported by the actual
+timeline and is retracted — produced a **different** file hash (`945cf990…` vs. the frozen
+`91caa6cd…`). A reviewing agent (relayed via the user; not independently reproduced in this
+session, since no re-acquired CSVs are available in this environment to check directly)
+reported that a byte-level diff attributes GLD's mismatch entirely to line-ending
+differences, while the other four symbols' mismatches remain unexplained. This session
+cannot independently confirm that claim either. Given how little time elapsed between
+acquisitions, `auto_adjust=True` retroactive dividend-adjustment drift is a weaker
+candidate explanation than it would be for a genuinely stale re-pull, and is no longer
+offered as the "most likely" cause — it is not ruled out for the four unexplained symbols,
+just no longer asserted as probable. The results below are drawn from the **originally
 frozen** dataset and artifacts, committed before this discrepancy was discovered; they are
-unaffected by it, but the dataset's re-acquisition is flagged for anyone attempting to
+unaffected by it, but the root cause of four of the five symbols' hash mismatches remains
+genuinely unresolved, and the dataset's re-acquisition is flagged for anyone attempting to
 reproduce this study from scratch.
 
 ## 3. Pre-registration and freeze
 
 **Config:** `configs/experiments/fdm_historical_regime_study_v1.yaml`, status
-`frozen-for-holdout`. **Freeze commit:** `596a22527b6f0107ba5baf55dd2edd68a1d991fe`. No
-retuning occurred after this freeze; the holdout (2025) run used the identical frozen
-`PipelineConfig` as development and validation.
+`frozen-for-holdout`. **Freeze timestamp:** `2026-09-16T02:58:00Z`
+(`freeze_record.frozen_for_holdout_utc` in the config file itself — the authoritative,
+in-repo freeze marker). An earlier version of this report cited a specific "freeze commit"
+hash; that hash does not exist anywhere in this repository's git history and was
+fabricated. It is retracted without replacement: this branch's history has no discrete
+commit that cleanly separates pre-freeze design from post-freeze execution (the config,
+dataset manifest, and surrounding repository state all landed together in one bulk commit),
+so no commit-hash citation would be meaningful here. The config's own `freeze_record`
+field is the basis for this claim instead. No retuning occurred after this freeze per
+`constraints.no_retune_after_freeze: true`; the holdout (2025) run used the identical
+frozen `PipelineConfig` as development and validation.
 
 ## 4. Model and benchmarks
 
@@ -70,10 +89,16 @@ z-score normalization over a 252-session window), temperature 1.0, hysteresis th
 | RISK_OFF | (0.90, 0.30, 0.80, 0.90, 0.90) |
 
 **Benchmarks** (fit on formation data only, frozen before OOS classification):
-1. **Volatility-bucket** — trailing 20-day realized volatility, HIGH/LOW split at the
-   formation-period median, threshold applied unchanged OOS.
-2. **Trend/volatility grid** — trailing 63-session return sign × trailing 20-session
-   realized-vol median split (formation-derived threshold), four quadrant states.
+1. **Volatility-bucket** — trailing 20-day realized volatility, split into formation-period
+   **quartiles** (Q1/Q2/Q3), mapped to the four regime labels in increasing-volatility
+   order (≤Q1 → CALM_TREND, Q1–Q2 → CHOP, Q2–Q3 → VOLATILE_TREND, >Q3 → RISK_OFF),
+   thresholds frozen from formation and applied unchanged OOS. (An earlier version of this
+   report incorrectly described this as a binary HIGH/LOW median split; corrected to match
+   `VolatilityBucketClassifier` in `src/financial_dynamics/benchmarks/baselines.py`.)
+2. **Trend/volatility grid** — trailing **14**-session return sign × trailing 20-session
+   realized-vol median split (both formation-derived), four quadrant states. (An earlier
+   version of this report incorrectly stated a 63-session trend window; corrected to match
+   `TrendVolGridClassifier`'s `trend_window: int = 14` default in the same file.)
 3. **Gaussian mixture** — unsupervised GMM (seed 0), fit on formation data, frozen before
    OOS classification.
 4. **Persistence** — trivial "last observed regime persists" baseline (validation/holdout
@@ -88,6 +113,18 @@ standard deviation (`ddof=0` over one point is undefined/zero), not a data error
 a meaningful 1-day realized-volatility estimate and should be disregarded. `h5`/`h20`
 realized volatilities are computed over genuine multi-observation windows and are
 meaningful.
+
+**Important methodological caveat on `mean_return_h*` and `median_return_h*`:** these are
+**unweighted averages across each period's observed regimes** of that regime's own mean
+(resp. median) forward return — i.e. "the average, across regimes, of each regime's mean
+return," not a bar-level statistic over the raw day-by-day return series, and not weighted
+by how many days each regime was observed. A regime with 5 observed bars and a regime with
+500 observed bars contribute equally to these aggregates. This materially limits what can
+be inferred from comparing a period's `mean_return_h1` against its `median_return_h1`: the
+two columns are computed the same way but over each regime's mean vs. median respectively,
+not the mean and median of one common underlying distribution, so a mean-vs-median
+comparison here does not by itself indicate distributional skew (see §6, where an earlier
+version of this report drew exactly that unsupported conclusion).
 
 ### 5.1 Development (2015–2023, formation window)
 
@@ -128,28 +165,52 @@ selected in the 2025 holdout window** — reported exactly as observed, not adju
 ## 6. Discussion
 
 **Cross-regime differentiation.** Across all three periods and all four models, mean and
-median forward returns vary materially by regime/model and by horizon, and multi-day
-realized volatility (h5/h20) is consistently higher for the Gaussian-mixture and
-FDM-pipeline classifications than for the volatility-bucket and trend/vol-grid benchmarks.
-This is consistent with the FDM and GMM capturing more volatility-sensitive states, at the
-cost of the self-transition (persistence) trade-off described next.
+median forward returns vary materially by regime/model and by horizon. Multi-day realized
+volatility (h5/h20) is **consistently highest for the Gaussian-mixture classification** in
+every period (DEV, VAL, and holdout alike). The FDM pipeline's relative position is **not**
+consistent across periods, contrary to an earlier version of this report, which incorrectly
+claimed FDM was "consistently higher" than the volatility-bucket and trend/vol-grid
+benchmarks: in DEV, FDM has the **lowest** h5/h20 volatility of all four models
+(0.00766/0.00885); in VAL 2024, FDM has the lowest h5 volatility of all five models
+(0.00609) while its h20 volatility (0.00758) sits in the middle of the pack (above
+persistence and trend/vol-grid, below volatility-bucket and GMM); only in the 2025 holdout
+is FDM's volatility elevated above all three non-GMM benchmarks (persistence, volatility-
+bucket, trend/vol-grid) at both h5 and h20, while still below GMM. No single directional
+claim about FDM's volatility level relative to the simpler benchmarks holds across all
+three periods — only GMM's volatility being the highest of the four models in every period
+holds up.
 
 **Persistence vs. reactivity.** The FDM pipeline's self-transition rate (0.61–0.75 across
 periods) sits between the trivially sticky benchmarks (volatility-bucket 0.89–0.92,
-persistence 1.00 by construction) and the noisy Gaussian mixture (0.29–0.37). This is the
-direct, honest answer to the secondary research question: FDM's hysteresis/majority-vote
-stabilization measurably reduces regime churn relative to an unconstrained GMM, without
-collapsing to the triviality of a persistence-only or single-threshold benchmark. Whether
-that specific trade-off point is "better" depends on the downstream use case; this report
-does not adjudicate that.
+persistence 1.00 by construction) and the noisy Gaussian mixture (0.29–0.37), consistently
+in every period. However, GMM is a structurally different, unrelated clustering model —
+not an ablation of FDM with its hysteresis/majority-vote stabilization components removed
+— so this comparison alone cannot isolate how much of that gap is attributable
+specifically to FDM's stabilization mechanism versus other structural differences between
+the two approaches (e.g. fixed centroid-distance classification vs. unsupervised
+clustering). An earlier version of this report attributed the gap directly to "FDM's
+hysteresis/majority-vote stabilization," which overstated what a comparison against an
+unrelated model can support; establishing that specific causal link would require an
+ablation of FDM itself (e.g. running the pipeline with hysteresis/majority-vote disabled)
+as a control, which this report does not include. What the evidence does support without
+that caveat: FDM's self-transition rate sits between the sticky simple benchmarks and the
+noisy GMM, consistently across all three periods. Whether that trade-off point is "better"
+depends on the downstream use case; this report does not adjudicate that.
 
 **2025 finding, reported honestly.** The FDM pipeline's holdout mean 1-day forward return
 was negative (−0.000293) — the only negative mean-return cell in this entire results set —
-while the median 1-day return in the same period remained positive (+0.0014), and no
-benchmark showed a negative mean 1-day return in 2025. This indicates the negative mean is
-driven by downside-skewed outliers rather than a broadly negative regime, but this report
-cannot fully characterize that skew (see Limitations — downside volatility and tail
-quantiles are not available in the committed artifacts). The FDM regime set also lost
+while the corresponding `median_return_h1` aggregate remained positive (+0.0014), and no
+benchmark showed a negative `mean_return_h1` in 2025. Given the methodological caveat in
+§5 (both figures are unweighted averages across regimes' own mean/median returns, not
+statistics of one common day-level return distribution), this mean/median contrast does
+**not** by itself establish that the negative mean is driven by downside-skewed outliers —
+an earlier version of this report drew that conclusion, which overstated what these two
+aggregates can support, and it is retracted. What is genuinely established is narrower:
+FDM was the only model whose `mean_return_h1` aggregate was negative in the 2025 holdout.
+Characterizing whether that reflects broadly negative returns, a few large negative days,
+or an artifact of which regimes were observed and how they are weighted in this
+aggregation would require the bar-level return distribution and per-regime breakdowns this
+report does not have access to (see Limitations). The FDM regime set also lost
 `CALM_TREND` entirely in 2025 — reported as observed, without adjustment.
 
 ## 7. Limitations
@@ -161,6 +222,12 @@ quantiles are not available in the committed artifacts). The FDM regime set also
   Regenerating those fuller tables requires either the local raw CSVs (not available in
   this environment — see §2's acquisition-drift note) or re-running the study end to end.
   This is a real content gap in this report, not an omission of already-available evidence.
+- **`mean_return_h*` and `median_return_h*` are unweighted averages across regimes, not
+  bar-level statistics of the raw return series.** See §5's methodological caveat. This
+  limits how far any mean-vs-median or model-vs-model comparison in this report can be
+  pushed without the fuller per-observation tables noted above; an earlier version of this
+  report drew a downside-skew conclusion from this comparison that the aggregation method
+  does not support (corrected in §6).
 - **No moving-block or stationary bootstrap uncertainty intervals are reported.** The
   frozen methodology specifies time-series-aware uncertainty where sample size permits;
   computing it requires the fuller per-observation tables noted above.
