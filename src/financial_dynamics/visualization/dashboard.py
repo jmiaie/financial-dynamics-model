@@ -141,7 +141,7 @@ class SystemDashboard:
 
         ax.stackplot(
             valid.index,
-            *[valid[col].values for col in prob_cols],
+            *[valid[col].to_numpy() for col in prob_cols],
             labels=labels,
             colors=colors,
             alpha=0.7,

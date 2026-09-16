@@ -31,6 +31,12 @@ from financial_dynamics.pipeline import FinancialDynamicsPipeline
 OHLCV = ["open", "high", "low", "close", "volume"]
 
 
+def _records(df: pd.DataFrame) -> list[dict[str, Any]]:
+    """DataFrame.to_dict(orient="records") typed as list[dict[Hashable, Any]];
+    columns here are always strings, so coerce keys to match ModelPeriodResult's contract."""
+    return [{str(k): v for k, v in record.items()} for record in df.to_dict(orient="records")]
+
+
 @dataclass(frozen=True)
 class PeriodSpec:
     name: str
@@ -296,10 +302,10 @@ def run_historical_period(
             model="financial_dynamics_pipeline",
             evaluated_bars=int(fdm_regimes.notna().sum()),
             regime_counts=counts,
-            summary_records=summary.to_dict(orient="records"),
-            transition_records=transitions.reset_index()
-            .rename(columns={"from_regime": "from_regime"})
-            .to_dict(orient="records"),
+            summary_records=_records(summary),
+            transition_records=_records(
+                transitions.reset_index().rename(columns={"from_regime": "from_regime"})
+            ),
             key_metrics=key,
         )
     )
@@ -331,8 +337,8 @@ def run_historical_period(
                 model=baseline.name,
                 evaluated_bars=int(preds.notna().sum()),
                 regime_counts=counts_b,
-                summary_records=summary_b.to_dict(orient="records"),
-                transition_records=transitions_b.reset_index().to_dict(orient="records"),
+                summary_records=_records(summary_b),
+                transition_records=_records(transitions_b.reset_index()),
                 key_metrics=key_b,
             )
         )
