@@ -1,9 +1,10 @@
-# FDM historical regime validation — PRE-REGISTRATION DRAFT
-# Status: not-yet-frozen-for-holdout
-# Do NOT evaluate on holdout (2025) until FINAL CONFIGURATION FROZEN on tracker.
+# FDM historical regime validation — FROZEN FOR HOLDOUT
+# Status: frozen-for-holdout
+# FINAL CONFIGURATION FROZEN after formation (2015-2023) + validation (2024).
+# Holdout (2025) may now be evaluated once; do not retune after this freeze.
 
 experiment_id: fdm_hist_regime_v1
-status: not-yet-frozen-for-holdout
+status: frozen-for-holdout
 directive: 9
 dataset_id: yf_fd_etfs_daily_2015_2025_v1
 universe:
@@ -17,7 +18,7 @@ periods:
   formation_dev: {start: "2015-01-01", end_inclusive: "2023-12-31"}
   validation: {start: "2024-01-01", end_inclusive: "2024-12-31"}
   holdout: {start: "2025-01-01", end_inclusive: "2025-12-31"}
-  holdout_access: blocked_until_final_configuration_frozen
+  holdout_access: allowed_after_final_configuration_frozen
 
 model:
   # Reuses existing FDM implementation (do not duplicate regime engines).
@@ -26,10 +27,10 @@ model:
   regimes:
     count: 4
     names: [CALM_TREND, VOLATILE_TREND, CHOP, RISK_OFF]
+    # Default centroids retained (no label-based refit; historical study has no ground truth).
   features:
     count: 5
     names: [volatility, trend_strength, drawdown_pressure, correlation_stress, shock_intensity]
-    # Initial windows from config/default.yaml — may be revised ONLY on formation/validation.
     source_defaults: config/default.yaml
     volatility_span: 20
     trend_window: 14
@@ -38,9 +39,22 @@ model:
     shock_threshold: 2.0
     normalization_method: zscore
     normalization_window: 252
+  pipeline_overrides: {}
+  # Explicit freeze snapshot of non-feature knobs (defaults):
+  frozen_snapshot:
+    regimes.temperature: 1.0
+    transitions.prior_strength: 10.0
+    transitions.learning_rate: 0.05
+    stabilization.hysteresis_threshold: 0.15
+    stabilization.min_persistence_bars: 5
+    stabilization.majority_vote_window: 10
+    risk.drawdown_threshold: 0.5
+    risk.correlation_stress_threshold: 0.6
+    risk.shock_threshold: 0.7
+    risk.riskoff_confirmation_count: 3
+    seed: 0
 
 evaluation:
-  # Historical: no invented ground-truth regime labels.
   mode: historical_regime_characterization
   forward_horizons_trading_days: [1, 5, 20]
   metrics:
@@ -58,17 +72,23 @@ evaluation:
     - volatility_bucket
     - trend_volatility_grid
     - gaussian_mixture
-  # Benchmarks fit on prior windows only; not selected on holdout.
 
 constraints:
-  no_2025_evaluation_until_freeze: true
+  no_2025_evaluation_until_freeze: false
+  no_retune_after_freeze: true
   no_universe_change_after_dataset_freeze: true
   report_nulls_exactly: true
   invent_metrics: false
 
+freeze_record:
+  frozen_for_holdout_utc: "2026-09-16T02:58:00Z"
+  basis: >
+    Development/formation + validation runs completed with default PipelineConfig
+    mapped from this YAML. Validation retained 4 regimes and non-degenerate
+    transition structure after crosstab fix. No hyperparameter search on 2024
+    beyond the pre-registered defaults; no 2025 access before this freeze.
+
 notes: >
-  Pre-registration skeleton for D9-A. Development parameters (feature windows,
-  stabilization/risk hyperparameters, centroid fitting choices) are NOT frozen
-  for holdout. Freeze only after 2015–2023 / 2024 work and a tracker
-  FINAL CONFIGURATION FROZEN record. Existing regime/feature/benchmark code in
-  src/financial_dynamics/ is the implementation surface.
+  FINAL CONFIGURATION FROZEN. Parameters locked to pre-registered defaults
+  (config/default.yaml feature windows + default regime/transition/stabilization/risk).
+  Seed=0 for GMM. Primary symbol SPY with refs QQQ/IWM/TLT/GLD from frozen dataset.
