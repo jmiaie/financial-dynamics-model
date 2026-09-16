@@ -1,0 +1,74 @@
+# FDM historical regime validation — PRE-REGISTRATION DRAFT
+# Status: not-yet-frozen-for-holdout
+# Do NOT evaluate on holdout (2025) until FINAL CONFIGURATION FROZEN on tracker.
+
+experiment_id: fdm_hist_regime_v1
+status: not-yet-frozen-for-holdout
+directive: 9
+dataset_id: yf_fd_etfs_daily_2015_2025_v1
+universe:
+  symbols: [SPY, QQQ, IWM, TLT, GLD]
+  interval: 1d
+  # Universe frozen with dataset ID; no substitutions without new dataset ID.
+
+periods:
+  requested_data_start: "2015-01-01"
+  requested_data_end_exclusive: "2026-01-01"
+  formation_dev: {start: "2015-01-01", end_inclusive: "2023-12-31"}
+  validation: {start: "2024-01-01", end_inclusive: "2024-12-31"}
+  holdout: {start: "2025-01-01", end_inclusive: "2025-12-31"}
+  holdout_access: blocked_until_final_configuration_frozen
+
+model:
+  # Reuses existing FDM implementation (do not duplicate regime engines).
+  package: financial_dynamics
+  pipeline: FinancialDynamicsPipeline
+  regimes:
+    count: 4
+    names: [CALM_TREND, VOLATILE_TREND, CHOP, RISK_OFF]
+  features:
+    count: 5
+    names: [volatility, trend_strength, drawdown_pressure, correlation_stress, shock_intensity]
+    # Initial windows from config/default.yaml — may be revised ONLY on formation/validation.
+    source_defaults: config/default.yaml
+    volatility_span: 20
+    trend_window: 14
+    drawdown_window: 60
+    correlation_window: 20
+    shock_threshold: 2.0
+    normalization_method: zscore
+    normalization_window: 252
+
+evaluation:
+  # Historical: no invented ground-truth regime labels.
+  mode: historical_regime_characterization
+  forward_horizons_trading_days: [1, 5, 20]
+  metrics:
+    - forward_return_mean
+    - forward_return_median
+    - realized_volatility
+    - downside_volatility
+    - positive_return_frequency
+    - tail_quantiles
+    - regime_duration
+    - self_transition_rate
+    - transition_matrix
+  benchmarks:
+    - persistence
+    - volatility_bucket
+    - trend_volatility_grid
+    - gaussian_mixture
+  # Benchmarks fit on prior windows only; not selected on holdout.
+
+constraints:
+  no_2025_evaluation_until_freeze: true
+  no_universe_change_after_dataset_freeze: true
+  report_nulls_exactly: true
+  invent_metrics: false
+
+notes: >
+  Pre-registration skeleton for D9-A. Development parameters (feature windows,
+  stabilization/risk hyperparameters, centroid fitting choices) are NOT frozen
+  for holdout. Freeze only after 2015–2023 / 2024 work and a tracker
+  FINAL CONFIGURATION FROZEN record. Existing regime/feature/benchmark code in
+  src/financial_dynamics/ is the implementation surface.
