@@ -1,0 +1,260 @@
+{
+  "experiment_id": "fdm_hist_regime_v1_val_2024",
+  "dataset_id": "yf_fd_etfs_daily_2015_2025_v1",
+  "config_path": "configs/experiments/fdm_historical_regime_study_v1.yaml",
+  "primary_symbol": "SPY",
+  "period": {
+    "name": "validation",
+    "start": "2024-01-01",
+    "end_inclusive": "2024-12-31"
+  },
+  "history_period": {
+    "name": "formation_dev",
+    "start": "2015-01-01",
+    "end_inclusive": "2023-12-31"
+  },
+  "seed": 0,
+  "horizons": [
+    1,
+    5,
+    20
+  ],
+  "pipeline_config_snapshot": {
+    "features": {
+      "volatility_span": 20,
+      "trend_window": 14,
+      "drawdown_window": 60,
+      "correlation_window": 20,
+      "shock_threshold": 2.0,
+      "normalization_method": "zscore",
+      "normalization_window": 252,
+      "feature_weights": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_symbols": []
+    },
+    "regimes": {
+      "temperature": 1.0,
+      "centroids": {
+        "CALM_TREND": [
+          0.1,
+          0.8,
+          0.05,
+          0.1,
+          0.1
+        ],
+        "VOLATILE_TREND": [
+          0.8,
+          0.7,
+          0.3,
+          0.5,
+          0.6
+        ],
+        "CHOP": [
+          0.4,
+          0.2,
+          0.15,
+          0.3,
+          0.3
+        ],
+        "RISK_OFF": [
+          0.9,
+          0.3,
+          0.8,
+          0.9,
+          0.9
+        ]
+      }
+    },
+    "transitions": {
+      "prior_strength": 10.0,
+      "learning_rate": 0.05
+    },
+    "stabilization": {
+      "hysteresis_threshold": 0.15,
+      "min_persistence_bars": 5,
+      "majority_vote_window": 10
+    },
+    "risk": {
+      "drawdown_threshold": 0.5,
+      "correlation_stress_threshold": 0.6,
+      "shock_threshold": 0.7,
+      "riskoff_confirmation_count": 3,
+      "overextension_window": 50,
+      "overextension_decay": 0.02,
+      "chop_penalty_window": 30,
+      "chop_penalty_factor": 0.1
+    }
+  },
+  "created_utc": "2026-09-16T02:57:54Z",
+  "notes": "Validation OOS characterization; benchmarks fit on formation only.",
+  "models": [
+    {
+      "model": "financial_dynamics_pipeline",
+      "evaluated_bars": 252,
+      "regime_counts": {
+        "CALM_TREND": 8,
+        "CHOP": 121,
+        "RISK_OFF": 21,
+        "VOLATILE_TREND": 102
+      },
+      "key_metrics": {
+        "n_regimes_observed": 4,
+        "mean_self_transition": 0.612739021228326,
+        "mean_return_h1": 0.0007384401052613777,
+        "mean_realized_vol_h1": 0.0,
+        "median_return_h1": 0.001194296630587774,
+        "mean_return_h5": 0.006413506129389949,
+        "mean_realized_vol_h5": 0.006092264436859702,
+        "median_return_h5": 0.007623081137412932,
+        "mean_return_h20": 0.019870183271391846,
+        "mean_realized_vol_h20": 0.007583872874388489,
+        "median_return_h20": 0.02311506010770273,
+        "transition_matrix_shape": [
+          4,
+          4
+        ],
+        "evaluated_bars": 252,
+        "total_bars": 252
+      },
+      "summary_records_omitted": true,
+      "transition_records_omitted": true,
+      "n_summary_records": 12,
+      "n_transition_records": 4
+    },
+    {
+      "model": "persistence",
+      "evaluated_bars": 252,
+      "regime_counts": {
+        "CHOP": 252
+      },
+      "key_metrics": {
+        "n_regimes_observed": 1,
+        "mean_self_transition": 1.0,
+        "mean_return_h1": 0.0009394902836447251,
+        "mean_realized_vol_h1": 0.0,
+        "median_return_h1": 0.0010932628914375186,
+        "mean_return_h5": 0.005160629745517385,
+        "mean_realized_vol_h5": 0.006426931065738329,
+        "median_return_h5": 0.006206903379144535,
+        "mean_return_h20": 0.020893166176170562,
+        "mean_realized_vol_h20": 0.0074175221377493035,
+        "median_return_h20": 0.02677036010526268,
+        "transition_matrix_shape": [
+          4,
+          4
+        ],
+        "evaluated_bars": 252,
+        "total_bars": 252
+      },
+      "summary_records_omitted": true,
+      "transition_records_omitted": true,
+      "n_summary_records": 3,
+      "n_transition_records": 4
+    },
+    {
+      "model": "volatility_bucket",
+      "evaluated_bars": 252,
+      "regime_counts": {
+        "CALM_TREND": 38,
+        "CHOP": 121,
+        "RISK_OFF": 18,
+        "VOLATILE_TREND": 75
+      },
+      "key_metrics": {
+        "n_regimes_observed": 4,
+        "mean_self_transition": 0.8927508957413264,
+        "mean_return_h1": 0.0014589610767679149,
+        "mean_realized_vol_h1": 0.0,
+        "median_return_h1": 0.0013620380211800398,
+        "mean_return_h5": 0.006777756610813717,
+        "mean_realized_vol_h5": 0.006599228621985467,
+        "median_return_h5": 0.0068229070260753255,
+        "mean_return_h20": 0.018239005316470543,
+        "mean_realized_vol_h20": 0.007808714566751046,
+        "median_return_h20": 0.020467392520571753,
+        "transition_matrix_shape": [
+          4,
+          4
+        ],
+        "evaluated_bars": 252,
+        "total_bars": 252
+      },
+      "summary_records_omitted": true,
+      "transition_records_omitted": true,
+      "n_summary_records": 12,
+      "n_transition_records": 4
+    },
+    {
+      "model": "trend_vol_grid",
+      "evaluated_bars": 252,
+      "regime_counts": {
+        "CALM_TREND": 140,
+        "CHOP": 19,
+        "RISK_OFF": 36,
+        "VOLATILE_TREND": 57
+      },
+      "key_metrics": {
+        "n_regimes_observed": 4,
+        "mean_self_transition": 0.8323934837092732,
+        "mean_return_h1": 0.0016545873547625135,
+        "mean_realized_vol_h1": 0.0,
+        "median_return_h1": 0.002524664312032937,
+        "mean_return_h5": 0.007969402910557342,
+        "mean_realized_vol_h5": 0.0068855419160934765,
+        "median_return_h5": 0.011145380265601523,
+        "mean_return_h20": 0.02960497779785109,
+        "mean_realized_vol_h20": 0.007568343937193701,
+        "median_return_h20": 0.03528445921915779,
+        "transition_matrix_shape": [
+          4,
+          4
+        ],
+        "evaluated_bars": 252,
+        "total_bars": 252
+      },
+      "summary_records_omitted": true,
+      "transition_records_omitted": true,
+      "n_summary_records": 12,
+      "n_transition_records": 4
+    },
+    {
+      "model": "gaussian_mixture",
+      "evaluated_bars": 252,
+      "regime_counts": {
+        "CALM_TREND": 145,
+        "CHOP": 93,
+        "RISK_OFF": 3,
+        "VOLATILE_TREND": 11
+      },
+      "key_metrics": {
+        "n_regimes_observed": 4,
+        "mean_self_transition": 0.2868525964290582,
+        "mean_return_h1": 0.0009232708250779182,
+        "mean_realized_vol_h1": 0.0,
+        "median_return_h1": 0.0007395022638426729,
+        "mean_return_h5": 0.01032505528762006,
+        "mean_realized_vol_h5": 0.006677506887039497,
+        "median_return_h5": 0.011774574921137843,
+        "mean_return_h20": 0.028773589925591685,
+        "mean_realized_vol_h20": 0.008461233276635057,
+        "median_return_h20": 0.03127789090846553,
+        "transition_matrix_shape": [
+          4,
+          4
+        ],
+        "evaluated_bars": 252,
+        "total_bars": 252
+      },
+      "summary_records_omitted": true,
+      "transition_records_omitted": true,
+      "n_summary_records": 12,
+      "n_transition_records": 4
+    }
+  ],
+  "artifact_note": "Slim artifact for git: full summary/transition tables omitted; re-run scripts/run_historical_regime_study.py on frozen local data to regenerate."
+}

@@ -294,9 +294,10 @@ def historical_regime_statistics(
 
     duration_df = pd.DataFrame(duration_rows)
 
+    # Use distinct names / numpy values: identically named Series confuse crosstab.
     transition_counts = pd.crosstab(
-        valid_regimes.iloc[:-1],
-        valid_regimes.iloc[1:],
+        valid_regimes.iloc[:-1].to_numpy(),
+        valid_regimes.iloc[1:].to_numpy(),
         rownames=["from_regime"],
         colnames=["to_regime"],
         dropna=False,

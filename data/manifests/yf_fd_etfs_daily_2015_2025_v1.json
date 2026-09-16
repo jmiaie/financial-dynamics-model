@@ -1,0 +1,190 @@
+{
+  "dataset_id": "yf_fd_etfs_daily_2015_2025_v1",
+  "source": "yfinance",
+  "source_version": "1.7.0",
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD"
+  ],
+  "interval": "1d",
+  "requested_start": "2015-01-01",
+  "requested_end_exclusive": "2026-01-01",
+  "actual_start": {
+    "SPY": "2015-01-02",
+    "QQQ": "2015-01-02",
+    "IWM": "2015-01-02",
+    "TLT": "2015-01-02",
+    "GLD": "2015-01-02"
+  },
+  "actual_end": {
+    "SPY": "2025-12-31",
+    "QQQ": "2025-12-31",
+    "IWM": "2025-12-31",
+    "TLT": "2025-12-31",
+    "GLD": "2025-12-31"
+  },
+  "row_counts": {
+    "SPY": 2766,
+    "QQQ": 2766,
+    "IWM": 2766,
+    "TLT": 2766,
+    "GLD": 2766
+  },
+  "missing_counts": {
+    "SPY": 0,
+    "QQQ": 0,
+    "IWM": 0,
+    "TLT": 0,
+    "GLD": 0
+  },
+  "actions": {
+    "SPY": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 44
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "QQQ": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 44
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "IWM": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 44
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "TLT": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 132
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "GLD": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    }
+  },
+  "retrieval_timestamp_utc": "2026-09-16T02:36:57Z",
+  "freeze_timestamp_utc": "2026-09-16T02:37:02Z",
+  "status": "DATA FROZEN",
+  "sha256": {
+    "GLD.csv": "661e1e4670253b597a51ebe82da555fbe932962ca99bd649f77df34812df071f",
+    "IWM.csv": "6d255067e675c185918d44e7360264bb4bc1ca2332e3d2dac960052d9a86d89f",
+    "QQQ.csv": "00968114e8e83ac126f06088e3079f35e1e490ef232b8198956e7c5e19eb2004",
+    "SPY.csv": "f7f2a7dfdcb1e01b6bd5151d2d385e43c1b9fe26e99deaf64411389c3c4c311b",
+    "TLT.csv": "8fe002b66d8c5d4e0dda93d2ec26a0946e0d5469617bf4b416782f3e9c14d262",
+    "dataset_canonical": "91caa6cde08358091125a6576ff3f2be5666791b06df67d462c2aad6f771ada9"
+  },
+  "parameters": {
+    "start": "2015-01-01",
+    "end": "2026-01-01",
+    "interval": "1d",
+    "auto_adjust": true,
+    "actions": true,
+    "repair": false,
+    "keepna": true,
+    "threads": false,
+    "group_by": "column"
+  },
+  "per_symbol_columns": {
+    "SPY": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "QQQ": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "IWM": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "TLT": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "GLD": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ]
+  },
+  "notes": "Frozen after local acquisition+validation. Raw CSVs remain gitignored under data/raw/. Re-acquire with the same parameters and compare dataset_canonical if regenerating."
+}

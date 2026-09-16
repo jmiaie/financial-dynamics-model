@@ -11,6 +11,7 @@ build/
 *.csv
 *.png
 !assets/micap_logo.*
+!research/experiment-ledger.csv
 .env
 config/calibrated.yaml
 .venv/
@@ -18,3 +19,6 @@ venv/
 .mypy_cache/
 .hypothesis/
 .ruff_cache/
+
+# Directive #9: raw vendor snapshots stay local / gitignored
+data/raw/
