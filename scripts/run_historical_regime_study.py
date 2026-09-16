@@ -8,6 +8,12 @@ Examples:
 
   # Holdout (2025) only after YAML status is frozen-for-holdout
   python scripts/run_historical_regime_study.py --allow-holdout
+
+  # Cross-asset robustness: run the same frozen methodology with a
+  # different symbol as primary (spec Sec 12 - independent runs, not
+  # merely SPY feature references). Tags experiment IDs/ledger rows
+  # distinctly from the SPY primary experiment.
+  python scripts/run_historical_regime_study.py --primary-symbol QQQ --allow-holdout
 """
 
 from __future__ import annotations
@@ -68,6 +74,18 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("configs/experiments/fdm_historical_regime_study_v1.yaml"),
     )
     parser.add_argument("--raw-dir", type=Path, default=None)
+    parser.add_argument(
+        "--primary-symbol",
+        default=None,
+        help=(
+            "Run the frozen methodology with this symbol as primary instead of the "
+            "config's first universe symbol (SPY). Used for cross-asset robustness "
+            "(spec Sec 12); must already be in the frozen dataset's universe. Tags "
+            "experiment IDs as 'robustness' and, for the holdout period, labels the "
+            "run PRE-SPECIFIED ROBUSTNESS EVALUATION EXECUTED AFTER PRIMARY HOLDOUT "
+            "rather than a final holdout."
+        ),
+    )
     parser.add_argument("--results-dir", type=Path, default=Path("results/historical_regimes"))
     parser.add_argument("--ledger", type=Path, default=Path("research/experiment-ledger.csv"))
     parser.add_argument("--seed", type=int, default=0)
@@ -97,8 +115,18 @@ def main(argv: list[str] | None = None) -> int:
     symbols = list(
         experiment.get("universe", {}).get("symbols", ["SPY", "QQQ", "IWM", "TLT", "GLD"])
     )
-    primary = symbols[0]
-    references = [s for s in symbols[1:]]
+    is_robustness = args.primary_symbol is not None and args.primary_symbol != symbols[0]
+    if args.primary_symbol is not None and args.primary_symbol not in symbols:
+        print(
+            f"ERROR: --primary-symbol {args.primary_symbol} not in frozen universe {symbols}",
+            file=sys.stderr,
+        )
+        return 4
+    primary = args.primary_symbol or symbols[0]
+    references = [s for s in symbols if s != primary]
+    id_prefix = f"fdm_hist_regime_v1_robustness_{primary.lower()}" if is_robustness else (
+        "fdm_hist_regime_v1"
+    )
     horizons = tuple(
         int(h)
         for h in experiment.get("evaluation", {}).get("forward_horizons_trading_days", [1, 5, 20])
@@ -134,7 +162,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.skip_dev:
         runs.append(
             (
-                "fdm_hist_regime_v1_dev_formation",
+                f"{id_prefix}_dev_formation",
                 formation,
                 None,
                 "Development/in-sample characterization on formation window; no holdout.",
@@ -143,7 +171,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.skip_validation:
         runs.append(
             (
-                "fdm_hist_regime_v1_val_2024",
+                f"{id_prefix}_val_2024",
                 validation,
                 formation,
                 "Validation OOS characterization; benchmarks fit on formation only.",
@@ -156,16 +184,24 @@ def main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 3
+        holdout_notes = (
+            "PRE-SPECIFIED ROBUSTNESS EVALUATION EXECUTED AFTER PRIMARY HOLDOUT "
+            "(cross-asset robustness per spec Sec 12; not the primary SPY holdout; "
+            "2025 outcomes for this symbol were not inspected before the original "
+            "SPY freeze)."
+            if is_robustness
+            else "FINAL holdout evaluation after FINAL CONFIGURATION FROZEN."
+        )
         runs.append(
             (
-                "fdm_hist_regime_v1_holdout_2025",
+                f"{id_prefix}_holdout_2025",
                 holdout,
                 PeriodSpec(
                     "pre_holdout",
                     formation.start,
                     validation.end_inclusive,
                 ),
-                "FINAL holdout evaluation after FINAL CONFIGURATION FROZEN.",
+                holdout_notes,
             )
         )
 
