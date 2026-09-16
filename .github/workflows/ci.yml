@@ -86,8 +86,8 @@ jobs:
 
       - name: Build package
         run: |
-          pip install hatchling
-          python -m hatchling build
+          pip install build
+          python -m build
 
       - name: Verify wheel
         run: |
