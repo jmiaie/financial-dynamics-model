@@ -193,6 +193,31 @@ class TestHistoricalRegimeStatistics:
         assert not stats.forward_occurrences.empty
         assert list(stats.forward_occurrences.index) == sorted(stats.forward_occurrences.index)
 
+    def test_positive_return_freq_is_horizon_level_not_daily_level(self):
+        """Real defect (independent review, 2026-09-17): positive_return_freq
+        must be the fraction of OCCURRENCES whose horizon-level compounded
+        forward_return was positive -- not the fraction of individual days
+        inside each window that were positive (a different statistic the
+        code previously computed and reported instead).
+
+        Construct a repeating +1%/-3% daily pattern: every 2-day window has
+        exactly one up-day and one down-day (daily-positive-fraction ==
+        0.5 for every window, so the old buggy definition would read 0.5),
+        but the -3% day always dominates, so every window's COMPOUNDED
+        2-day return is negative (the correct definition must read 0.0).
+        """
+        index = pd.date_range("2024-01-01", periods=6, freq="D")
+        prices = [100.0]
+        for i in range(5):
+            prices.append(prices[-1] * (1.01 if i % 2 == 0 else 0.97))
+        close = pd.Series(prices, index=index)
+        inferred = pd.Series(["CALM_TREND"] * 6, index=index)
+
+        stats = historical_regime_statistics(close, inferred, horizons=(2,))
+        row = stats.summary.iloc[0]
+        assert (stats.forward_occurrences["forward_return"] < 0).all()
+        assert row["positive_return_freq"] == pytest.approx(0.0)
+
 
 class TestBlockBootstrap:
     def test_recovers_the_sample_mean_and_brackets_it_with_a_ci(self):

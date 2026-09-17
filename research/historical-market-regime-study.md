@@ -3,9 +3,11 @@
 ## A Walk-Forward Evaluation of the Financial Dynamics Model
 
 **Status: SPY primary results complete. Cross-asset robustness (QQQ/IWM/TLT/GLD) executed
-2026-09-17 against a v2 fallback dataset (§5.4) — SPY's own v1 result is unchanged and stays
-primary; the robustness result is pre-specified robustness / post-primary characterization,
-never a substitute for it.**
+2026-09-17 against a v2 fallback dataset (§5.4), plus a SPY post-primary characterization run
+on the same v2 dataset (§5.5) — SPY's own v1 result is unchanged and stays primary; both
+§5.4 and §5.5 are pre-specified robustness / post-primary characterization, never a
+substitute for it. `positive_return_freq` corrected 2026-09-17 (was computing a different,
+day-level statistic; see §5.4).**
 
 ---
 
@@ -241,10 +243,22 @@ regime's figure. 2025 holdout, h20:
 
 | Symbol | downside vol | positive-return freq | tail q05 | adverse DD (mean) | adverse DD (worst) |
 |---|---:|---:|---:|---:|---:|
-| QQQ | 0.00935 | 0.5781 | −0.0859 | −0.0571 | −0.1569 |
-| IWM | 0.00724 | 0.5369 | −0.0860 | −0.0484 | −0.1630 |
-| TLT | 0.00427 | 0.5282 | −0.0268 | −0.0324 | −0.0738 |
-| GLD | 0.00629 | 0.5959 | −0.0054 | −0.0367 | −0.1013 |
+| QQQ | 0.00935 | 0.7139 | −0.0859 | −0.0571 | −0.1569 |
+| IWM | 0.00724 | 0.7030 | −0.0860 | −0.0484 | −0.1630 |
+| TLT | 0.00427 | 0.5114 | −0.0268 | −0.0324 | −0.0738 |
+| GLD | 0.00629 | 0.8898 | −0.0054 | −0.0367 | −0.1013 |
+
+**`positive-return freq` corrected 2026-09-17** (independent review, tracker Issue
+#3): this column previously reported the fraction of individual *daily* returns
+positive inside each 20-day forward window, averaged across occurrences -- a
+different statistic from what the name means everywhere else in this report. It
+is now `mean(forward_return_h20 > 0)`, i.e. the fraction of 20-day windows whose
+*compounded* forward return was itself positive, matching `mean_return`/
+`median_return`/`tail_q05` above. Only this column changed; `downside_vol`,
+`tail_q05`, and the adverse-drawdown columns are unaffected (verify against
+`src/financial_dynamics/backtesting/metrics.py`'s `historical_regime_statistics`
+and the regression test in `tests/test_backtesting.py`). The pre-fix values are
+preserved at `results/historical_regimes/superseded_positive_return_freq_fix/`.
 
 **Block-bootstrap uncertainty** (moving-block and stationary, block length 20 trading days,
 150 resamples, 90% CI — full tables in each artifact's `bootstrap_records`; not an out-of-
@@ -273,6 +287,42 @@ this confidence level given how few RISK_OFF occurrences were observed. `VOLATIL
 - No symbol's h5 or h20 mean forward return was negative in the 2025 holdout except TLT's
   DEV/VAL periods (unrelated to the 2025 finding above) — the negative signal specific to
   2025 is concentrated at the 1-day horizon.
+
+### 5.5 SPY (v2 dataset) post-primary characterization
+
+**This is NOT a replacement for, restatement of, or second observation of SPY's primary
+result (§5.1–5.3).** SPY-v1's already-frozen artifacts (`results/historical_regimes/fdm_hist_regime_v1_*.json`)
+are untouched by this section and remain the sole primary consumed result for SPY. This
+section exists only because §7's limitations bullet noted that `downside_vol`,
+`positive_return_freq`, `tail_q05`, and `adverse_drawdown` were never reported for SPY at
+all (the v1 artifacts predate those metrics and re-running the primary is off the table --
+see §7). Running SPY once through the **same, unmodified §5.4 methodology and dataset**
+(`fdm_historical_regime_study_v2_robustness.yaml`, `--primary-symbol SPY
+--force-robustness-label`, so this run is filed and labeled as robustness/characterization,
+never as a replacement primary or holdout) supplies those metrics as supplementary
+characterization, on the same non-bit-identical v2 dataset already disclosed in §5.4 as not
+confirming or disconfirming anything about the v1 primary.
+
+**FDM pipeline, all periods:**
+
+| Period | Regimes | Bars | Self-trans. | ret h1 | ret h20 | pos-ret freq h20 | adverse DD (worst, h20) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| DEV | 4 | 2204/2264 | 0.736 | +0.000376 | +0.010435 | 0.6640 | −0.3099 |
+| VAL 2024 | 4 | 252/252 | 0.613 | +0.000738 | +0.019870 | 0.8216 | −0.0841 |
+| HOLDOUT 2025 | **3** | 250/250 | 0.746 | **−0.000293** | +0.018083 | 0.7196 | −0.1372 |
+
+**Two factual observations, not overclaimed:**
+- **`CALM_TREND` is absent from the 2025 holdout here too** (3 regimes observed, matching
+  §5.4's QQQ/IWM/TLT finding and SPY-v1's own §5.3 result) — a fifth, independently-acquired
+  data source showing the same pattern. Still a fixed-centroid classification outcome on one
+  calendar year and one non-bit-identical dataset, not proof of a market-wide cause (§5.4's
+  same caveat applies).
+- **`mean_return_h1` in the 2025 holdout is −0.00029294** on this v2 dataset, against
+  SPY-v1's own primary figure of **−0.00029295** (§5.3, `results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json`)
+  — agreement to 4 significant figures despite the two datasets **not being bit-identical**
+  (§5.4; SPY does not hash-match between v1 and v2). This is a consistency observation on
+  independently-sourced data, not a bit-for-bit reproduction, and is reported factually
+  rather than as validation of either result.
 
 ## 6. Discussion
 
@@ -332,16 +382,19 @@ report does not have access to (see Limitations). The FDM regime set also lost
 ## 7. Limitations
 
 - **Downside volatility, drawdown/maximum-adverse-excursion, positive-return frequency, and
-  5th-percentile forward return are still not reported for SPY's primary v1 result.** The
-  committed v1 result artifacts (`results/historical_regimes/fdm_hist_regime_v1_*.json`)
+  5th-percentile forward return are still not reported for SPY's primary v1 result itself.**
+  The committed v1 result artifacts (`results/historical_regimes/fdm_hist_regime_v1_*.json`)
   remain intentionally "slim" — key aggregate metrics and regime counts only. Regenerating
-  those fuller tables for SPY specifically would require either the lost v1 raw CSVs (see
-  §2's acquisition-drift note) or re-running the primary study end to end, which this report
-  does not do (no retune/re-run of an already-consumed primary result). **These metrics ARE
-  now available for the §5.4 cross-asset robustness runs**, computed via
+  those fuller tables for SPY *from the primary v1 dataset* would require either the lost v1
+  raw CSVs (see §2's acquisition-drift note) or re-running the primary study end to end,
+  which this report does not do (no retune/re-run of an already-consumed primary result).
+  **These metrics ARE now available for the §5.4 cross-asset robustness runs**, computed via
   `historical_regime_statistics`'s `adverse_drawdown` column and surfaced in
   `key_metrics` (added 2026-09-17;
-  `financial_dynamics.backtesting.metrics.regime_bootstrap_uncertainty`).
+  `financial_dynamics.backtesting.metrics.regime_bootstrap_uncertainty`), **and, as of
+  2026-09-17, for SPY itself on the non-bit-identical v2 dataset** (§5.5) — supplementary
+  post-primary characterization only, not a regeneration of the v1 primary artifacts, which
+  remain untouched.
 - **`mean_return_h*` and `median_return_h*` are unweighted averages across regimes, not
   bar-level statistics of the raw return series.** See §5's methodological caveat. This
   limits how far any mean-vs-median or model-vs-model comparison in this report can be
@@ -393,8 +446,16 @@ python scripts/acquire_yf_fd_etfs_daily.py --dataset-id yf_fd_etfs_daily_2015_20
   --raw-dir <dir>
 python scripts/run_historical_regime_study.py \
   --config configs/experiments/fdm_historical_regime_study_v2_robustness.yaml \
-  --primary-symbol QQQ --allow-holdout --include-bootstrap
-# repeat --primary-symbol for IWM, TLT, GLD (never SPY against this config)
+  --primary-symbol QQQ --allow-holdout --include-bootstrap --bootstrap-n-resamples 150
+# repeat --primary-symbol for IWM, TLT, GLD. For SPY (post-primary characterization
+# only -- never a replacement primary/holdout), add --force-robustness-label so the
+# run is labeled and filed as robustness rather than mistaken for SPY-v1's own primary:
+#   --primary-symbol SPY --force-robustness-label --allow-holdout --include-bootstrap \
+#   --bootstrap-n-resamples 150
 ```
+`--bootstrap-n-resamples 150` must be passed explicitly -- the script's own default
+(1000) does not match what was actually run and recorded in the committed artifacts
+(`bootstrap_records[].n_bootstrap`); omitting the flag reproduces different CIs, not
+the ones in this report.
 
 Ledger: `research/experiment-ledger.csv`. Artifacts: `results/historical_regimes/*.json`.

@@ -126,6 +126,17 @@ def main(argv: list[str] | None = None) -> int:
         default=1000,
         help="Number of bootstrap resamples per (regime, horizon) group.",
     )
+    parser.add_argument(
+        "--force-robustness-label",
+        action="store_true",
+        help=(
+            "Force robustness/post-primary-characterization labeling and file "
+            "naming even when --primary-symbol matches the config's first "
+            "universe symbol. Needed to run that symbol (e.g. SPY) through a "
+            "non-primary config (e.g. the v2 robustness dataset) without the "
+            "result being named or labeled like a replacement primary/holdout."
+        ),
+    )
     args = parser.parse_args(argv)
 
     root = _repo_root()
@@ -136,7 +147,9 @@ def main(argv: list[str] | None = None) -> int:
     symbols = list(
         experiment.get("universe", {}).get("symbols", ["SPY", "QQQ", "IWM", "TLT", "GLD"])
     )
-    is_robustness = args.primary_symbol is not None and args.primary_symbol != symbols[0]
+    is_robustness = args.force_robustness_label or (
+        args.primary_symbol is not None and args.primary_symbol != symbols[0]
+    )
     if args.primary_symbol is not None and args.primary_symbol not in symbols:
         print(
             f"ERROR: --primary-symbol {args.primary_symbol} not in frozen universe {symbols}",

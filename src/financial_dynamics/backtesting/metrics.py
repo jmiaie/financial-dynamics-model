@@ -340,7 +340,6 @@ def historical_regime_statistics(
                     "forward_return": future_price / current_price - 1.0,
                     "realized_vol": float(future_daily_returns.std(ddof=0)),
                     "downside_vol": float(downside.std(ddof=0)) if len(downside) > 0 else 0.0,
-                    "positive_return_freq": float((future_daily_returns > 0).mean()),
                     # Worst peak-to-trough decline within [start, start+horizon],
                     # not just the start-to-end forward_return -- a horizon can
                     # end flat or up while still passing through a sharp dip.
@@ -360,7 +359,12 @@ def historical_regime_statistics(
         median_return=("forward_return", "median"),
         realized_vol=("realized_vol", "mean"),
         downside_vol=("downside_vol", "mean"),
-        positive_return_freq=("positive_return_freq", "mean"),
+        # Fraction of OCCURRENCES whose horizon-level (compounded) forward
+        # return was positive -- not the fraction of individual days inside
+        # each window that were positive (a materially different, and
+        # previously miscomputed, statistic; see
+        # TestHistoricalRegimeStatistics.test_positive_return_freq_is_horizon_level_not_daily_level).
+        positive_return_freq=("forward_return", lambda values: float((values > 0).mean())),
         tail_q05=("forward_return", lambda values: float(np.quantile(values, 0.05))),
         tail_q25=("forward_return", lambda values: float(np.quantile(values, 0.25))),
         mean_adverse_drawdown=("adverse_drawdown", "mean"),
