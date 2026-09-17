@@ -105,6 +105,27 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Skip 2024 validation run",
     )
+    parser.add_argument(
+        "--include-bootstrap",
+        action="store_true",
+        help=(
+            "Add moving-block and stationary block-bootstrap CIs on mean forward "
+            "return per (regime, horizon) to each artifact's bootstrap_records. "
+            "Off by default; compute-heavier than the rest of this script."
+        ),
+    )
+    parser.add_argument(
+        "--bootstrap-block-size",
+        type=int,
+        default=20,
+        help="Block length for the bootstrap resamplers (default: 20 trading days).",
+    )
+    parser.add_argument(
+        "--bootstrap-n-resamples",
+        type=int,
+        default=1000,
+        help="Number of bootstrap resamples per (regime, horizon) group.",
+    )
     args = parser.parse_args(argv)
 
     root = _repo_root()
@@ -223,6 +244,9 @@ def main(argv: list[str] | None = None) -> int:
             seed=args.seed,
             primary_symbol=primary,
             include_benchmarks=True,
+            include_bootstrap=args.include_bootstrap,
+            bootstrap_block_size=args.bootstrap_block_size,
+            bootstrap_n_resamples=args.bootstrap_n_resamples,
             notes=notes,
         )
         artifact_path, artifact_sha = write_artifacts(artifacts, results_dir)

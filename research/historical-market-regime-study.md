@@ -2,8 +2,10 @@
 
 ## A Walk-Forward Evaluation of the Financial Dynamics Model
 
-**Status: SPY primary results complete. Cross-asset robustness (QQQ/IWM/TLT/GLD) NOT YET
-EXECUTED — see Limitations. This report will be updated in place once those runs land.**
+**Status: SPY primary results complete. Cross-asset robustness (QQQ/IWM/TLT/GLD) executed
+2026-09-17 against a v2 fallback dataset (§5.4) — SPY's own v1 result is unchanged and stays
+primary; the robustness result is pre-specified robustness / post-primary characterization,
+never a substitute for it.**
 
 ---
 
@@ -187,6 +189,91 @@ FDM regime counts: CALM_TREND 8, CHOP 121, RISK_OFF 21, VOLATILE_TREND 102.
 FDM regime counts: CHOP 113, RISK_OFF 29, VOLATILE_TREND 108. **CALM_TREND was never
 selected in the 2025 holdout window** — reported exactly as observed, not adjusted.
 
+### 5.4 Cross-asset robustness (QQQ/IWM/TLT/GLD, v2 dataset)
+
+**Executed 2026-09-17**, owner-authorized, via `configs/experiments/fdm_historical_regime_study_v2_robustness.yaml`
+(methodology byte-identical to the frozen v1 config above — same centroids, same feature
+windows, same frozen knobs; only the input dataset differs) and
+`scripts/run_historical_regime_study.py --primary-symbol {QQQ,IWM,TLT,GLD} --allow-holdout
+--include-bootstrap`.
+
+**Dataset provenance, disclosed plainly.** The true v1 raw payload for these four symbols
+was never committed (`data/raw/` is gitignored) and is confirmed unrecoverable — no machine
+that ran the primary SPY acquisition still holds it (owner confirmation, 2026-09-17). A
+fresh acquisition (`yf_fd_etfs_daily_2015_2025_v2`, `dataset_canonical`
+`94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582`) does **not** hash-match
+the frozen v1 manifest for SPY/QQQ/IWM/TLT; **GLD alone matches exactly**. GLD pays no
+distributions, so its raw-close series is bit-reproducible across retrievals; the other four
+carry dividend adjustment, which is not. This pattern is **consistent with** dividend-
+adjustment recomputation drift as the explanation, but **the cause is not proven** — no
+byte-level diff against the true v1 payload is possible since it no longer exists, and this
+report does not assert more than the pattern actually shows. Full per-file hash table in
+`data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md`. Per program convention, raw
+CSVs are kept local/gitignored on this branch (like v1), not committed to a public path,
+since redistribution rights for vendor market data have not been separately checked.
+
+**Every number below is pre-specified robustness / post-primary characterization.** It does
+not confirm, disconfirm, or restate the primary SPY v1 result — a different, non-bit-
+comparable input dataset cannot do either. SPY's own v1 result (§5.1–5.3) is unchanged and
+remains the sole primary consumed result.
+
+**FDM pipeline, all periods, all four symbols:**
+
+| Symbol | Period | Regimes | Bars | Self-trans. | ret h1 | ret h5 | ret h20 | vol h5 | vol h20 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| QQQ | DEV | 4 | 2204/2264 | 0.692 | +0.000716 | +0.005256 | +0.015604 | 0.01040 | 0.01178 |
+| QQQ | VAL 2024 | 4 | 252/252 | 0.556 | +0.000249 | +0.004687 | +0.012360 | 0.00950 | 0.01116 |
+| QQQ | HOLDOUT 2025 | **3** | 250/250 | 0.752 | **−0.000439** | +0.002380 | +0.021542 | 0.01308 | 0.01516 |
+| IWM | DEV | 4 | 2204/2264 | 0.674 | +0.000461 | +0.002613 | +0.005129 | 0.01070 | 0.01202 |
+| IWM | VAL 2024 | 3 | 252/252 | 0.593 | +0.000882 | +0.005211 | +0.015960 | 0.01059 | 0.01185 |
+| IWM | HOLDOUT 2025 | **3** | 250/250 | 0.740 | **−0.000528** | +0.004899 | +0.020357 | 0.01247 | 0.01342 |
+| TLT | DEV | 4 | 2204/2264 | 0.680 | −0.000303 | +0.000581 | +0.001841 | 0.00730 | 0.00846 |
+| TLT | VAL 2024 | 4 | 252/252 | 0.575 | −0.000755 | −0.002086 | −0.004378 | 0.00671 | 0.00874 |
+| TLT | HOLDOUT 2025 | **3** | 250/250 | 0.590 | +0.001272 | +0.002144 | +0.005375 | 0.00673 | 0.00765 |
+| GLD | DEV | 4 | 2204/2264 | 0.603 | +0.000067 | +0.000932 | +0.007291 | 0.00692 | 0.00816 |
+| GLD | VAL 2024 | 4 | 252/252 | 0.637 | +0.002780 | +0.002784 | +0.008316 | 0.00800 | 0.01035 |
+| GLD | HOLDOUT 2025 | 4 | 250/250 | 0.603 | +0.002259 | +0.014719 | +0.048581 | 0.00964 | 0.01165 |
+
+**New metrics for this run only** (previously computable but not surfaced — see §7):
+downside volatility, positive-return frequency, 5th-percentile tail return, and adverse
+(intra-horizon peak-to-trough) drawdown, both a cross-regime mean and the single worst
+regime's figure. 2025 holdout, h20:
+
+| Symbol | downside vol | positive-return freq | tail q05 | adverse DD (mean) | adverse DD (worst) |
+|---|---:|---:|---:|---:|---:|
+| QQQ | 0.00935 | 0.5781 | −0.0859 | −0.0571 | −0.1569 |
+| IWM | 0.00724 | 0.5369 | −0.0860 | −0.0484 | −0.1630 |
+| TLT | 0.00427 | 0.5282 | −0.0268 | −0.0324 | −0.0738 |
+| GLD | 0.00629 | 0.5959 | −0.0054 | −0.0367 | −0.1013 |
+
+**Block-bootstrap uncertainty** (moving-block and stationary, block length 20 trading days,
+150 resamples, 90% CI — full tables in each artifact's `bootstrap_records`; not an out-of-
+sample test, and it does not validate the regime definitions, only how stable each observed
+mean is under resampling that respects serial dependence). Representative h1 example,
+QQQ 2025 holdout: `RISK_OFF`'s mean forward return (n=29) is **−0.0043**, but its 90%
+moving-block CI is **[−0.0097, +0.0015]** — the negative mean does not survive resampling at
+this confidence level given how few RISK_OFF occurrences were observed. `VOLATILE_TREND`
+(n=121) is more stable: mean **+0.0021**, CI **[+0.0009, +0.0033]**, entirely positive.
+
+**Cross-symbol pattern, reported factually, not overclaimed:**
+- **`CALM_TREND` disappeared from the 2025 holdout in QQQ, IWM, and TLT** (3 of 4 symbols;
+  each drops to 3 observed regimes), matching SPY's own 2025 finding (§5.3). **GLD is the
+  exception** — it retained `CALM_TREND` (11 observations) in 2025. Four-of-five instruments
+  losing this regime in the same calendar year is a broader pattern than SPY alone showed,
+  but it is a fixed-centroid classification outcome on one calendar year, not evidence about
+  what caused it (a genuine 2025 market characteristic vs. a centroid-definition artifact
+  cannot be distinguished from this alone).
+- **QQQ and IWM's `mean_return_h1` are negative in the 2025 holdout** (−0.000439 and
+  −0.000528), the same sign as SPY's own headline 2025 finding (−0.000293, §5.3). **TLT and
+  GLD are positive** in the same period (+0.001272, +0.002259). This is consistent with an
+  equity-specific (SPY/QQQ/IWM, all broad-equity ETFs) rather than a universal 2025 pattern,
+  but three equity instruments is still a small sample and this report does not claim
+  statistical significance for the split — see the bootstrap CIs above for how much
+  uncertainty surrounds these regime-conditional means at the per-regime level.
+- No symbol's h5 or h20 mean forward return was negative in the 2025 holdout except TLT's
+  DEV/VAL periods (unrelated to the 2025 finding above) — the negative signal specific to
+  2025 is concentrated at the 1-day horizon.
+
 ## 6. Discussion
 
 **Cross-regime differentiation.** Across all three periods and all four models, mean and
@@ -244,30 +331,37 @@ report does not have access to (see Limitations). The FDM regime set also lost
 
 ## 7. Limitations
 
-- **Downside volatility, drawdown/maximum-adverse-excursion, positive-return frequency,
-  and 5th-percentile forward return are not reported here.** The committed result
-  artifacts (`results/historical_regimes/*.json`) are intentionally "slim" — key aggregate
-  metrics and regime counts only, not the full per-observation summary/transition tables.
-  Regenerating those fuller tables requires either the local raw CSVs (not available in
-  this environment — see §2's acquisition-drift note) or re-running the study end to end.
-  This is a real content gap in this report, not an omission of already-available evidence.
+- **Downside volatility, drawdown/maximum-adverse-excursion, positive-return frequency, and
+  5th-percentile forward return are still not reported for SPY's primary v1 result.** The
+  committed v1 result artifacts (`results/historical_regimes/fdm_hist_regime_v1_*.json`)
+  remain intentionally "slim" — key aggregate metrics and regime counts only. Regenerating
+  those fuller tables for SPY specifically would require either the lost v1 raw CSVs (see
+  §2's acquisition-drift note) or re-running the primary study end to end, which this report
+  does not do (no retune/re-run of an already-consumed primary result). **These metrics ARE
+  now available for the §5.4 cross-asset robustness runs**, computed via
+  `historical_regime_statistics`'s `adverse_drawdown` column and surfaced in
+  `key_metrics` (added 2026-09-17;
+  `financial_dynamics.backtesting.metrics.regime_bootstrap_uncertainty`).
 - **`mean_return_h*` and `median_return_h*` are unweighted averages across regimes, not
   bar-level statistics of the raw return series.** See §5's methodological caveat. This
   limits how far any mean-vs-median or model-vs-model comparison in this report can be
   pushed without the fuller per-observation tables noted above; an earlier version of this
   report drew a downside-skew conclusion from this comparison that the aggregation method
-  does not support (corrected in §6).
-- **No moving-block or stationary bootstrap uncertainty intervals are reported.** The
-  frozen methodology specifies time-series-aware uncertainty where sample size permits;
-  computing it requires the fuller per-observation tables noted above.
-- **Cross-asset robustness (QQQ, IWM, TLT, GLD as independent primary instruments) has not
-  been executed.** The runner supports this (`scripts/run_historical_regime_study.py
-  --primary-symbol <SYMBOL>`, tagging experiment IDs as
-  `fdm_hist_regime_v1_robustness_<symbol>` and labeling any 2025 result
-  `PRE-SPECIFIED ROBUSTNESS EVALUATION EXECUTED AFTER PRIMARY HOLDOUT`, not a fresh
-  untouched holdout), but execution is blocked on data acquisition in this environment —
-  this session's egress policy blocks Yahoo Finance. This report's title claims apply to
-  SPY only until those runs land.
+  does not support (corrected in §6). This limitation still applies to SPY's v1 tables;
+  §5.4's robustness runs report `mean_adverse_drawdown`/`worst_adverse_drawdown` as a
+  separate, non-aggregated-across-mean/median metric that partially addresses it for those
+  four symbols.
+- **Moving-block and stationary bootstrap uncertainty intervals are now reported for the
+  §5.4 cross-asset robustness runs** (`--include-bootstrap`, 150 resamples, 90% CI, block
+  length 20 trading days) but **not for SPY's primary v1 result**, for the same
+  re-run-avoidance reason as the bullet above. The CIs characterize sampling uncertainty in
+  the observed regime-conditional mean given the observed serial-dependence structure; they
+  are not an out-of-sample test and do not validate the regime definitions themselves.
+- **Cross-asset robustness (QQQ, IWM, TLT, GLD as independent primary instruments) has now
+  been executed** (§5.4, 2026-09-17) against a v2 fallback dataset — the true v1 payload for
+  these four symbols is confirmed unrecoverable. This report's title claims for SPY
+  specifically are unaffected; the robustness result is a separate, clearly-labeled
+  characterization on a non-bit-comparable dataset, not a restatement of the SPY result.
 - **`mean_realized_vol_h1 = 0.0` throughout is a known artifact**, not a finding (see §5).
 - **Cross-program note:** SPY, QQQ, IWM, TLT, and GLD price history is also used by
   Directive #9's Stat-Arb v3 study (a different repository, different research design).
@@ -290,5 +384,17 @@ python scripts/run_historical_regime_study.py \
 requires frozen local raw CSVs under `data/raw/yf_fd_etfs_daily_2015_2025_v1/` (gitignored;
 acquire via `scripts/acquire_yf_fd_etfs_daily.py` and verify the resulting
 `dataset_canonical` hash before use — see §2's caveat about acquisition drift).
+
+**§5.4 cross-asset robustness** (reproduces a fresh v2 pull, which will not hash-match the
+committed `yf_fd_etfs_daily_2015_2025_v2` manifest for the dividend-paying symbols — expected,
+see §5.4):
+```
+python scripts/acquire_yf_fd_etfs_daily.py --dataset-id yf_fd_etfs_daily_2015_2025_v2 \
+  --raw-dir <dir>
+python scripts/run_historical_regime_study.py \
+  --config configs/experiments/fdm_historical_regime_study_v2_robustness.yaml \
+  --primary-symbol QQQ --allow-holdout --include-bootstrap
+# repeat --primary-symbol for IWM, TLT, GLD (never SPY against this config)
+```
 
 Ledger: `research/experiment-ledger.csv`. Artifacts: `results/historical_regimes/*.json`.

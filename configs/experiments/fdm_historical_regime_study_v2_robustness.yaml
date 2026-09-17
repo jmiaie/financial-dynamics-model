@@ -1,0 +1,129 @@
+# FDM historical regime validation — CROSS-ASSET ROBUSTNESS (v2 dataset)
+# Status: frozen-for-holdout
+#
+# NOT THE PRIMARY EXPERIMENT. This config exists solely to run the already-frozen
+# v1 methodology (fdm_historical_regime_study_v1.yaml) against a different input
+# dataset for QQQ/IWM/TLT/GLD, because the true v1 raw payload for those symbols
+# was never committed (data/raw/ is gitignored) and is confirmed unrecoverable
+# (owner decision, 2026-09-17 — no machine that ran the primary SPY acquisition
+# still holds it). SPY's own v1 result (fdm_hist_regime_v1_*) is NOT re-run here
+# and remains the sole primary consumed result.
+#
+# Methodology is byte-identical to v1's model block below (same centroids, same
+# feature windows, same frozen_snapshot knobs) -- nothing here is a new tuning
+# surface, so there is no retune-on-observed-outcome risk in running this
+# directly through holdout, unlike v1's own dataset-freeze/holdout-authorization
+# staging. Only the input dataset differs.
+#
+# Dataset: yf_fd_etfs_daily_2015_2025_v2 (data/manifests/yf_fd_etfs_daily_2015_2025_v2.json).
+# Re-acquired 2026-09-17 on a node with unrestricted egress; does NOT hash-match
+# the frozen v1 manifest for SPY/QQQ/IWM/TLT (GLD alone matches -- it pays no
+# distributions, so its series is bit-reproducible; the others carry dividend
+# adjustment, which is not). The CAUSE of this divergence is plausible
+# (dividend-adjustment recomputation across retrieval times) but NOT PROVEN --
+# see data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md for the full
+# per-file hash table and the explicit statement that the magnitude is
+# unquantifiable without the lost v1 payload.
+#
+# Output computed from this dataset is PRE-SPECIFIED ROBUSTNESS / POST-PRIMARY
+# CHARACTERIZATION per Directive #9 -- never a substitute for or restatement of
+# the primary SPY v1 result, and never described as confirming or disconfirming
+# it (a different, non-bit-comparable input dataset cannot do either).
+
+experiment_id: fdm_hist_regime_v2_robustness
+status: frozen-for-holdout
+directive: 9
+dataset_id: yf_fd_etfs_daily_2015_2025_v2
+universe:
+  symbols: [SPY, QQQ, IWM, TLT, GLD]
+  interval: 1d
+  # SPY stays in the universe only as a reference-column source for the
+  # non-SPY primary runs below; SPY is never the --primary-symbol here.
+
+periods:
+  requested_data_start: "2015-01-01"
+  requested_data_end_exclusive: "2026-01-01"
+  formation_dev: {start: "2015-01-01", end_inclusive: "2023-12-31"}
+  validation: {start: "2024-01-01", end_inclusive: "2024-12-31"}
+  holdout: {start: "2025-01-01", end_inclusive: "2025-12-31"}
+  holdout_access: allowed_after_final_configuration_frozen
+
+model:
+  # Identical to fdm_historical_regime_study_v1.yaml -- do not diverge the
+  # methodology; only the dataset_id above differs.
+  package: financial_dynamics
+  pipeline: FinancialDynamicsPipeline
+  regimes:
+    count: 4
+    names: [CALM_TREND, VOLATILE_TREND, CHOP, RISK_OFF]
+  features:
+    count: 5
+    names: [volatility, trend_strength, drawdown_pressure, correlation_stress, shock_intensity]
+    source_defaults: config/default.yaml
+    volatility_span: 20
+    trend_window: 14
+    drawdown_window: 60
+    correlation_window: 20
+    shock_threshold: 2.0
+    normalization_method: zscore
+    normalization_window: 252
+  pipeline_overrides: {}
+  frozen_snapshot:
+    regimes.temperature: 1.0
+    transitions.prior_strength: 10.0
+    transitions.learning_rate: 0.05
+    stabilization.hysteresis_threshold: 0.15
+    stabilization.min_persistence_bars: 5
+    stabilization.majority_vote_window: 10
+    risk.drawdown_threshold: 0.5
+    risk.correlation_stress_threshold: 0.6
+    risk.shock_threshold: 0.7
+    risk.riskoff_confirmation_count: 3
+    seed: 0
+
+evaluation:
+  mode: historical_regime_characterization
+  forward_horizons_trading_days: [1, 5, 20]
+  metrics:
+    - forward_return_mean
+    - forward_return_median
+    - realized_volatility
+    - downside_volatility
+    - positive_return_frequency
+    - tail_quantiles
+    - adverse_drawdown
+    - regime_duration
+    - self_transition_rate
+    - transition_matrix
+    - block_bootstrap_uncertainty
+  benchmarks:
+    - persistence
+    - volatility_bucket
+    - trend_volatility_grid
+    - gaussian_mixture
+
+constraints:
+  no_2025_evaluation_until_freeze: false
+  no_retune_after_freeze: true
+  no_universe_change_after_dataset_freeze: true
+  report_nulls_exactly: true
+  invent_metrics: false
+
+freeze_record:
+  frozen_for_holdout_utc: "2026-09-17T00:00:00Z"
+  basis: >
+    Methodology inherited unchanged from fdm_historical_regime_study_v1.yaml's
+    already-frozen model block (fixed a priori centroids, fixed feature
+    windows, mechanically-fit baselines) -- nothing here is tuned against this
+    dataset's own results, so this config is frozen for holdout on creation
+    rather than staged through a separate dev/validation freeze gate. Only the
+    input dataset (yf_fd_etfs_daily_2015_2025_v2) differs from v1, per the
+    owner-authorized fallback decision recorded in
+    data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md.
+
+notes: >
+  Cross-asset robustness / post-primary characterization only. Run via
+  scripts/run_historical_regime_study.py --config
+  configs/experiments/fdm_historical_regime_study_v2_robustness.yaml
+  --primary-symbol {QQQ,IWM,TLT,GLD} --allow-holdout (never --primary-symbol
+  SPY against this config -- SPY's primary result is v1's, unchanged).
