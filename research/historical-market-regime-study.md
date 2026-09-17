@@ -60,17 +60,30 @@ reproduce this study from scratch.
 ## 3. Pre-registration and freeze
 
 **Config:** `configs/experiments/fdm_historical_regime_study_v1.yaml`, status
-`frozen-for-holdout`. **Freeze timestamp:** `2026-09-16T02:58:00Z`
-(`freeze_record.frozen_for_holdout_utc` in the config file itself — the authoritative,
-in-repo freeze marker). An earlier version of this report cited a specific "freeze commit"
-hash; that hash does not exist anywhere in this repository's git history and was
-fabricated. It is retracted without replacement: this branch's history has no discrete
-commit that cleanly separates pre-freeze design from post-freeze execution (the config,
-dataset manifest, and surrounding repository state all landed together in one bulk commit),
-so no commit-hash citation would be meaningful here. The config's own `freeze_record`
-field is the basis for this claim instead. No retuning occurred after this freeze per
-`constraints.no_retune_after_freeze: true`; the holdout (2025) run used the identical
-frozen `PipelineConfig` as development and validation.
+`frozen-for-holdout`. **Freeze commit:** `596a22527b6f0107ba5baf55dd2edd68a1d991fe`
+("D9-A: FINAL CONFIGURATION FROZEN for holdout"), an ancestor of this branch that
+modifies exactly this config file to the frozen state evaluated below (verified via
+`git merge-base --is-ancestor` against a full, unshallowed clone — not assumed).
+**Freeze timestamp:** `2026-09-16T02:58:00Z` (`freeze_record.frozen_for_holdout_utc`
+in the config file itself). A prior version of this report claimed this hash "does
+not exist anywhere in this repository's git history and was fabricated"; that claim
+was itself wrong — reached from an incomplete/shallow local check at the time — and
+is retracted here. The commit is real and its diff is exactly the freeze: nothing
+else changed alongside it.
+
+**Freeze chronology, assessed directly from git log (not just "a commit exists"):**
+the freeze commit's author timestamp is `2026-09-16T03:01:12Z`, about 3 minutes
+after the `freeze_record` field's own `02:58:00Z` — consistent with the field being
+stamped by a freeze script moments before the resulting file was `git add`/`git
+commit`-ed, not a discrepancy worth flagging further. Every commit on this branch
+after the freeze commit (`f0ad092` through `8158395`, all within the same working
+session, followed by unrelated CI/tooling fixes the next day: `9d51855`, `3f248ab`,
+`ab72cc9`) only adds the study module, runner, tests, and DEV/validation/holdout
+result artifacts — none of them touches
+`configs/experiments/fdm_historical_regime_study_v1.yaml` again. No retuning
+occurred after this freeze per `constraints.no_retune_after_freeze: true`; the
+holdout (2025) run used the identical frozen `PipelineConfig` as development and
+validation.
 
 ## 4. Model and benchmarks
 
