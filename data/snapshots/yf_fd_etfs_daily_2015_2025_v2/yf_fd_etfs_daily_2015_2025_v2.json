@@ -1,0 +1,190 @@
+{
+  "dataset_id": "yf_fd_etfs_daily_2015_2025_v2",
+  "source": "yfinance",
+  "source_version": "1.7.0",
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD"
+  ],
+  "interval": "1d",
+  "requested_start": "2015-01-01",
+  "requested_end_exclusive": "2026-01-01",
+  "actual_start": {
+    "SPY": "2015-01-02",
+    "QQQ": "2015-01-02",
+    "IWM": "2015-01-02",
+    "TLT": "2015-01-02",
+    "GLD": "2015-01-02"
+  },
+  "actual_end": {
+    "SPY": "2025-12-31",
+    "QQQ": "2025-12-31",
+    "IWM": "2025-12-31",
+    "TLT": "2025-12-31",
+    "GLD": "2025-12-31"
+  },
+  "row_counts": {
+    "SPY": 2766,
+    "QQQ": 2766,
+    "IWM": 2766,
+    "TLT": 2766,
+    "GLD": 2766
+  },
+  "missing_counts": {
+    "SPY": 0,
+    "QQQ": 0,
+    "IWM": 0,
+    "TLT": 0,
+    "GLD": 0
+  },
+  "actions": {
+    "SPY": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 44
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "QQQ": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 44
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "IWM": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 44
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "TLT": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 132
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    },
+    "GLD": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    }
+  },
+  "retrieval_timestamp_utc": "2026-09-17T02:27:37Z",
+  "freeze_timestamp_utc": "2026-09-17T02:27:39Z",
+  "status": "DATA FROZEN",
+  "sha256": {
+    "GLD.csv": "661e1e4670253b597a51ebe82da555fbe932962ca99bd649f77df34812df071f",
+    "IWM.csv": "24d9f10c8ae71a8bb28c2691728135c082b2a3ba4d56fad9e36512cad9bb5279",
+    "QQQ.csv": "83e545c7b67b2589fcab9807c0b451741c2212af27158395da8c9c6ce588b80c",
+    "SPY.csv": "e5d6adc6ae471de1fb2f3ba84942805a6fea0382a56e3b52ff35616a2cd0c327",
+    "TLT.csv": "7e54e1f21a927385f18d6efa864e17cffe41eb0242a9bd507b84d2d701631957",
+    "dataset_canonical": "94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582"
+  },
+  "parameters": {
+    "start": "2015-01-01",
+    "end": "2026-01-01",
+    "interval": "1d",
+    "auto_adjust": true,
+    "actions": true,
+    "repair": false,
+    "keepna": true,
+    "threads": false,
+    "group_by": "column"
+  },
+  "per_symbol_columns": {
+    "SPY": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "QQQ": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "IWM": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "TLT": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ],
+    "GLD": [
+      "Capital Gains",
+      "Close",
+      "Dividends",
+      "High",
+      "Low",
+      "Open",
+      "Stock Splits",
+      "Volume"
+    ]
+  },
+  "notes": "v2 snapshot. Re-acquired 2026-09-17 on node Hai (unrestricted egress) with the repo's own scripts/acquire_yf_fd_etfs_daily.py, unmodified, yfinance 1.7.0, identical parameters to v1. v1 raw payload was never committed (data/raw/ is gitignored), so it is NOT recoverable from the repo, and this re-acquisition does NOT hash-match the frozen v1 manifest: SPY/QQQ/IWM/TLT differ, GLD matches (GLD has no distributions; dividend-adjusted series are not bit-reproducible across retrievals). Identical: symbol set, row counts (2766 each), actual_start 2015-01-02, actual_end 2025-12-31, zero missing OHLCV cells. Per the program's dataset-provenance rule this payload must never be presented as v1: outputs computed from it are pre-specified robustness / post-primary characterization, with the consumed SPY v1 result staying primary. Payload is committed under data/snapshots/ (unlike v1's gitignored data/raw/) so this snapshot stays recoverable. See PROVENANCE.md."
+}

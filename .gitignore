@@ -22,3 +22,8 @@ venv/
 
 # Directive #9: raw vendor snapshots stay local / gitignored
 data/raw/
+
+# Directive #9: FROZEN snapshots ARE committed so a payload stays recoverable.
+# The global `*.csv` above is why the v1 payload could not be recovered later;
+# these negations carve out the one directory that must survive.
+!data/snapshots/**/*.csv
