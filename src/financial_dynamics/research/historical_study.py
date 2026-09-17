@@ -17,7 +17,10 @@ from typing import Any
 import pandas as pd
 import yaml
 
-from financial_dynamics.backtesting.metrics import historical_regime_statistics
+from financial_dynamics.backtesting.metrics import (
+    historical_regime_statistics,
+    regime_bootstrap_uncertainty,
+)
 from financial_dynamics.benchmarks.baselines import (
     BaselineClassifier,
     GaussianMixtureClassifier,
@@ -52,6 +55,10 @@ class ModelPeriodResult:
     summary_records: list[dict[str, Any]]
     transition_records: list[dict[str, Any]]
     key_metrics: dict[str, Any]
+    # Populated only when run_historical_period(include_bootstrap=True):
+    # block-bootstrap CIs on mean forward_return per (regime, horizon, method).
+    # Empty by default so existing DEV/VAL/holdout re-runs are unaffected.
+    bootstrap_records: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass
@@ -233,6 +240,35 @@ def _summarize_key_metrics(summary: pd.DataFrame, transitions: pd.DataFrame) -> 
         out[f"median_return_h{horizon}"] = (
             float(sub["median_return"].mean()) if not sub.empty else None
         )
+        # Cross-regime averages of the per-occurrence robustness metrics
+        # (see financial_dynamics.backtesting.metrics.historical_regime_statistics):
+        # downside vol, positive-return frequency, 5th-percentile tail return,
+        # and adverse (intra-horizon peak-to-trough) drawdown -- both the
+        # cross-regime mean and the single worst regime-level figure, since
+        # averaging away the worst regime would hide exactly the tail risk
+        # this metric exists to surface.
+        out[f"mean_downside_vol_h{horizon}"] = (
+            float(sub["downside_vol"].mean()) if not sub.empty else None
+        )
+        out[f"mean_positive_return_freq_h{horizon}"] = (
+            float(sub["positive_return_freq"].mean()) if not sub.empty else None
+        )
+        out[f"mean_tail_q05_h{horizon}"] = float(sub["tail_q05"].mean()) if not sub.empty else None
+        out[f"mean_adverse_drawdown_h{horizon}"] = (
+            float(sub["mean_adverse_drawdown"].mean())
+            if not sub.empty and "mean_adverse_drawdown" in sub.columns
+            else None
+        )
+        out[f"worst_adverse_drawdown_h{horizon}"] = (
+            float(sub["worst_adverse_drawdown"].min())
+            if not sub.empty and "worst_adverse_drawdown" in sub.columns
+            else None
+        )
+    out["mean_duration_bars"] = (
+        float(summary.drop_duplicates("regime")["mean_duration"].mean())
+        if "mean_duration" in summary.columns
+        else None
+    )
     out["transition_matrix_shape"] = list(transitions.shape)
     return out
 
@@ -241,14 +277,28 @@ def _characterize(
     eval_df: pd.DataFrame,
     regimes: pd.Series,
     horizons: tuple[int, ...],
-) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any], dict[str, int]]:
+    *,
+    include_bootstrap: bool = False,
+    bootstrap_block_size: int = 20,
+    bootstrap_n_resamples: int = 1000,
+    bootstrap_seed: int = 0,
+) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any], dict[str, int], list[dict[str, Any]]]:
     aligned = regimes.reindex(eval_df.index)
     stats = historical_regime_statistics(eval_df["close"], aligned, horizons=horizons)
     counts = {str(k): int(v) for k, v in aligned.dropna().value_counts().sort_index().items()}
     key = _summarize_key_metrics(stats.summary, stats.transitions)
     key["evaluated_bars"] = int(aligned.notna().sum())
     key["total_bars"] = len(eval_df)
-    return stats.summary, stats.transitions, key, counts
+    bootstrap_records: list[dict[str, Any]] = []
+    if include_bootstrap:
+        bootstrap_table = regime_bootstrap_uncertainty(
+            stats.forward_occurrences,
+            block_size=bootstrap_block_size,
+            n_bootstrap=bootstrap_n_resamples,
+            seed=bootstrap_seed,
+        )
+        bootstrap_records = _records(bootstrap_table)
+    return stats.summary, stats.transitions, key, counts, bootstrap_records
 
 
 def _default_baselines(seed: int) -> list[BaselineClassifier]:
@@ -273,9 +323,18 @@ def run_historical_period(
     seed: int = 0,
     primary_symbol: str = "SPY",
     include_benchmarks: bool = True,
+    include_bootstrap: bool = False,
+    bootstrap_block_size: int = 20,
+    bootstrap_n_resamples: int = 1000,
     notes: str = "",
 ) -> StudyArtifacts:
-    """Run FDM (+ optional baselines) on one calendar period using frozen data."""
+    """Run FDM (+ optional baselines) on one calendar period using frozen data.
+
+    include_bootstrap adds moving-block and stationary block-bootstrap CIs
+    (see financial_dynamics.backtesting.metrics.regime_bootstrap_uncertainty)
+    to each model's bootstrap_records. Off by default -- it does not change
+    any already-committed artifact unless explicitly requested, and is
+    compute-heavier than the rest of this function."""
     eval_df = slice_period(panel, eval_period)
     history_df = (
         slice_period(panel, history_period) if history_period is not None else eval_df.iloc[0:0]
@@ -296,7 +355,15 @@ def run_historical_period(
     )
 
     fdm_regimes = infer_regimes_with_history(history_df, eval_df, pipeline_config)
-    summary, transitions, key, counts = _characterize(eval_df, fdm_regimes, horizons)
+    summary, transitions, key, counts, bootstrap_records = _characterize(
+        eval_df,
+        fdm_regimes,
+        horizons,
+        include_bootstrap=include_bootstrap,
+        bootstrap_block_size=bootstrap_block_size,
+        bootstrap_n_resamples=bootstrap_n_resamples,
+        bootstrap_seed=seed,
+    )
     artifacts.models.append(
         ModelPeriodResult(
             model="financial_dynamics_pipeline",
@@ -307,6 +374,7 @@ def run_historical_period(
                 transitions.reset_index().rename(columns={"from_regime": "from_regime"})
             ),
             key_metrics=key,
+            bootstrap_records=bootstrap_records,
         )
     )
 
@@ -331,7 +399,15 @@ def run_historical_period(
                 preds = baseline.fit(eval_df).predict(eval_df)
             else:
                 preds = baseline.fit(history_df).predict(eval_df, history_df=history_df)
-        summary_b, transitions_b, key_b, counts_b = _characterize(eval_df, preds, horizons)
+        summary_b, transitions_b, key_b, counts_b, bootstrap_records_b = _characterize(
+            eval_df,
+            preds,
+            horizons,
+            include_bootstrap=include_bootstrap,
+            bootstrap_block_size=bootstrap_block_size,
+            bootstrap_n_resamples=bootstrap_n_resamples,
+            bootstrap_seed=seed,
+        )
         artifacts.models.append(
             ModelPeriodResult(
                 model=baseline.name,
@@ -340,6 +416,7 @@ def run_historical_period(
                 summary_records=_records(summary_b),
                 transition_records=_records(transitions_b.reset_index()),
                 key_metrics=key_b,
+                bootstrap_records=bootstrap_records_b,
             )
         )
 

@@ -1,13 +1,16 @@
 """Tests for the backtesting framework."""
 
+import numpy as np
 import pandas as pd
 import pytest
 
 from financial_dynamics.backtesting.evaluator import BacktestEvaluator, BacktestResult
 from financial_dynamics.backtesting.metrics import (
+    block_bootstrap_mean_ci,
     historical_regime_statistics,
     regime_accuracy,
     regime_balanced_accuracy,
+    regime_bootstrap_uncertainty,
     regime_calibration_table,
     regime_classification_report,
     regime_confusion_matrix,
@@ -165,6 +168,87 @@ class TestHistoricalRegimeStatistics:
         stats = historical_regime_statistics(close, inferred, horizons=(1,))
         assert stats.transitions.loc["CHOP", "VOLATILE_TREND"] > 0.0
         assert stats.transitions.loc["VOLATILE_TREND", "RISK_OFF"] > 0.0
+
+    def test_adverse_drawdown_catches_an_intra_horizon_dip_a_flat_forward_return_would_miss(self):
+        """A 3-day horizon that dips hard on day 1 then fully recovers by day
+        3 has forward_return == 0.0 -- the adverse drawdown must still show
+        the dip, since a trader holding through the horizon lived through it
+        even though the endpoint-to-endpoint return looks benign."""
+        index = pd.date_range("2024-01-01", periods=4, freq="D")
+        close = pd.Series([100.0, 80.0, 90.0, 100.0], index=index)  # -20% then back to par
+        inferred = pd.Series(["CALM_TREND"] * 4, index=index)
+
+        stats = historical_regime_statistics(close, inferred, horizons=(3,))
+        row = stats.summary.iloc[0]
+        assert row["mean_return"] == pytest.approx(0.0)
+        assert row["worst_adverse_drawdown"] == pytest.approx(-0.20)
+        assert row["mean_adverse_drawdown"] == pytest.approx(-0.20)
+
+    def test_forward_occurrences_is_populated_and_chronologically_ordered(self):
+        index = pd.date_range("2024-01-01", periods=6, freq="D")
+        close = pd.Series([100.0, 101.0, 102.0, 101.0, 100.0, 99.0], index=index)
+        inferred = pd.Series(["CALM_TREND"] * 6, index=index)
+
+        stats = historical_regime_statistics(close, inferred, horizons=(1,))
+        assert not stats.forward_occurrences.empty
+        assert list(stats.forward_occurrences.index) == sorted(stats.forward_occurrences.index)
+
+
+class TestBlockBootstrap:
+    def test_recovers_the_sample_mean_and_brackets_it_with_a_ci(self):
+        rng = np.random.default_rng(0)
+        values = pd.Series(rng.normal(0.001, 0.01, size=200))
+        result = block_bootstrap_mean_ci(
+            values, method="moving_block", block_size=10, n_bootstrap=500, seed=1
+        )
+        assert result["insufficient_data"] is False
+        assert result["mean"] == pytest.approx(float(values.mean()))
+        assert result["ci_low"] < result["mean"] < result["ci_high"]
+
+    def test_stationary_method_also_brackets_the_mean(self):
+        rng = np.random.default_rng(0)
+        values = pd.Series(rng.normal(0.001, 0.01, size=200))
+        result = block_bootstrap_mean_ci(
+            values, method="stationary", block_size=10, n_bootstrap=500, seed=1
+        )
+        assert result["insufficient_data"] is False
+        assert result["ci_low"] < result["mean"] < result["ci_high"]
+
+    def test_flags_insufficient_data_below_two_observations(self):
+        assert block_bootstrap_mean_ci(pd.Series([0.01]))["insufficient_data"] is True
+        assert block_bootstrap_mean_ci(pd.Series([], dtype=float))["insufficient_data"] is True
+
+    def test_regime_bootstrap_uncertainty_covers_every_regime_horizon_and_method(self):
+        index = pd.date_range("2024-01-01", periods=40, freq="D")
+        rng = np.random.default_rng(2)
+        close = pd.Series(100 + np.cumsum(rng.normal(0, 0.5, 40)), index=index)
+        inferred = pd.Series(
+            ["CALM_TREND" if i < 20 else "RISK_OFF" for i in range(40)], index=index
+        )
+        stats = historical_regime_statistics(close, inferred, horizons=(1, 5))
+
+        table = regime_bootstrap_uncertainty(
+            stats.forward_occurrences,
+            methods=("moving_block", "stationary"),
+            block_size=5,
+            n_bootstrap=200,
+            seed=0,
+        )
+        assert not table.empty
+        seen = set(zip(table["regime"], table["horizon"], table["method"], strict=True))
+        expected_groups = set(
+            zip(
+                stats.forward_occurrences["regime"],
+                stats.forward_occurrences["horizon"],
+                strict=False,
+            )
+        )
+        for regime, horizon in expected_groups:
+            assert (regime, horizon, "moving_block") in seen
+            assert (regime, horizon, "stationary") in seen
+
+    def test_regime_bootstrap_uncertainty_returns_empty_frame_for_empty_input(self):
+        assert regime_bootstrap_uncertainty(pd.DataFrame()).empty
 
 
 class TestBacktestEvaluator:

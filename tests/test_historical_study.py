@@ -96,6 +96,88 @@ def test_run_historical_period_writes_artifact(frozen_raw_dir: Path, tmp_path: P
     assert "gaussian_mixture" in names
 
 
+def test_run_historical_period_surfaces_robustness_metrics_in_key_metrics(
+    frozen_raw_dir: Path,
+):
+    """downside_vol / positive_return_freq / tail_q05 / adverse_drawdown are
+    always computed (see historical_regime_statistics); this proves they
+    reach ModelPeriodResult.key_metrics, not just the full per-row
+    summary_records that already-committed artifacts have stripped away."""
+    panel = build_multi_asset_frame(frozen_raw_dir)
+    formation = PeriodSpec("formation_dev", "2015-01-02", "2015-12-31")
+    validation = PeriodSpec("validation", "2016-01-01", "2016-06-30")
+    artifacts = run_historical_period(
+        experiment_id="unit_hist_robustness_metrics",
+        dataset_id="unit_dataset",
+        config_path="configs/experiments/fdm_historical_regime_study_v1.yaml",
+        panel=panel,
+        eval_period=validation,
+        history_period=formation,
+        pipeline_config=PipelineConfig(),
+        horizons=(1,),
+        seed=0,
+        include_benchmarks=False,
+        notes="unit test",
+    )
+    key = artifacts.models[0].key_metrics
+    for field_name in (
+        "mean_downside_vol_h1",
+        "mean_positive_return_freq_h1",
+        "mean_tail_q05_h1",
+        "mean_adverse_drawdown_h1",
+        "worst_adverse_drawdown_h1",
+        "mean_duration_bars",
+    ):
+        assert field_name in key
+        assert key[field_name] is not None
+
+
+def test_run_historical_period_include_bootstrap_populates_bootstrap_records(
+    frozen_raw_dir: Path,
+):
+    panel = build_multi_asset_frame(frozen_raw_dir)
+    formation = PeriodSpec("formation_dev", "2015-01-02", "2015-12-31")
+    validation = PeriodSpec("validation", "2016-01-01", "2016-06-30")
+
+    without_bootstrap = run_historical_period(
+        experiment_id="unit_hist_no_bootstrap",
+        dataset_id="unit_dataset",
+        config_path="configs/experiments/fdm_historical_regime_study_v1.yaml",
+        panel=panel,
+        eval_period=validation,
+        history_period=formation,
+        pipeline_config=PipelineConfig(),
+        horizons=(1,),
+        seed=0,
+        include_benchmarks=False,
+        include_bootstrap=False,
+        notes="unit test",
+    )
+    assert without_bootstrap.models[0].bootstrap_records == []
+
+    with_bootstrap = run_historical_period(
+        experiment_id="unit_hist_with_bootstrap",
+        dataset_id="unit_dataset",
+        config_path="configs/experiments/fdm_historical_regime_study_v1.yaml",
+        panel=panel,
+        eval_period=validation,
+        history_period=formation,
+        pipeline_config=PipelineConfig(),
+        horizons=(1,),
+        seed=0,
+        include_benchmarks=False,
+        include_bootstrap=True,
+        bootstrap_n_resamples=50,
+        notes="unit test",
+    )
+    records = with_bootstrap.models[0].bootstrap_records
+    assert records
+    methods_seen = {r["method"] for r in records}
+    assert {"moving_block", "stationary"} <= methods_seen
+    for record in records:
+        assert "ci_low" in record and "ci_high" in record
+
+
 def test_load_frozen_symbol_rejects_missing_ohlcv(tmp_path: Path):
     bad = tmp_path / "BAD.csv"
     bad.write_text("Date,Close\n2015-01-02,1.0\n", encoding="utf-8")

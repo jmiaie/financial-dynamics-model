@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from itertools import pairwise
 from typing import cast
 
@@ -20,6 +20,11 @@ class HistoricalRegimeStatistics:
 
     summary: pd.DataFrame
     transitions: pd.DataFrame
+    # Raw per-occurrence rows (regime, horizon, forward_return, ...) behind
+    # `summary`'s per-(regime, horizon) aggregates -- kept in chronological
+    # order so callers can bootstrap the mean respecting the original time
+    # ordering (see regime_bootstrap_uncertainty). Empty when summary is.
+    forward_occurrences: pd.DataFrame = field(default_factory=pd.DataFrame)
 
 
 def regime_accuracy(
@@ -325,6 +330,9 @@ def historical_regime_statistics(
                 continue
 
             downside = future_daily_returns[future_daily_returns < 0]
+            window_prices = close.iloc[start : start + horizon + 1]
+            running_peak = window_prices.cummax()
+            adverse_drawdown = float((window_prices / running_peak - 1.0).min())
             rows.append(
                 {
                     "regime": str(regime_name),
@@ -333,6 +341,10 @@ def historical_regime_statistics(
                     "realized_vol": float(future_daily_returns.std(ddof=0)),
                     "downside_vol": float(downside.std(ddof=0)) if len(downside) > 0 else 0.0,
                     "positive_return_freq": float((future_daily_returns > 0).mean()),
+                    # Worst peak-to-trough decline within [start, start+horizon],
+                    # not just the start-to-end forward_return -- a horizon can
+                    # end flat or up while still passing through a sharp dip.
+                    "adverse_drawdown": adverse_drawdown,
                 }
             )
 
@@ -351,6 +363,8 @@ def historical_regime_statistics(
         positive_return_freq=("positive_return_freq", "mean"),
         tail_q05=("forward_return", lambda values: float(np.quantile(values, 0.05))),
         tail_q25=("forward_return", lambda values: float(np.quantile(values, 0.25))),
+        mean_adverse_drawdown=("adverse_drawdown", "mean"),
+        worst_adverse_drawdown=("adverse_drawdown", "min"),
     ).reset_index()
 
     duration_summary = (
@@ -368,4 +382,127 @@ def historical_regime_statistics(
 
     summary = summary.merge(duration_summary, on="regime", how="left")
     summary = summary.merge(self_transition, on="regime", how="left")
-    return HistoricalRegimeStatistics(summary=summary, transitions=transition_rates)
+    return HistoricalRegimeStatistics(
+        summary=summary, transitions=transition_rates, forward_occurrences=forward_df
+    )
+
+
+def _moving_block_bootstrap_mean(
+    values: np.ndarray, block_size: int, rng: np.random.Generator
+) -> float:
+    """One resample: concatenate contiguous blocks of `block_size` consecutive
+    observations (wrapping around the end), sampled with replacement, until
+    reaching the original length, then take the mean. Preserves local
+    serial dependence within a block; does not assume i.i.d. observations."""
+    n = len(values)
+    n_blocks = -(-n // block_size)  # ceil division
+    starts = rng.integers(0, n, size=n_blocks)
+    resampled = np.concatenate([values.take(range(s, s + block_size), mode="wrap") for s in starts])
+    return float(resampled[:n].mean())
+
+
+def _stationary_bootstrap_mean(
+    values: np.ndarray, expected_block_size: int, rng: np.random.Generator
+) -> float:
+    """One resample via Politis-Romano (1994) stationary bootstrap: block
+    length is geometrically distributed (memoryless restart probability
+    1/expected_block_size at each step) rather than fixed, which keeps the
+    resampled series itself stationary. Same intent as the moving-block
+    variant -- respect serial dependence -- without picking one fixed block
+    length."""
+    n = len(values)
+    restart_prob = 1.0 / expected_block_size
+    idx = np.empty(n, dtype=int)
+    idx[0] = rng.integers(0, n)
+    restarts = rng.random(n) < restart_prob
+    fresh_starts = rng.integers(0, n, size=n)
+    for i in range(1, n):
+        idx[i] = fresh_starts[i] if restarts[i] else (idx[i - 1] + 1) % n
+    return float(values[idx].mean())
+
+
+def block_bootstrap_mean_ci(
+    values: pd.Series,
+    *,
+    method: str = "moving_block",
+    block_size: int = 20,
+    n_bootstrap: int = 1000,
+    confidence: float = 0.90,
+    seed: int = 0,
+) -> dict[str, float | int | str | None]:
+    """Block-bootstrap confidence interval for a chronologically-ordered
+    series' mean (e.g. one regime's forward returns at one horizon, in the
+    order they occurred). Regime-conditional forward returns are serially
+    dependent -- overlapping horizons, regime persistence -- so an ordinary
+    i.i.d. bootstrap would understate uncertainty; block resampling (either
+    `method="moving_block"` with a fixed block length, or
+    `method="stationary"` with a geometrically-distributed one) keeps
+    contiguous runs intact.
+
+    This characterizes SAMPLING uncertainty in the observed mean given the
+    observed serial-dependence structure. It is not an out-of-sample test
+    and does not validate the regime definitions themselves; a narrow CI
+    here means the mean is stable across resamples of this same historical
+    sample, not that it will hold out of sample."""
+    arr = values.to_numpy(dtype=float)
+    n = len(arr)
+    if n < 2:
+        return {
+            "n": n,
+            "method": method,
+            "block_size": min(block_size, max(n, 1)),
+            "n_bootstrap": n_bootstrap,
+            "confidence": confidence,
+            "mean": float(arr[0]) if n == 1 else None,
+            "ci_low": None,
+            "ci_high": None,
+            "insufficient_data": True,
+        }
+    effective_block = max(1, min(block_size, n))
+    rng = np.random.default_rng(seed)
+    resample_fn = (
+        _stationary_bootstrap_mean if method == "stationary" else _moving_block_bootstrap_mean
+    )
+    boot_means = np.array([resample_fn(arr, effective_block, rng) for _ in range(n_bootstrap)])
+    alpha = 1.0 - confidence
+    ci_low, ci_high = np.quantile(boot_means, [alpha / 2, 1.0 - alpha / 2])
+    return {
+        "n": n,
+        "method": method,
+        "block_size": effective_block,
+        "n_bootstrap": n_bootstrap,
+        "confidence": confidence,
+        "mean": float(arr.mean()),
+        "ci_low": float(ci_low),
+        "ci_high": float(ci_high),
+        "insufficient_data": False,
+    }
+
+
+def regime_bootstrap_uncertainty(
+    forward_occurrences: pd.DataFrame,
+    *,
+    methods: tuple[str, ...] = ("moving_block", "stationary"),
+    block_size: int = 20,
+    n_bootstrap: int = 1000,
+    confidence: float = 0.90,
+    seed: int = 0,
+) -> pd.DataFrame:
+    """Block-bootstrap CIs on mean forward_return for every (regime, horizon)
+    group in `forward_occurrences` (HistoricalRegimeStatistics.forward_occurrences),
+    for each requested method. One row per (regime, horizon, method)."""
+    if forward_occurrences.empty:
+        return pd.DataFrame()
+    rows: list[dict[str, float | int | str | None]] = []
+    for (regime, horizon), group in forward_occurrences.groupby(["regime", "horizon"], sort=False):
+        for method in methods:
+            result = block_bootstrap_mean_ci(
+                group["forward_return"],
+                method=method,
+                block_size=block_size,
+                n_bootstrap=n_bootstrap,
+                confidence=confidence,
+                seed=seed,
+            )
+            rows.append({"regime": str(regime), "horizon": int(cast(int, horizon)), **result})
+    return pd.DataFrame(rows)
