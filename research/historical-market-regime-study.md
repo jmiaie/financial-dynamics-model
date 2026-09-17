@@ -71,6 +71,18 @@ was itself wrong — reached from an incomplete/shallow local check at the time 
 is retracted here. The commit is real and its diff is exactly the freeze: nothing
 else changed alongside it.
 
+**Correction to the audit trail, not just this report's text:** checking this
+repository's git history directly (`git show 4fda3ba:research/historical-market-regime-study.md`)
+confirms the *original* first-draft report already cited this exact hash correctly.
+There was never a fabricated freeze-commit hash in this report at any point — the
+"fabricated" characterization was itself an error, introduced by an earlier relayed
+review and then compounded, not by anything actually wrong in this report's own
+history. `research/experiment-ledger.csv`'s `fdm_hist_regime_v1_report_SUPERSEDED_FACTUAL_ERRORS`
+row's notes list "a fabricated freeze-commit hash" among that superseded version's
+defects; that specific item in those notes is now known to be false and is flagged
+here rather than edited in place, since that row is preserved verbatim as an
+immutable audit-trail entry.
+
 **Freeze chronology, assessed directly from git log (not just "a commit exists"):**
 the freeze commit's author timestamp is `2026-09-16T03:01:12Z`, about 3 minutes
 after the `freeze_record` field's own `02:58:00Z` — consistent with the field being
@@ -179,19 +191,23 @@ selected in the 2025 holdout window** — reported exactly as observed, not adju
 
 **Cross-regime differentiation.** Across all three periods and all four models, mean and
 median forward returns vary materially by regime/model and by horizon. Multi-day realized
-volatility (h5/h20) is **consistently highest for the Gaussian-mixture classification** in
-every period (DEV, VAL, and holdout alike). The FDM pipeline's relative position is **not**
-consistent across periods, contrary to an earlier version of this report, which incorrectly
-claimed FDM was "consistently higher" than the volatility-bucket and trend/vol-grid
-benchmarks: in DEV, FDM has the **lowest** h5/h20 volatility of all four models
-(0.00766/0.00885); in VAL 2024, FDM has the lowest h5 volatility of all five models
-(0.00609) while its h20 volatility (0.00758) sits in the middle of the pack (above
-persistence and trend/vol-grid, below volatility-bucket and GMM); only in the 2025 holdout
-is FDM's volatility elevated above all three non-GMM benchmarks (persistence, volatility-
-bucket, trend/vol-grid) at both h5 and h20, while still below GMM. No single directional
-claim about FDM's volatility level relative to the simpler benchmarks holds across all
-three periods — only GMM's volatility being the highest of the four models in every period
-holds up.
+volatility (h20) is **highest for the Gaussian-mixture classification in every period**
+(DEV 0.01208, VAL 0.00846, holdout 0.01186, each the maximum of that period's row). At h5
+this holds in DEV (0.01143) and holdout (0.01143) but **not** in VAL 2024, where the
+trend/vol-grid benchmark's h5 volatility (0.00689) marginally exceeds GMM's (0.00668) — an
+exception a prior version of this report missed while correcting a different, broader
+overclaim about GMM. The FDM pipeline's relative position is **not** consistent across
+periods, contrary to an earlier version of this report, which incorrectly claimed FDM was
+"consistently higher" than the volatility-bucket and trend/vol-grid benchmarks: in DEV, FDM
+has the **lowest** h5/h20 volatility of all four models (0.00766/0.00885); in VAL 2024, FDM
+has the lowest h5 volatility of all five models (0.00609) while its h20 volatility
+(0.00758) sits in the middle of the pack (above persistence and trend/vol-grid, below
+volatility-bucket and GMM); only in the 2025 holdout is FDM's volatility elevated above all
+three non-GMM benchmarks (persistence, volatility-bucket, trend/vol-grid) at both h5 and
+h20, while still below GMM. No single directional claim about FDM's volatility level
+relative to the simpler benchmarks holds across all three periods, and even GMM's
+volatility is the outright highest of the four models in 5 of 6 period-horizon cells, not
+all 6 — the one exception (VAL 2024, h5) is real and should not be smoothed over.
 
 **Persistence vs. reactivity.** The FDM pipeline's self-transition rate (0.61–0.75 across
 periods) sits between the trivially sticky benchmarks (volatility-bucket 0.89–0.92,
