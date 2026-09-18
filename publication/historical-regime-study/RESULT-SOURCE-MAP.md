@@ -44,7 +44,7 @@ This performs no network access and reads only already-committed files under `re
 ## Coverage check
 
 - §2 (primary results): 3 periods × up to 5 models × 9 numeric columns + regime counts —
-  every cell in every table in TECHNICAL-PAPER.md §2.1–2.3 has a `primary.*` row.
+  every one of those cells has a `primary.*` row. The count column is covered in part: its `regime_counts` half has a `primary.*.regime_counts` row per period and model, while its `evaluated_bars`/`total_bars` half is covered only by the artifact's whole-file sha256 row, not by an individual row_id.
 - §3 (robustness): 5 symbols × 3 periods × 9 numeric columns — every cell in the §3 table has a
   `robustness.*` row.
 - §4.1 (sparse-cell disclosure): all 174 verified rows (not a sample) are individually mapped via

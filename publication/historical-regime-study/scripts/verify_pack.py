@@ -24,10 +24,16 @@ non-zero if any check fails):
                 committed figures/*.png; byte-identical is tried first, and
                 only on failure does this fall back to a pixel-content
                 comparison, with the outcome logged explicitly either way.
+                The committed PNGs are deleted before generation, so if
+                generation is skipped or writes nothing (e.g. matplotlib is
+                missing) the check FAILS: a figure missing after the run is
+                never scored as a byte-identical match against the file's own
+                stale bytes.
 4. citations -- every citation identifier quoted in CLAIM-REGISTER.md
                 resolves to a real row_id in tables/source_map.json
-                (wildcard `prefix.*` citations resolve against any row
-                starting with that prefix).
+                (citations containing `*` are matched against row_ids as
+                shell globs, so `primary.*.persistence.self_trans` matches
+                any period).
 5. no-rerun  -- self-audit: neither this script nor the two generator
                 scripts reference scripts/run_historical_regime_study.py or
                 scripts/acquire_yf_fd_etfs_daily.py.
@@ -41,6 +47,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import hashlib
 import json
 import re
@@ -221,8 +228,13 @@ def check_figures(repo_root: Path) -> None:
             "unavailable when this pack was built -- see D10-STATUS.md)")
         return
 
-    # Snapshot committed bytes before regenerating in place.
+    # Snapshot committed bytes, then remove the committed PNGs from disk so a
+    # skipped or no-op generation cannot be scored as a byte-identical PASS
+    # against the file's own stale bytes -- that fail-open path silently
+    # turned a missing matplotlib into "all figures reproduced".
     committed_bytes = {p.name: p.read_bytes() for p in committed_pngs}
+    for _p in committed_pngs:
+        _p.unlink()
 
     script = repo_root / PACK_DIR / "scripts" / "generate_figures.py"
     result = subprocess.run(
@@ -238,6 +250,21 @@ def check_figures(repo_root: Path) -> None:
     any_pixel_fallback = False
     for name, old_bytes in committed_bytes.items():
         new_path = figures_dir / name
+        if not new_path.exists():
+            # Restore everything removed above so a failed run leaves the tree
+            # as it found it. ponytail: only this path restores; a hard
+            # non-zero generator exit can leave figures deleted -- they are
+            # git-tracked, so `git checkout -- <pack>/figures` recovers.
+            for _n, _old in committed_bytes.items():
+                _q = figures_dir / _n
+                if not _q.exists():
+                    _q.write_bytes(_old)
+            raise CheckFailure(
+                f"{name}: regeneration produced no file -- generation was "
+                f"skipped (matplotlib missing?) or wrote nothing. A missing "
+                f"figure is a FAILURE, not a byte-identical PASS against the "
+                f"stale committed file."
+            )
         new_bytes = new_path.read_bytes()
         if new_bytes == old_bytes:
             log(f"PASS (byte-identical): {name}")
@@ -282,16 +309,20 @@ def check_citations(repo_root: Path) -> None:
     existing_ids = {row["row_id"] for row in smap}
 
     claim_text = (repo_root / PACK_DIR / "CLAIM-REGISTER.md").read_text(encoding="utf-8")
-    candidates = set(re.findall(r"`([a-z_]+\.[a-z0-9_.]+)`", claim_text))
+    # Case-sensitive and wildcard-capable: the previous lowercase-only pattern
+    # matched 19 of the 35 identifiers actually cited, silently skipping the
+    # rest (16 wildcard/uppercase ones, every one of which resolves) while
+    # reporting "all ... resolve".
+    candidates = set(re.findall(r"`([A-Za-z_*][A-Za-z0-9_*]*\.[A-Za-z0-9_.*]+)`", claim_text))
 
     unresolved: list[str] = []
     for candidate in sorted(candidates):
         if candidate in existing_ids:
             continue
-        if candidate.endswith(".*"):
-            prefix = candidate[:-1]
-            if any(rid.startswith(prefix) for rid in existing_ids):
-                continue
+        if "*" in candidate and any(
+            fnmatch.fnmatchcase(rid, candidate) for rid in existing_ids
+        ):
+            continue
         unresolved.append(candidate)
 
     if unresolved:

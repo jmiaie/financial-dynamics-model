@@ -241,7 +241,7 @@ Four regimes — `CALM_TREND`, `VOLATILE_TREND`, `CHOP`, `RISK_OFF` — classifi
 theory-based centroids** (not fit to any evaluation window; see the source report §4 for the
 exact centroid vectors).
 
-**Benchmarks**, all fit on formation data only and frozen before OOS classification
+**Benchmarks**, all fit on data through the end of validation (`history_period.end_inclusive = 2024-12-31`, not formation alone) and frozen before OOS classification
 (`src/financial_dynamics/benchmarks/baselines.py`):
 - `PersistenceClassifier` (line 40) — trivial "last observed regime persists."
 - `VolatilityBucketClassifier` (line 73) — trailing 20-day realized-volatility quartile buckets.
@@ -267,7 +267,7 @@ that framing throughout (see `CLAIM-REGISTER.md`).
 
 ## Bootstrap / uncertainty detail
 
-**Requested parameterization:** block length 20 trading days, `n_bootstrap=1000`, confidence
+**Requested parameterization:** block length 20 **regime occurrences**, not trading days (`effective_block = max(1, min(block_size, n))`; see §4.1 of `TECHNICAL-PAPER.md`), `n_bootstrap=1000`, confidence
 90%, both `moving_block` and `stationary` methods, fixed `seed=0`
 (`block_bootstrap_mean_ci`/`regime_bootstrap_uncertainty`,
 `src/financial_dynamics/backtesting/metrics.py:428` and `:486`; default arguments in the function
@@ -376,10 +376,12 @@ observation, not as proof of either result.
   `.github/workflows/publication-pack.yml`, added 2026-09-18 at the coordinating session's
   explicit direction (see `D10-STATUS.md`'s remediation-round notes) so this pack has its own CI
   verification gate, since `ci.yml` never runs on a PR targeting a non-`main` base branch. That
-  workflow only checks out the repo, installs dependencies, and runs read-only verification
-  against already-committed files (`scripts/verify_pack.py`, `ruff`, `mypy`) — it does not publish
-  anything, does not touch either of the two named publish workflows above, and does not modify
-  any file.
+  workflow only checks out the repo, installs dependencies, and runs verification against
+  already-committed files (`scripts/verify_pack.py`, `ruff`, `mypy`). Note that
+  `scripts/verify_pack.py` is not read-only with respect to the working tree: it regenerates
+  `tables/` and `figures/` in place in order to compare them against the committed bytes, and
+  restores them. The workflow itself commits nothing, publishes nothing, and does not touch
+  either of the two named publish workflows above.
 
 ## Reviewer instructions
 

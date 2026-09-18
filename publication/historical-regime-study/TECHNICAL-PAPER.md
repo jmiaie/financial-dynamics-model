@@ -82,8 +82,9 @@ not a data-driven fit (see §6, Limitations).
 
 ### 1.4 Benchmarks
 
-All benchmark thresholds are fit on formation-period data only and frozen before out-of-sample
-classification (`src/financial_dynamics/benchmarks/baselines.py`):
+All benchmark thresholds are fit on data through the end of the validation period
+(`history_period.end_inclusive = 2024-12-31` in the committed artifacts, i.e. formation plus
+the 2024 validation year, not formation alone) and frozen before out-of-sample classification (`src/financial_dynamics/benchmarks/baselines.py`):
 
 - **Persistence** (`PersistenceClassifier`) — trivially repeats the last observed regime; defined
   only where a history window exists, so absent from the development row.
@@ -256,7 +257,7 @@ Block-bootstrap confidence intervals exist **only** for the 15 robustness/charac
 artifacts (§3); the three SPY-v1 primary artifacts are intentionally slim and carry no bootstrap
 fields (§6). Two methods are computed for every (regime, horizon) cell: `moving_block` (fixed
 block length) and `stationary` (Politis–Romano geometrically-distributed block length), each with
-requested block length 20 trading days, `n_bootstrap=1000`, 90% confidence, fixed `seed=0`
+requested block length 20 **regime occurrences** (not trading days; `effective_block = max(1, min(block_size, n))` collapses to `n` in sparse cells -- see §4.1), `n_bootstrap=1000`, 90% confidence, fixed `seed=0`
 (`block_bootstrap_mean_ci`/`regime_bootstrap_uncertainty`,
 `src/financial_dynamics/backtesting/metrics.py`).
 
@@ -277,6 +278,8 @@ that smaller `n` (never 20). Two concrete examples, independently re-verified in
   `n=12`, reported `block_size=12`.
 - `fdm_hist_regime_v1_robustness_gld_holdout_2025.json`, **volatility-bucket benchmark** (not the
   FDM pipeline), `CALM_TREND`, horizon 1: `n=4`, reported `block_size=4`.
+
+Because the effective block equals `n` in all 174 of these rows, such a cell's resampled mean reduces to (or is dominated by) the sample mean itself: the reported interval is degenerate or near-degenerate and must not be read as evidence of stability.
 
 Full listing of all 174 rows: `tables/bootstrap_sparse_cells_full.md`. A histogram of effective
 block sizes across these rows is at `figures/sparse_cell_effective_block_sizes.png` (see

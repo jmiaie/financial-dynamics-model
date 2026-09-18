@@ -22,7 +22,7 @@ resulting HEAD, or `git log --oneline -1` for the actual current value).
 | 7b | Red-team: claim overreach | `CLAIM-REDTEAM.md` | Done |
 | 7c | Red-team: citation integrity | `CITATION-REDTEAM.md` | Done |
 | 8 | This status document | `D10-STATUS.md` | Done |
-| 9a | Script-generated tables | `tables/*.md`, `tables/*.json` (7 files, all produced by `scripts/generate_tables.py`, none hand-typed) | Done |
+| 9a | Script-generated tables | `tables/*.md`, `tables/*.json` (8 files, all produced by `scripts/generate_tables.py`, none hand-typed) | Done |
 | 9b | Script-generated figures | `figures/qqq_2025_holdout_bootstrap_ci_h1.png`, `figures/sparse_cell_effective_block_sizes.png` (matplotlib 3.11.2 available in `/tmp/fdm-venv`; both produced by `scripts/generate_figures.py`) | Done — matplotlib was available, so figures were generated, not skipped |
 | 9c | Generator scripts | `scripts/generate_tables.py`, `scripts/generate_figures.py`, `scripts/verify_pack.py` (deterministic, offline, re-runnable against the frozen local artifacts; ruff-clean and mypy-clean) | Done |
 | 10 | Publication-pack CI workflow (added in this remediation round) | `.github/workflows/publication-pack.yml` — validates the pack itself (hashes, table/figure reproducibility, citation integrity, no-rerun self-audit, lint, typecheck); never invokes the empirical study runner or acquisition script | Done |
@@ -213,6 +213,35 @@ zero bytes changed in any file under `results/`, `configs/`, `src/`, `data/`, or
 - Nothing was published externally (no npm/pypi publish, no website deploy, no use of
   `.github/workflows/mirror-to-public.yml` or `.github/workflows/publish.yml`).
 - No Directive #11 work of any kind was started.
+
+---
+
+## Remediation round 4 — 2026-09-18 (independent-review findings)
+
+An independent review of this pack (not a re-run of `scripts/verify_pack.py`, which only
+re-tests the pack against itself) reported findings; the ones that reproduced against the
+committed artifacts are corrected here. No empirical code was run, no artifact was
+regenerated, and no frozen value was touched: every correction is documentation,
+claim-register wording, or the verifier itself.
+
+| # | Finding | Correction |
+|---|---|---|
+| 1 | Claim register quoted the stationary CI lower bound as `-0.0097`; the artifact holds `ci_low = -0.009628231317896438` | `CLAIM-REGISTER.md` now reads `-0.0096` |
+| 2 | Benchmarks described as "fit on formation-period data only" | Corrected in `TECHNICAL-PAPER.md` §1.4 and `SOURCE-GATE.md`: fitted through the end of validation (`history_period.end_inclusive = 2024-12-31`, i.e. formation plus the 2024 validation year) |
+| 3 | Persistence cited as a comparator across all three periods | Scoped to `val_2024`/`holdout_2025` in `CLAIM-REGISTER.md`; the `dev_formation` artifact holds four models and no `persistence` model — the sticky comparator there is `volatility_bucket` (mean self-transition 0.923) and the ordering still holds (FDM 0.736, GMM 0.365) |
+| 4 | "block length 20 trading days" — wrong unit | Now "20 **regime occurrences**, not trading days" in `TECHNICAL-PAPER.md` §4 and `SOURCE-GATE.md`, with `effective_block = max(1, min(block_size, n))` spelled out |
+| 5 | Sparse-cell disclosure gave the reduced block sizes but not what they imply | `TECHNICAL-PAPER.md` §4.1 now states that the effective block equals `n` in all 174 rows, so the resampled mean reduces to (or is dominated by) the sample mean itself: the interval is degenerate or near-degenerate and is not evidence of stability |
+| 6 | `RESULT-SOURCE-MAP.md` promised a row for every table cell | Reworded to what the map holds: the `regime_counts` half of the count column has `primary.*.regime_counts` rows per period/model; the `evaluated_bars`/`total_bars` half is covered only by the artifact's whole-file sha256 row |
+| 7 | `D10-STATUS.md` said `tables/` holds 7 files | Corrected to 8 |
+| 8 | `verify_pack.py`'s figure check compared each PNG against itself after a no-op generator run, so a skipped generation (e.g. matplotlib absent) reported a byte-identical PASS | The check now deletes the committed PNGs before generation and raises `CheckFailure` if a figure is missing afterwards, restoring the files so a failed run leaves the tree as it found it; docstring updated |
+| 9 | Citation check resolved 19 of the 35 identifiers present (lowercase-only pattern skipped `*`/uppercase forms) and resolved wildcards by prefix only | Pattern widened and wildcard matching moved to `fnmatch` glob semantics; the check now reports and resolves all 35 |
+| 10 | Workflow described as running "read-only verification" | `SOURCE-GATE.md` now states that `verify_pack.py` regenerates `tables/`/`figures/` in place to compare against the committed bytes and restores them; the workflow itself commits and publishes nothing |
+
+Re-verified after this round: `verify_pack.py` → **all 5 checks pass** under the pinned
+interpreter, **35 citation identifiers resolved**, both figures regenerated and
+byte-identical, generated tables byte-identical to committed. With matplotlib absent the
+figure check now **fails closed** (1/5 failed: `['figures']`) where it previously reported a
+full pass — that false-pass path is closed permanently, not just noted.
 
 ---
 
