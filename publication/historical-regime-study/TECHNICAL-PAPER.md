@@ -25,10 +25,10 @@ secondary, explicitly post-primary robustness evaluation repeats the same frozen
 QQQ, IWM, TLT, and GLD (plus a second SPY run) on a separately acquired dataset that is disclosed
 as not bit-identical to the primary dataset for four of the five symbols. The FDM pipeline shows
 a self-transition rate that sits consistently between the sticky simple benchmarks and a noisy
-Gaussian-mixture baseline across all three periods, and its 2025 holdout result is the only model whose
-mean 1-day forward return was negative in that period — a finding whose 90% block-bootstrap
-confidence interval, examined in the robustness runs, does not exclude zero for the small-sample
-`RISK_OFF` regime specifically. All reported numbers trace to committed JSON artifacts; the
+Gaussian-mixture baseline across all three periods, and, in the primary results set, its 2025 holdout
+aggregate 1-day forward return is the only negative per-model cell across all three primary periods —
+with the negative contribution concentrated in the small-sample `RISK_OFF` regime, whose 90%
+block-bootstrap interval, examined in the robustness runs, does not exclude zero. All reported numbers trace to committed JSON artifacts; the
 mapping is in `RESULT-SOURCE-MAP.md`.
 
 ## 1. Data and methodology
@@ -283,7 +283,15 @@ that smaller `n` (never 20). Two concrete examples, independently re-verified in
 - `fdm_hist_regime_v1_robustness_gld_holdout_2025.json`, **volatility-bucket benchmark** (not the
   FDM pipeline), `CALM_TREND`, horizon 1: `n=4`, reported `block_size=4`.
 
-Because the effective block equals `n` in these rows, the outcome is method-dependent, and the pattern is a property of the implementation rather than evidence about stability. Of the 174 rows, **81 are moving-block rows whose 90% interval collapses to zero width** (the block spans the whole sample, so every resample reproduces the sample mean), **81 are stationary-method rows that keep a non-zero interval** (an expected block length of `n` does not force each draw to contain every observation — e.g. QQQ `val_2024`, volatility-bucket, `CALM_TREND`, horizon 20, `n=19`: interval `[-0.024217, +0.047039]`, width `0.071255`), and **12 rows (6 per method) are flagged `insufficient_data`**, for which no interval is defined. A collapsed moving-block interval must not be read as evidence of stability; the stationary rows in the same set do not collapse.
+Because the effective block equals `n` in these rows, the outcome is method-dependent, and the
+pattern is a property of the implementation rather than evidence about stability. Of the 174 rows,
+**81 are moving-block rows whose 90% interval collapses to zero width** (the block spans the whole
+sample, so every resample reproduces the sample mean), **81 are stationary-method rows that keep a
+non-zero interval** (an expected block length of `n` does not force each draw to contain every
+observation — e.g. QQQ `val_2024`, volatility-bucket, `CALM_TREND`, horizon 20, `n=19`: interval
+`[-0.024217, +0.047039]`, width `0.071255`), and **12 rows (6 per method) are flagged
+`insufficient_data`**, for which no interval is defined. A collapsed moving-block interval must not
+be read as evidence of stability; the stationary rows in the same set do not collapse.
 
 Full listing of all 174 rows: `tables/bootstrap_sparse_cells_full.md`. A histogram of effective
 block sizes across these rows is at `figures/sparse_cell_effective_block_sizes.png` (see
