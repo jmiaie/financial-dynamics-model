@@ -76,7 +76,8 @@ lose track of which numbers are primary.
 robustness/non-primary status (the section header itself says "Robustness / characterization,"
 the section's first sentence repeats "post-primary, robustness / characterization only," and each
 subsequent finding paragraph — cross-symbol pattern, SPY-v2 consistency — repeats the
-non-primary framing inline). `SOURCE-GATE.md` §13 and `CLAIM-REGISTER.md`'s "Primary or
+non-primary framing inline). `SOURCE-GATE.md` field 4 and its "Primacy statement (full)" section,
+plus `CLAIM-REGISTER.md`'s "Primary or
 robustness-only" column provide two further, independent places this distinction is asserted.
 This redundancy is intentional, not accidental over-qualification, given how consequential this
 specific distinction is to the whole pack.

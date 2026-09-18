@@ -39,7 +39,7 @@ This performs no network access and reads only already-committed files under `re
 | `robustness.<symbol>.<period>.<column>` | §3 (Robustness / SPY-v2) | `results/historical_regimes/fdm_hist_regime_v1_robustness_{symbol}_{period}.json`, `models[model==financial_dynamics_pipeline].key_metrics.<field>` |
 | `sparse_cell.<index>.<symbol>.<period>.<model>.<regime>.h<horizon>.<method>` | §4.1 (sparse-cell disclosure) | same 15 robustness files, `models[model==<model>].bootstrap_records[<index>].block_size` |
 | `case_study.qqq_2025.*` | §4.2, `CASE-STUDY.md` | `fdm_hist_regime_v1_robustness_qqq_holdout_2025.json` (+ `superseded_150_resamples/` copy for the before/after contrast) |
-| `hash_table.*` | §1.1, `SOURCE-GATE.md` §4–5, §12 | `data/manifests/yf_fd_etfs_daily_2015_2025_{v1,v2}.json`, `data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md`, `configs/experiments/fdm_historical_regime_study_{v1,v2_robustness}.yaml`, `research/holdout-audit.md` (the 2025 period-classification CLEAR verdict, `hash_table.holdout_audit_verdict`) |
+| `hash_table.*` | §1.1, `SOURCE-GATE.md` fields 5–6 and 8, plus its "Dataset provenance detail" and "Config detail" sections | `data/manifests/yf_fd_etfs_daily_2015_2025_{v1,v2}.json`, `data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md`, `configs/experiments/fdm_historical_regime_study_{v1,v2_robustness}.yaml`, `research/holdout-audit.md` (the 2025 period-classification CLEAR verdict, `hash_table.holdout_audit_verdict`) |
 
 ## Coverage check
 

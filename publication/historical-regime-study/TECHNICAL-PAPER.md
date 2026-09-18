@@ -64,7 +64,8 @@ single 2025 run. It is **not** based on, and does not require, "the data existed
 principle inspectable before the freeze" — that is true of every holdout period ever run and is
 not itself evidence for or against holdout status; an earlier version of this paper used that
 reasoning and mislabeled the period "historical evaluation" as a result (corrected 2026-09-18; see
-`SOURCE-GATE.md` §12 and `QUANT-REDTEAM.md`'s dated remediation note). This label does not assert
+`SOURCE-GATE.md` field 7 and its "Period classification detail" section, and
+`QUANT-REDTEAM.md`'s dated remediation note). This label does not assert
 the period is "pristine," free of every conceivable prior human exposure, or a prospective
 live-market validation — only what the audit and freeze record directly support.
 

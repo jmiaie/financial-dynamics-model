@@ -1,9 +1,12 @@
 # D10-A Publication Pack — Status
 
 **Directive:** D10-A (publication/communication phase). **Study:** Historical Market Regimes and
-Subsequent Risk Characteristics (FDM, SPY primary; QQQ/IWM/TLT/GLD + SPY-v2 robustness). **Base
-commit:** `5d01cf8e2d3334602fbd8e2b114f6bff92d78f31` on `publication/historical-regime-study`,
-based on PR #13's branch (`research/historical-regime-validation`), not `main`.
+Subsequent Risk Characteristics (FDM, SPY primary; QQQ/IWM/TLT/GLD + SPY-v2 robustness). **Branch:**
+`publication/historical-regime-study`, created from accepted D9-A evidence base
+`5d01cf8e2d3334602fbd8e2b114f6bff92d78f31` (PR #13's branch, `research/historical-regime-validation`,
+not `main`). **That base commit is fixed and is not this branch's current HEAD** — this branch has
+its own commit history on top of it (see each "Remediation round" section below for that round's
+resulting HEAD, or `git log --oneline -1` for the actual current value).
 
 ## Deliverables checklist
 
@@ -60,7 +63,9 @@ initially published pack, both confirmed real:
    instead in `research/holdout-audit.md`'s explicit **CLEAR** verdict (no evidence of prior
    empirical inspection of 2025 data anywhere in this repository) combined with the config freeze
    preceding the single 2025 run — read and confirmed directly in this session. Every occurrence
-   was fixed: `SOURCE-GATE.md` §12, `TECHNICAL-PAPER.md` (abstract, §1.2, §2.3, §3, §6, §7),
+   was fixed: `SOURCE-GATE.md` field 7 and its "Period classification detail" section (see the
+   round-3 note below for that document's own subsequent restructuring),
+   `TECHNICAL-PAPER.md` (abstract, §1.2, §2.3, §3, §6, §7),
    `CASE-STUDY.md`, `CLAIM-REGISTER.md` C19 (the claim's *reasoning* was rewritten, not just
    relabeled), `CITATION-REDTEAM.md`, and the embedded label string in
    `scripts/generate_tables.py`'s `PERIOD_LABELS` (fixed at the source and tables regenerated, not
@@ -87,6 +92,67 @@ whole-file re-verification would have wrongly flagged as an inconsistency. Fixed
 adding a `kind` field (`whole_file_sha256` vs `field_value`) to the `SourceMap` schema in
 `generate_tables.py`, rather than special-casing row IDs in the checker.
 
+Round 2's push initially failed CI on the real GitHub Actions runner (not just locally): a
+follow-up fix, committed separately, removed an absolute filesystem path
+(`generate_tables.py` had embedded `str(repo_root)` in `tables/generation_manifest.json`, which
+necessarily differs between a local clone and the CI runner's checkout, breaking byte-identical
+reproducibility). Verified the fix generalizes by regenerating the entire `tables/` directory from
+a genuinely different absolute path and diffing the full output — zero differences. Both triggered
+CI runs went green after that fix.
+
+## Remediation round 3 — 2026-09-18 (authoritative SOURCE-GATE.md schema)
+
+`SOURCE-GATE.md`'s original 14 fields were an improvised structure, not the program's actual
+Phase 0 "SOURCE-GATE MATRIX" schema. Rebuilt the document to the authoritative 14-field schema
+(Repository; Source PR/branch; Accepted HEAD; Experiment ID; Dataset IDs; Dataset SHA / frozen
+identity; 2025/holdout status; Final config SHA; Primary artifact path; Result artifact SHA;
+Independent review status; Primary finding; Primary null/negative finding; Primary limitation),
+each field now concise and in the mandated order. **No content was deleted** — every piece of the
+prior document's methodology detail, artifact inventories, bootstrap sparse-cell disclosure, full
+period-classification reasoning, full limitations list, standing prohibitions, and primacy
+statement was relocated, in full, to named unnumbered sections after field 14 (e.g. "Methodology,"
+"Bootstrap / uncertainty detail," "Period classification detail," "Standing prohibitions") so a
+future schema change cannot silently break a numbered cross-reference again.
+
+Two specific defects were also fixed in this round:
+
+- **Stale branch-head claim.** The document previously stated the local sandbox clone path
+  (`/home/user/financial-dynamics-model`) as if it were meaningful provenance, and separately
+  implied — via a "Verified directly in this session: `git log --oneline -1` ... reports `5d01cf8`"
+  sentence written when the branch genuinely had no commits yet — that the accepted D9-A base HEAD
+  and this publication branch's own current HEAD were the same value. They have not been the same
+  value since this pack's first commit. Fixed: the local-clone path is removed entirely (it is a
+  sandbox artifact, not provenance); field 3 now states explicitly that the accepted HEAD is fixed
+  and is *not* this branch's current HEAD, and points to `git log`/this file's own remediation-round
+  notes for the actual current value instead of hardcoding a value that would immediately go stale
+  on the next commit (including this one).
+- **Cross-reference repair.** Renumbering the schema would have silently broken every existing
+  `SOURCE-GATE.md §N` / `item N` reference elsewhere in this pack, including two that would have
+  pointed at content with a *different meaning* under the new numbering (old §8 = Methodology, new
+  field 8 = Final config SHA; old §9 = Bootstrap detail, new field 9 = Primary artifact path).
+  Searched every file under `publication/historical-regime-study/` for these patterns and updated
+  each to either the new field number or a stable named heading:
+  - `RESULT-SOURCE-MAP.md` (`hash_table.*` row: `§4–5, §12` → "fields 5–6 and 8, plus 'Dataset
+    provenance detail' and 'Config detail'")
+  - `TECHNICAL-PAPER.md` §1.2 (`§12` → "field 7" + "Period classification detail")
+  - `CASE-STUDY.md` (Step 0 table: `§12` → field 7 + named section; a second reference,
+    `§9` → "Bootstrap / uncertainty detail" named section, since old §9 and new field 9 mean
+    different things)
+  - `CLAIM-REGISTER.md` C6 (`§8` methodology reference → "Methodology" named section, since old §8
+    and new field 8 mean different things), C17 and its closing note (`§11` → "field 11," a
+    position that coincidentally still means the same thing under both schemas, normalized to the
+    new phrasing regardless)
+  - `CITATION-REDTEAM.md` (`§12` → field 7 + named section)
+  - `CLAIM-REDTEAM.md` (`§13` primacy reference → field 4 + "Primacy statement (full)" named
+    section)
+  - `QUANT-REDTEAM.md` (two `§12` references, including inside its dated round-2 remediation note,
+    which is a historical record but was still updated so the reference itself stays navigable)
+  - `reproducibility.json` (`Sec 9` bootstrap reference → "Bootstrap / uncertainty detail" named
+    section)
+  - `scripts/generate_tables.py` (two code comments citing `Sec 12` → field 7 / named section)
+  - `scripts/verify_pack.py` was checked and needed no change: its `SOURCE-GATE.md` references are
+    all to the document as a whole (hash-citation scanning), never to a specific field number.
+
 ## Independent verification performed in this session (not just re-reading the source report)
 
 - Confirmed branch (`publication/historical-regime-study`) and commit
@@ -109,12 +175,12 @@ adding a `kind` field (`whole_file_sha256` vs `field_value`) to the `SourceMap` 
 - Ran the full existing test suite before and is re-confirmed after this pack's script edits (see
   below) — 321 tests, all passing, unchanged from baseline.
 
-## Final checks (run in this session)
+## Final checks (re-run fresh in every remediation round, including round 3)
 
 ```
 source /tmp/fdm-venv/bin/activate && cd /home/user/financial-dynamics-model
-python -m pytest tests/ -q          # 321 passed, 0 failed (baseline == post-pack; no test touches publication/)
-ruff check .                        # 19 pre-existing errors, all outside publication/historical-regime-study/
+python -m pytest tests/ -q          # 321 passed, 0 failed every round (baseline == post-pack; no test touches publication/)
+ruff check .                        # 19 pre-existing errors every round, all outside publication/historical-regime-study/
                                      # (scripts/run_pipeline.py etc.); publication/historical-regime-study/scripts/
                                      # is independently ruff-clean
 mypy src/                           # Success: no issues found in 53 source files (unchanged from baseline)
@@ -125,14 +191,15 @@ mypy publication/historical-regime-study/scripts/ --ignore-missing-imports  # Su
 ```
 
 Every step in `.github/workflows/publication-pack.yml` (dependency install, `verify_pack.py`,
-`ruff check`, `mypy`) was run locally in this exact sequence before pushing, per the "validate the
-workflow's own steps locally first" instruction. The actual GitHub Actions run triggered by the
-push is reported in the follow-up message to the orchestrating session (run ID, head SHA, and
-each job's conclusion).
+`ruff check`, `mypy`) is re-run locally in this exact sequence before every push, per the
+"validate the workflow's own steps locally first" instruction. The actual GitHub Actions run
+triggered by each push is reported in that round's follow-up message to the orchestrating session
+(run ID, head SHA, and each job's conclusion) — round 3's run is reported the same way.
 
-`git status` / `git diff --stat` confirm only new, untracked files under
-`publication/historical-regime-study/` — zero bytes changed in any file under `results/`,
-`configs/`, `src/`, `data/`, or the existing `research/historical-market-regime-study.md`.
+`git status` / `git diff --stat` confirm only files under `publication/historical-regime-study/`
+and (as of round 2) the one authorized `.github/workflows/publication-pack.yml` are ever touched —
+zero bytes changed in any file under `results/`, `configs/`, `src/`, `data/`, or the existing
+`research/historical-market-regime-study.md`, in any round including this one.
 
 ## Standing prohibitions — confirmed in force
 
@@ -149,4 +216,4 @@ each job's conclusion).
 
 ---
 
-## READY FOR INDEPENDENT REVIEW. NO MERGE. NO D11.
+## READY FOR INDEPENDENT D10 REVIEW. NO MERGE. NO D11.

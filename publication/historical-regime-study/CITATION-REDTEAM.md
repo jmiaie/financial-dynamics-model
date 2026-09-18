@@ -75,7 +75,8 @@ existing `hash_table.config_v1_primary` whole-file hash.
 C19's underlying *claim* was separately found to contain a category error (the period was labeled
 "historical evaluation" on the reasoning that "2025 data existed and was in principle
 inspectable," which is true of every holdout period and is not evidence either way) — see
-`QUANT-REDTEAM.md`'s dated remediation note and `SOURCE-GATE.md` §12 for the full correction. That
+`QUANT-REDTEAM.md`'s dated remediation note and `SOURCE-GATE.md` field 7 / its "Period
+classification detail" section for the full correction. That
 fix is a claim/labeling correction, not a citation-integrity one, but it touches this document
 because C19's evidentiary basis grew a fourth citation as part of it:
 `hash_table.holdout_audit_verdict`, added to the generator to cite the exact CLEAR-verdict line in

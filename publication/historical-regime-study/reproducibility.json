@@ -116,7 +116,7 @@
     "confidence": 0.90,
     "methods": ["moving_block", "stationary"],
     "seed": 0,
-    "sparse_cell_rule": "effective_block = max(1, min(block_size, n)); reported back verbatim in each bootstrap record's own block_size field. See SOURCE-GATE.md Sec 9 and tables/bootstrap_sparse_cells_full.md for all 174 verified rows where n < 20.",
+    "sparse_cell_rule": "effective_block = max(1, min(block_size, n)); reported back verbatim in each bootstrap record's own block_size field. See SOURCE-GATE.md's 'Bootstrap / uncertainty detail' section and tables/bootstrap_sparse_cells_full.md for all 174 verified rows where n < 20.",
     "source_function": "src/financial_dynamics/backtesting/metrics.py: block_bootstrap_mean_ci (line 428), regime_bootstrap_uncertainty (line 486)"
   },
   "this_pack_generation": {

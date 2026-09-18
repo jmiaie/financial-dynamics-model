@@ -39,7 +39,8 @@ PERIOD_LABELS = {
     "dev_formation": "Development / formation (2015-01-01 to 2023-12-31)",
     "val_2024": "Validation (2024-01-01 to 2024-12-31)",
     # Corrected 2026-09-18: "HISTORICAL EVALUATION" was a category error (see
-    # SOURCE-GATE.md Sec 12 and QUANT-REDTEAM.md's dated remediation note).
+    # SOURCE-GATE.md field 7 / its "Period classification detail" section,
+    # and QUANT-REDTEAM.md's dated remediation note).
     # Holdout status is established by research/holdout-audit.md's CLEAR
     # verdict plus freeze-then-single-execution, not by "2025 data existed
     # and was inspectable" (true of every holdout period, not evidence
@@ -504,7 +505,8 @@ def gen_dataset_config_hash_table(
 
     # CLAIM-REGISTER.md C19 (corrected 2026-09-18): holdout status rests on
     # research/holdout-audit.md's CLEAR verdict, not on "2025 data existed
-    # and was inspectable" (a category error; see SOURCE-GATE.md Sec 12).
+    # and was inspectable" (a category error; see SOURCE-GATE.md field 7 /
+    # its "Period classification detail" section).
     # Extract and map the verdict line itself so this citation is traceable
     # the same way every other one in this pack is.
     holdout_audit_path = repo_root / "research/holdout-audit.md"

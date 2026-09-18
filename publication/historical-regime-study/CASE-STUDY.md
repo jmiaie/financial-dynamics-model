@@ -18,7 +18,7 @@ comparably complete worked example exists for SPY's own primary numbers.
 | Symbol | QQQ | `results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json`, `primary_symbol` field |
 | Dataset | `yf_fd_etfs_daily_2015_2025_v2` | same file, `dataset_id` field |
 | Config | `configs/experiments/fdm_historical_regime_study_v2_robustness.yaml`, sha256 `6e1044b4e46ae297f52efcd2b2a09d981d6a71d702fe2b58fd8a73ff9e746b4b` | same file, `config_path` field |
-| Period | 2025-01-01 to 2025-12-31 (final 2025 holdout evaluation; see `SOURCE-GATE.md` §12) | same file, `period` field |
+| Period | 2025-01-01 to 2025-12-31 (final 2025 holdout evaluation; see `SOURCE-GATE.md` field 7 and its "Period classification detail" section) | same file, `period` field |
 | Model | `financial_dynamics_pipeline` (FDM), seed 0 | same file, `models[0].model` and `seed` fields |
 | Artifact | `results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json` | sha256 `7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d` |
 
@@ -89,7 +89,7 @@ chronologically-ordered `forward_return` values behind the Step 2 summary (the u
 - **Requested parameterization:** `block_size=20`, `n_bootstrap=1000`, `confidence=0.90`, `seed=0`.
 - **Effective block size actually used:** `n = 29 ≥ 20`, so `effective_block = max(1, min(20, 29))
   = 20` — this is one of the **non**-sparse cells (contrast with the sparse-cell disclosure in
-  `SOURCE-GATE.md` §9, which covers cells where `n < 20`).
+  `SOURCE-GATE.md`'s "Bootstrap / uncertainty detail" section, which covers cells where `n < 20`).
 - For `method="moving_block"`: 1000 resamples are drawn by concatenating contiguous 20-observation
   blocks (wrapping at the series end) with replacement until the resampled series reaches length
   29, and each resample's mean is recorded (`_moving_block_bootstrap_mean`, line 394).

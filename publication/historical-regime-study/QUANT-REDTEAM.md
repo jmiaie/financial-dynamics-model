@@ -64,7 +64,8 @@ now states the columns are `mean_return_h*` explicitly, not just implicitly via 
 first mention, but a later sentence in the same abstract reverted to "its 2025 holdout" without
 the qualifier, three sentences later. Not a violation of the standing prohibition (the paper does
 not call it an "untouched" or "clean" holdout anywhere), but an avoidable inconsistency in a
-document that elsewhere insists on precise period labeling (`SOURCE-GATE.md` §12).
+document that elsewhere insists on precise period labeling (`SOURCE-GATE.md` field 7 / its
+"Period classification detail" section).
 
 **Fixed before finalizing.** Changed to "its 2025 evaluation result" for consistency within the
 abstract itself.
@@ -122,7 +123,8 @@ source report (`research/historical-market-regime-study.md`) itself uses consist
 
 **Scope of this correction.** Every occurrence of "historical evaluation" / "historical-evaluation"
 as a period classification was replaced with "final 2025 holdout evaluation" / "2025 holdout"
-across `SOURCE-GATE.md` §12, `TECHNICAL-PAPER.md` (abstract, §1.2, §2.3 header and body, §3, §6,
+across `SOURCE-GATE.md` field 7 (period classification, since renumbered — see the round-3 note
+below), `TECHNICAL-PAPER.md` (abstract, §1.2, §2.3 header and body, §3, §6,
 §7), `CASE-STUDY.md`, `CLAIM-REGISTER.md` C19 (the claim's *reasoning* was rewritten, not just its
 label — the "data existed and was inspectable" justification was the actual defect), and
 `CITATION-REDTEAM.md`. `scripts/generate_tables.py`'s `PERIOD_LABELS` dict carried the same wrong
@@ -139,13 +141,27 @@ unqualified) was a real, if now moot, observation about a since-superseded label
 place above as the accurate record of what was found and when, per this document's own
 "never silently rewrite a prior finding" convention.
 
+## Remediation update 2 — 2026-09-18 (SOURCE-GATE.md restructured to the authoritative schema)
+
+`SOURCE-GATE.md` was rebuilt to the program's actual Phase 0 14-field schema (a different, more
+specific structure than the improvised one this pack originally used), so every `SOURCE-GATE.md
+§N` reference in this document that pointed at content now living under a different number or a
+named unnumbered section was updated (not silently — this note documents it). The two occurrences
+above (the P2 finding's own body text, and this document's round-2 remediation note) both
+referenced the old "§12" (period classification); both now point to the new field 7 plus
+`SOURCE-GATE.md`'s "Period classification detail" named section, which is where that content
+lives after the restructuring. No finding's substance changed as a result of this renumbering —
+only the citation target.
+
 ## Summary
 
 - P0: 0
 - P1: 1 (fixed)
 - P2: 4 (2 fixed, 2 not fixed with rationale) + 1 remediation update (2025 period-label category
   error, corrected 2026-09-18 at the coordinator's direction, independently confirmed against
-  `research/holdout-audit.md` in this pass)
+  `research/holdout-audit.md` in this pass) + 1 further remediation update (SOURCE-GATE.md
+  cross-reference repair after its schema was rebuilt to the authoritative 14-field structure,
+  same date)
 
 No fabricated, mis-transcribed, or incorrectly-labeled *number* was found in this pass. The one P1
 was a scope/labeling gap in a caveat, not an incorrect number. The 2026-09-18 remediation update is
