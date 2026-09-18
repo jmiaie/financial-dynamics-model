@@ -1,0 +1,128 @@
+{
+  "_purpose": "Machine-readable reproduction record for the D10-A publication pack. Every field below is either quoted verbatim from an already-committed source (config, manifest, report) or independently recomputed in this session against already-committed artifacts. This file does NOT authorize or perform any re-run; commands are reproduced for reference exactly as the source report documents them.",
+  "package_versions": {
+    "note": "Discovered from pyproject.toml / requirements.txt (declared floors) and /tmp/fdm-venv (the environment actually used to verify hashes and run tests/tables/figures for this pack). Not necessarily the exact environment that originally produced the committed artifacts, which is not recorded in this repository.",
+    "python_requires": ">=3.10",
+    "mypy_typecheck_python_version": "3.12",
+    "declared_floors_requirements_txt": {
+      "numpy": ">=1.24",
+      "pandas": ">=2.0",
+      "scipy": ">=1.11",
+      "matplotlib": ">=3.7",
+      "PyYAML": ">=6.0",
+      "scikit-learn": ">=1.3",
+      "yfinance": ">=0.2.31"
+    },
+    "verification_environment_tmp_fdm_venv": {
+      "python": "3.12.3",
+      "numpy": "2.5.3",
+      "pandas": "3.0.5",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "ruff": "0.16.8",
+      "mypy": "2.3.1"
+    },
+    "yfinance_at_acquisition_time": "1.7.0 (per data/manifests/yf_fd_etfs_daily_2015_2025_v1.json and _v2.json, source_version field)"
+  },
+  "datasets": {
+    "v1_primary": {
+      "dataset_id": "yf_fd_etfs_daily_2015_2025_v1",
+      "manifest_path": "data/manifests/yf_fd_etfs_daily_2015_2025_v1.json",
+      "manifest_sha256": "e969413cd8dc6ec45697c6da34196355c6f7cfeb031a5f16584b22a88dd60344",
+      "dataset_canonical_sha256": "91caa6cde08358091125a6576ff3f2be5666791b06df67d462c2aad6f771ada9",
+      "retrieval_timestamp_utc": "2026-09-16T02:36:57Z",
+      "freeze_timestamp_utc": "2026-09-16T02:37:02Z",
+      "status": "used for the sole primary result (SPY); raw CSVs gitignored and confirmed unrecoverable as of 2026-09-17 (owner confirmation, see v2 provenance file) -- NOT bit-reproducible from scratch",
+      "acquisition_command": "python scripts/acquire_yf_fd_etfs_daily.py --dataset-id yf_fd_etfs_daily_2015_2025_v1 --raw-dir <dir>"
+    },
+    "v2_robustness": {
+      "dataset_id": "yf_fd_etfs_daily_2015_2025_v2",
+      "manifest_path": "data/manifests/yf_fd_etfs_daily_2015_2025_v2.json",
+      "manifest_sha256": "8e55e45f4054ae28f48ae5e69d6979b1033c3f67f061a18b1531b93d552a3e8c",
+      "dataset_canonical_sha256": "94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582",
+      "retrieval_timestamp_utc": "2026-09-17T02:27:37Z",
+      "provenance_file": "data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md",
+      "provenance_file_sha256": "8c23009abd5dee1930a02d1ec0011a78c21d9cfa41075be4ac8106976df3b83d",
+      "known_non_bit_reproducibility": "SPY, QQQ, IWM, and TLT (all dividend-paying) do NOT hash-match the frozen v1 manifest; GLD (pays no distributions) matches byte-for-byte. This is disclosed as-is in the source report and its provenance file -- it is cited here, not restated as fixed or resolved. Re-running the acquisition script again may produce yet another distinct hash for the dividend-paying symbols; that is an expected, documented reproducibility risk, not a broken run.",
+      "acquisition_command": "python scripts/acquire_yf_fd_etfs_daily.py --dataset-id yf_fd_etfs_daily_2015_2025_v2 --raw-dir <dir>"
+    }
+  },
+  "configs": {
+    "v1_primary": {
+      "path": "configs/experiments/fdm_historical_regime_study_v1.yaml",
+      "sha256": "299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16",
+      "status": "frozen-for-holdout",
+      "freeze_commit": "596a22527b6f0107ba5baf55dd2edd68a1d991fe",
+      "freeze_timestamp_utc": "2026-09-16T02:58:00Z"
+    },
+    "v2_robustness": {
+      "path": "configs/experiments/fdm_historical_regime_study_v2_robustness.yaml",
+      "sha256": "6e1044b4e46ae297f52efcd2b2a09d981d6a71d702fe2b58fd8a73ff9e746b4b",
+      "status": "methodology byte-identical to v1 config; only dataset_id differs"
+    }
+  },
+  "regeneration_commands": {
+    "_note": "Reproduced verbatim in substance from research/historical-market-regime-study.md Sec 8. These commands are NOT executed by this publication pack and this pack does not authorize their execution -- D10 performs no re-run of any evaluation period.",
+    "primary_v1": [
+      "python scripts/run_historical_regime_study.py --config configs/experiments/fdm_historical_regime_study_v1.yaml --allow-holdout"
+    ],
+    "primary_v1_requires": "Frozen local raw CSVs under data/raw/yf_fd_etfs_daily_2015_2025_v1/ (gitignored); acquire via scripts/acquire_yf_fd_etfs_daily.py and verify the resulting dataset_canonical hash before use.",
+    "robustness_v2": [
+      "python scripts/acquire_yf_fd_etfs_daily.py --dataset-id yf_fd_etfs_daily_2015_2025_v2 --raw-dir <dir>",
+      "python scripts/run_historical_regime_study.py --config configs/experiments/fdm_historical_regime_study_v2_robustness.yaml --primary-symbol QQQ --allow-holdout --include-bootstrap --bootstrap-n-resamples 1000",
+      "# repeat --primary-symbol for IWM, TLT, GLD",
+      "python scripts/run_historical_regime_study.py --config configs/experiments/fdm_historical_regime_study_v2_robustness.yaml --primary-symbol SPY --force-robustness-label --allow-holdout --include-bootstrap --bootstrap-n-resamples 1000"
+    ],
+    "bootstrap_flag_note": "--bootstrap-n-resamples 1000 matches the script's own default (n_bootstrap: int = 1000 in block_bootstrap_mean_ci/regime_bootstrap_uncertainty, src/financial_dynamics/backtesting/metrics.py) and what is actually recorded in every committed artifact's bootstrap_records[].n_bootstrap. Kept explicit here (rather than relying on the default silently) so the command remains self-documenting if the script's default ever changes. An earlier, superseded run used 150 resamples; those artifacts are preserved at results/historical_regimes/superseded_150_resamples/, not deleted, and are not used as evidence in this pack except as an explicit before/after contrast in CASE-STUDY.md."
+  },
+  "output_artifact_hashes": {
+    "primary": {
+      "dev_formation": {
+        "path": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+        "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35"
+      },
+      "val_2024": {
+        "path": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+        "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6"
+      },
+      "holdout_2025": {
+        "path": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+        "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937"
+      }
+    },
+    "robustness": {
+      "spy_dev_formation": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+      "spy_val_2024": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+      "spy_holdout_2025": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+      "qqq_dev_formation": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+      "qqq_val_2024": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+      "qqq_holdout_2025": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+      "iwm_dev_formation": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+      "iwm_val_2024": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+      "iwm_holdout_2025": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+      "tlt_dev_formation": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+      "tlt_val_2024": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+      "tlt_holdout_2025": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+      "gld_dev_formation": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+      "gld_val_2024": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+      "gld_holdout_2025": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f"
+    }
+  },
+  "bootstrap_parameterization": {
+    "requested_block_length_trading_days": 20,
+    "n_bootstrap": 1000,
+    "confidence": 0.90,
+    "methods": ["moving_block", "stationary"],
+    "seed": 0,
+    "sparse_cell_rule": "effective_block = max(1, min(block_size, n)); reported back verbatim in each bootstrap record's own block_size field. See SOURCE-GATE.md Sec 9 and tables/bootstrap_sparse_cells_full.md for all 174 verified rows where n < 20.",
+    "source_function": "src/financial_dynamics/backtesting/metrics.py: block_bootstrap_mean_ci (line 428), regime_bootstrap_uncertainty (line 486)"
+  },
+  "this_pack_generation": {
+    "note": "Tables and figures in this pack were generated deterministically, offline, from the already-committed artifacts listed above -- no network calls, no re-running of any experiment.",
+    "tables_script": "publication/historical-regime-study/scripts/generate_tables.py",
+    "figures_script": "publication/historical-regime-study/scripts/generate_figures.py",
+    "regenerate_with": "python publication/historical-regime-study/scripts/generate_tables.py && python publication/historical-regime-study/scripts/generate_figures.py"
+  }
+}
