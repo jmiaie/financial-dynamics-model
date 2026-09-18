@@ -82,9 +82,13 @@ not a data-driven fit (see §6, Limitations).
 
 ### 1.4 Benchmarks
 
-All benchmark thresholds are fit on data through the end of the validation period
-(`history_period.end_inclusive = 2024-12-31` in the committed artifacts, i.e. formation plus
-the 2024 validation year, not formation alone) and frozen before out-of-sample classification (`src/financial_dynamics/benchmarks/baselines.py`):
+All benchmark thresholds are fit on data through the end of the history window recorded in each
+artifact, and frozen before out-of-sample classification
+(`src/financial_dynamics/benchmarks/baselines.py`). That cutoff is period-dependent:
+`history_period.end_inclusive` is `2023-12-31` in the `val_2024` artifacts (formation only, so
+the 2024 evaluation year is out of sample) and `2024-12-31` in the `holdout_2025` artifacts
+(formation plus validation, so 2025 is out of sample); the `dev_formation` artifacts record no
+history window at all. In every case the cutoff is strictly before the window being evaluated:
 
 - **Persistence** (`PersistenceClassifier`) — trivially repeats the last observed regime; defined
   only where a history window exists, so absent from the development row.
@@ -279,7 +283,7 @@ that smaller `n` (never 20). Two concrete examples, independently re-verified in
 - `fdm_hist_regime_v1_robustness_gld_holdout_2025.json`, **volatility-bucket benchmark** (not the
   FDM pipeline), `CALM_TREND`, horizon 1: `n=4`, reported `block_size=4`.
 
-Because the effective block equals `n` in all 174 of these rows, such a cell's resampled mean reduces to (or is dominated by) the sample mean itself: the reported interval is degenerate or near-degenerate and must not be read as evidence of stability.
+Because the effective block equals `n` in these rows, the outcome is method-dependent, and the pattern is a property of the implementation rather than evidence about stability. Of the 174 rows, **81 are moving-block rows whose 90% interval collapses to zero width** (the block spans the whole sample, so every resample reproduces the sample mean), **81 are stationary-method rows that keep a non-zero interval** (an expected block length of `n` does not force each draw to contain every observation — e.g. QQQ `val_2024`, volatility-bucket, `CALM_TREND`, horizon 20, `n=19`: interval `[-0.024217, +0.047039]`, width `0.071255`), and **12 rows (6 per method) are flagged `insufficient_data`**, for which no interval is defined. A collapsed moving-block interval must not be read as evidence of stability; the stationary rows in the same set do not collapse.
 
 Full listing of all 174 rows: `tables/bootstrap_sparse_cells_full.md`. A histogram of effective
 block sizes across these rows is at `figures/sparse_cell_effective_block_sizes.png` (see
@@ -321,14 +325,18 @@ simpler benchmarks in a way that is neither uniform nor trivial: its self-transi
 occupies a consistent middle ground between sticky and noisy alternatives across all three
 periods, but its relative *volatility* ranking among the benchmarks is period-dependent, and its
 one distinguishing 2025 finding (a negative mean 1-day forward return, unique among all five
-models in the primary result) is, on the closest bootstrap evidence available (QQQ's analogous
-`RISK_OFF` cell in the robustness runs), not distinguishable from a zero effect at 90% confidence
-given the small number of `RISK_OFF` occurrences that year. This is not a failure of the study —
+models in the primary result) is not distinguishable from a zero effect at 90% confidence on the resampling evidence available:
+its own robustness run reports SPY-v2 `RISK_OFF` at horizon 1 with `n=29`, mean `-0.003479`, and
+90% intervals of `[-0.008626, +0.001900]` (moving-block) and `[-0.008459, +0.001305]`
+(stationary), both of which include zero, as does QQQ's analogous `RISK_OFF` cell. Caveat: a
+per-regime interval for one symbol is not a confidence interval for the primary result's
+unweighted cross-regime mean, so this bounds the small-sample reading rather than testing it. This is not a failure of the study —
 it is the correct and honest reading of a small-sample regime cell under resampling that respects
 serial dependence, and it is the reason this pack treats the 2025 finding as reported rather than
 as confirmed.
 
-The cross-asset robustness runs (§3) extend the same pattern (loss of `CALM_TREND` in 2025,
+The cross-asset robustness runs (§3) extend the same pattern (loss of `CALM_TREND` in 2025 in three of the four additional symbols —
+QQQ, IWM and TLT each record zero `CALM_TREND` occurrences in 2025 while GLD retains it with 11;
 negative 1-day returns specific to the equity instruments) across four additional symbols on an
 independently acquired, non-bit-identical dataset, which strengthens the *descriptive* case that
 something changed in 2025 classification behavior without establishing a *causal* one (a

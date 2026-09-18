@@ -2,7 +2,8 @@
 
 This is the traceability backbone for `TECHNICAL-PAPER.md`: for every table and number in that
 document, this file (together with its machine-generated companions) states the exact source
-file, exact JSON key path, and sha256 of that source file, so a reviewer can check any number in
+file, exact JSON key path, and a sha256 (of the source file, except for the two
+`dataset_canonical` rows, which cite a canonical field value — see the exception below), so a reviewer can check any number in
 under 30 seconds.
 
 **This file is not hand-typed.** It is a thin index over two machine-generated outputs produced
@@ -27,8 +28,12 @@ This performs no network access and reads only already-committed files under `re
    `case_study.qqq_2025.*` (§4.2 / `CASE-STUDY.md`), `hash_table.*` (dataset/config hashes cited
    throughout).
 3. Open the `file` at that row, navigate to `key_path`, and confirm it matches the paper's number.
-4. Independently confirm the file is the one actually referenced by running
-   `sha256sum <file>` and comparing to the row's `sha256`.
+4. Independently confirm the file is the one actually referenced. For a whole-file row, run
+   `sha256sum <file>` and compare to the row's `sha256`. **Exception:** the two
+   `hash_table.dataset_v*_canonical` rows are not file hashes — each cites the manifest's own
+   `sha256.dataset_canonical` value (a canonical hash of the constituent file hashes). For those
+   two, compare against `sha256.dataset_canonical` inside the named manifest; the manifest *file*
+   hashes are `e969413cd8dc…` (v1) and `8e55e45f4054…` (v2).
 
 ## Row-ID namespace reference
 
@@ -45,8 +50,11 @@ This performs no network access and reads only already-committed files under `re
 
 - §2 (primary results): 3 periods × up to 5 models × 9 numeric columns + regime counts —
   every one of those cells has a `primary.*` row. The count column is covered in part: its `regime_counts` half has a `primary.*.regime_counts` row per period and model, while its `evaluated_bars`/`total_bars` half is covered only by the artifact's whole-file sha256 row, not by an individual row_id.
-- §3 (robustness): 5 symbols × 3 periods × 9 numeric columns — every cell in the §3 table has a
-  `robustness.*` row.
+- §3 (robustness): 5 symbols × 3 periods × 9 numeric columns — all 135 of those metric cells have
+  a `robustness.*` row. The count column is covered in part, exactly as in §2: its `regime_counts`
+  half has per-symbol/period rows, while `n_regimes_observed`, `evaluated_bars` and `total_bars`
+  have no individual `row_id` (45 scalar quantities / 30 displayed cells, covered only by the
+  artifact's whole-file sha256 row).
 - §4.1 (sparse-cell disclosure): all 174 verified rows (not a sample) are individually mapped via
   `sparse_cell.*` rows, each pointing at its exact `bootstrap_records[<index>]` entry.
 - §4.2/`CASE-STUDY.md` (QQQ 2025 RISK_OFF worked example): every field quoted in the case study —
@@ -66,8 +74,10 @@ support it.
 ## Full table
 
 See `tables/source_map_full.md` (469 rows) or `tables/source_map.json` (same data, structured).
-The first 10 rows and the case-study rows are reproduced below for immediate inspection; the
-remainder follows the identical schema.
+Ten rows are reproduced below: the first 2 rows of the map, the 5 case-study rows, and the 3
+dataset/config hash rows — not "the first 10 rows" of the map. The full 469-row map is
+`tables/source_map_full.md` / `tables/source_map.json`; every other row follows the identical
+schema.
 
 | Row ID | Source file | JSON key path | sha256 |
 |---|---|---|---|
@@ -81,5 +91,10 @@ remainder follows the identical schema.
 | `hash_table.dataset_v1_canonical` | `data/manifests/yf_fd_etfs_daily_2015_2025_v1.json` | `sha256.dataset_canonical` | `91caa6cde08358091125a6576ff3f2be5666791b06df67d462c2aad6f771ada9` |
 | `hash_table.dataset_v2_canonical` | `data/manifests/yf_fd_etfs_daily_2015_2025_v2.json` | `sha256.dataset_canonical` | `94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582` |
 | `hash_table.config_v1_primary` | `configs/experiments/fdm_historical_regime_study_v1.yaml` | `(whole file sha256)` | `299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16` |
+
+> **Hash exception (2 of 469 rows).** The `hash_table.dataset_v*_canonical` rows above cite the
+> manifest's own `sha256.dataset_canonical` field value, **not** a hash of the manifest file.
+> `sha256sum` on those two manifests yields `e969413cd8dc…` (v1) and `8e55e45f4054…` (v2).
+> Every other row in this map is a whole-file sha256.
 
 (See `tables/source_map_full.md` for all 469 rows.)
