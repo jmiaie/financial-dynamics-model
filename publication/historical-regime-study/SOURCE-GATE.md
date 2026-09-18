@@ -241,7 +241,7 @@ Four regimes — `CALM_TREND`, `VOLATILE_TREND`, `CHOP`, `RISK_OFF` — classifi
 theory-based centroids** (not fit to any evaluation window; see the source report §4 for the
 exact centroid vectors).
 
-**Benchmarks**, all fit on formation data only and frozen before OOS classification
+**Benchmarks**, all fit on data through the end of the history window recorded in each artifact (not formation alone where a validation year is available). That cutoff is period-dependent: `history_period.end_inclusive` is `2023-12-31` in the `val_2024` artifacts (formation only — the 2024 evaluation year is out of sample) and `2024-12-31` in the `holdout_2025` artifacts (formation plus validation — 2025 is out of sample); the `dev_formation` artifacts record no history window. The cutoff is never inside the window being evaluated and frozen before OOS classification
 (`src/financial_dynamics/benchmarks/baselines.py`):
 - `PersistenceClassifier` (line 40) — trivial "last observed regime persists."
 - `VolatilityBucketClassifier` (line 73) — trailing 20-day realized-volatility quartile buckets.
@@ -267,7 +267,7 @@ that framing throughout (see `CLAIM-REGISTER.md`).
 
 ## Bootstrap / uncertainty detail
 
-**Requested parameterization:** block length 20 trading days, `n_bootstrap=1000`, confidence
+**Requested parameterization:** block length 20 **regime occurrences**, not trading days (`effective_block = max(1, min(block_size, n))`; see §4.1 of `TECHNICAL-PAPER.md`), `n_bootstrap=1000`, confidence
 90%, both `moving_block` and `stationary` methods, fixed `seed=0`
 (`block_bootstrap_mean_ci`/`regime_bootstrap_uncertainty`,
 `src/financial_dynamics/backtesting/metrics.py:428` and `:486`; default arguments in the function
@@ -282,8 +282,8 @@ smaller than 20, the effective block used for that resampling is `n` itself (or 
 horizon), not the nominal 20.
 
 **Verified scope.** A full scan of all `bootstrap_records[]` rows across all 15
-robustness/characterization artifacts (both bootstrap methods, all five benchmark models where
-present) finds **174 rows** with `n < 20` (`generate_tables.py`'s `gen_bootstrap_sparse_cell_table`;
+robustness/characterization artifacts (both bootstrap methods, all four benchmark models plus the FDM pipeline where present — the
+development artifacts contain no `persistence` model) finds **174 rows** with `n < 20` (`generate_tables.py`'s `gen_bootstrap_sparse_cell_table`;
 full row-by-row listing in `tables/bootstrap_sparse_cells_full.md`).
 
 **Two concrete, independently re-verified examples:**
@@ -376,15 +376,22 @@ observation, not as proof of either result.
   `.github/workflows/publication-pack.yml`, added 2026-09-18 at the coordinating session's
   explicit direction (see `D10-STATUS.md`'s remediation-round notes) so this pack has its own CI
   verification gate, since `ci.yml` never runs on a PR targeting a non-`main` base branch. That
-  workflow only checks out the repo, installs dependencies, and runs read-only verification
-  against already-committed files (`scripts/verify_pack.py`, `ruff`, `mypy`) — it does not publish
-  anything, does not touch either of the two named publish workflows above, and does not modify
-  any file.
+  workflow only checks out the repo, installs dependencies, and runs verification against
+  already-committed files (`scripts/verify_pack.py`, `ruff`, `mypy`). Note that
+  `scripts/verify_pack.py` is not read-only with respect to the working tree: it regenerates
+  `tables/` and `figures/` in place in order to compare them against the committed bytes, and restores
+them on **every** path — including a non-zero generator exit or a byte mismatch, both of which were
+  forced and confirmed to restore the tracked figures (2026-09-18). Committed figures are deleted before
+  regeneration so a no-op generator cannot be scored against the file's own stale bytes, and an empty
+  committed-figure set is now a FAILURE rather than a skip. The workflow itself commits nothing, publishes nothing, and does not touch
+  either of the two named publish workflows above.
 
 ## Reviewer instructions
 
 To check any value in fields 1–14 or any relocated section above: every hash is independently
-re-verifiable with `sha256sum` against the named file at the branch's current HEAD; every number
+re-verifiable — with `sha256sum` against the named file at the branch's current HEAD, except the
+two `dataset_canonical` entries, which are canonical hashes of the manifests' constituent file
+hashes rather than hashes of the manifest files (see `RESULT-SOURCE-MAP.md`); every number
 elsewhere in this pack traces to one of these files via `RESULT-SOURCE-MAP.md` and
 `tables/source_map.json` (see that document's own "How to check a number" section). Running
 `python publication/historical-regime-study/scripts/verify_pack.py` re-derives and re-checks every

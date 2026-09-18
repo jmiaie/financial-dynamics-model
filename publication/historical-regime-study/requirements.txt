@@ -1,0 +1,7 @@
+# Runtime deps for scripts/ (table + figure generation).
+# The gate is interpreter-sensitive: a python without matplotlib fails the figure
+# check CLOSED ("regeneration produced no file"), which is correct behaviour but
+# reads like an artifact defect. Install these before running verify_pack.py.
+# Verified set for byte-identical figure regeneration: Python 3.12.3.
+matplotlib==3.11.2
+numpy==2.5.3

@@ -22,7 +22,7 @@ resulting HEAD, or `git log --oneline -1` for the actual current value).
 | 7b | Red-team: claim overreach | `CLAIM-REDTEAM.md` | Done |
 | 7c | Red-team: citation integrity | `CITATION-REDTEAM.md` | Done |
 | 8 | This status document | `D10-STATUS.md` | Done |
-| 9a | Script-generated tables | `tables/*.md`, `tables/*.json` (7 files, all produced by `scripts/generate_tables.py`, none hand-typed) | Done |
+| 9a | Script-generated tables | `tables/*.md`, `tables/*.json` (8 files, all produced by `scripts/generate_tables.py`, none hand-typed) | Done |
 | 9b | Script-generated figures | `figures/qqq_2025_holdout_bootstrap_ci_h1.png`, `figures/sparse_cell_effective_block_sizes.png` (matplotlib 3.11.2 available in `/tmp/fdm-venv`; both produced by `scripts/generate_figures.py`) | Done — matplotlib was available, so figures were generated, not skipped |
 | 9c | Generator scripts | `scripts/generate_tables.py`, `scripts/generate_figures.py`, `scripts/verify_pack.py` (deterministic, offline, re-runnable against the frozen local artifacts; ruff-clean and mypy-clean) | Done |
 | 10 | Publication-pack CI workflow (added in this remediation round) | `.github/workflows/publication-pack.yml` — validates the pack itself (hashes, table/figure reproducibility, citation integrity, no-rerun self-audit, lint, typecheck); never invokes the empirical study runner or acquisition script | Done |
@@ -213,6 +213,79 @@ zero bytes changed in any file under `results/`, `configs/`, `src/`, `data/`, or
 - Nothing was published externally (no npm/pypi publish, no website deploy, no use of
   `.github/workflows/mirror-to-public.yml` or `.github/workflows/publish.yml`).
 - No Directive #11 work of any kind was started.
+
+---
+
+## Remediation round 4 — 2026-09-18 (independent-review findings)
+
+An independent review of this pack (not a re-run of `scripts/verify_pack.py`, which only
+re-tests the pack against itself) reported findings; the ones that reproduced against the
+committed artifacts are corrected here. No empirical code was run, no artifact was
+regenerated, and no frozen value was touched: every correction is documentation,
+claim-register wording, or the verifier itself.
+
+| # | Finding | Correction |
+|---|---|---|
+| 1 | Claim register quoted the stationary CI lower bound as `-0.0097`; the artifact holds `ci_low = -0.009628231317896438` | `CLAIM-REGISTER.md` now reads `-0.0096` |
+| 2 | Benchmarks described as "fit on formation-period data only" | Corrected in `TECHNICAL-PAPER.md` §1.4 and `SOURCE-GATE.md`: fitted through the end of validation (`history_period.end_inclusive = 2024-12-31`, i.e. formation plus the 2024 validation year) |
+| 3 | Persistence cited as a comparator across all three periods | Scoped to `val_2024`/`holdout_2025` in `CLAIM-REGISTER.md`; the `dev_formation` artifact holds four models and no `persistence` model — the sticky comparator there is `volatility_bucket` (mean self-transition 0.923) and the ordering still holds (FDM 0.736, GMM 0.365) |
+| 4 | "block length 20 trading days" — wrong unit | Now "20 **regime occurrences**, not trading days" in `TECHNICAL-PAPER.md` §4 and `SOURCE-GATE.md`, with `effective_block = max(1, min(block_size, n))` spelled out |
+| 5 | Sparse-cell disclosure gave the reduced block sizes but not what they imply | `TECHNICAL-PAPER.md` §4.1 now states that the effective block equals `n` in all 174 rows, so the resampled mean reduces to (or is dominated by) the sample mean itself: the interval is degenerate or near-degenerate and is not evidence of stability |
+| 6 | `RESULT-SOURCE-MAP.md` promised a row for every table cell | Reworded to what the map holds: the `regime_counts` half of the count column has `primary.*.regime_counts` rows per period/model; the `evaluated_bars`/`total_bars` half is covered only by the artifact's whole-file sha256 row |
+| 7 | `D10-STATUS.md` said `tables/` holds 7 files | Corrected to 8 |
+| 8 | `verify_pack.py`'s figure check compared each PNG against itself after a no-op generator run, so a skipped generation (e.g. matplotlib absent) reported a byte-identical PASS | The check now deletes the committed PNGs before generation and raises `CheckFailure` if a figure is missing afterwards, restoring the files so a failed run leaves the tree as it found it; docstring updated |
+| 9 | Citation check resolved 19 of the 35 identifiers present (lowercase-only pattern skipped `*`/uppercase forms) and resolved wildcards by prefix only | Pattern widened and wildcard matching moved to `fnmatch` glob semantics; the check now reports and resolves all 35 identifiers matched by the pattern (abbreviated suffix citations such as `.median_ret_h1`, which the pattern does not match, are now cited in full in `CLAIM-REGISTER.md`) |
+| 10 | Workflow described as running "read-only verification" | `SOURCE-GATE.md` now states that `verify_pack.py` regenerates `tables/`/`figures/` in place to compare against the committed bytes and restores them; the workflow itself commits and publishes nothing |
+
+Re-verified after this round: `verify_pack.py` → **all 5 checks pass** under the pinned
+interpreter, **35 citation identifiers resolved**, both figures regenerated and
+byte-identical, generated tables byte-identical to committed. With matplotlib absent the
+figure check now **fails closed** (1/5 failed: `['figures']`) where it previously reported a
+full pass — that false-pass path is closed permanently, not just noted.
+
+---
+
+## Remediation round 5 — 2026-09-18 (independent re-review of `9996200`)
+
+A second, independent re-review (separate clean-room clone at `9996200`, separate reviewer
+session) returned **13 further defects in D10-A**. All 13 are addressed here. Two of them were
+regressions introduced by round 4 itself, which is worth stating plainly: the round-4 edits fixed
+the words they targeted and, in two places, generalised the replacement too far.
+
+| # | Defect from the re-review | Disposition in this round |
+|---|---|---|
+| 1 | Round 4 replaced "formation only" with "through 2024-12-31" **universally**; the validation artifacts actually record `history_period.end_inclusive = 2023-12-31` | `TECHNICAL-PAPER.md`, `SOURCE-GATE.md`: cutoff stated as period-dependent (`2023-12-31` for `val_2024`, `2024-12-31` for `holdout_2025`, no history window for `dev_formation`), with the invariant that it is never inside the evaluated window |
+| 2 | Round 4 claimed the effective-block-equals-`n` setting degenerates the interval in **all 174** rows; true only for moving-block | `TECHNICAL-PAPER.md`: measured split stated — 81 moving-block rows collapse to zero width, 81 stationary rows keep non-zero width (worked example given), 12 flagged `insufficient_data` |
+| 3 | `reproducibility.json` still labelled the block length in trading days | Key renamed to `requested_block_length_regime_occurrences` and a `…_note` added; the key is referenced nowhere else in the repo, so no hash or citation broke |
+| 4 | An **empty** committed-figure set was skipped and reported green, so deleting both tracked PNGs passed | `scripts/verify_pack.py`: `CheckFailure` ("Refusing to report a PASS on an empty figure set") |
+| 5 | The C1 claim excluded `dev_formation` but quoted its GMM value (0.365) in a two-period range | `CLAIM-REGISTER.md`: range corrected to 0.287–0.345 (`val_2024`+`holdout_2025`), with the 0.365 attributed to `dev_formation` |
+| 6 | The §3 coverage claim was as universal as the §2 one it replaced | `RESULT-SOURCE-MAP.md`: 135 metric cells mapped; `n_regimes_observed`/`evaluated_bars`/`total_bars` have no individual row (45 scalars / 30 displayed cells) |
+| 7 | `.median_ret_h1` was an abbreviated suffix citation the verifier cannot match, so "all 35" was not a complete inventory | `CLAIM-REGISTER.md` now cites the full row id; the check resolves **36** identifiers; the round-4 claim is scoped to pattern-matched identifiers |
+| 8 | Hash instructions conflated `dataset_canonical` field values with whole-file hashes | `RESULT-SOURCE-MAP.md` (framing, step 4, and a note under the table) and `SOURCE-GATE.md`: the two rows are named as the exception, with the manifests' own `sha256sum` values given |
+| 9 | The preview promise ("first 10 rows") did not match the 10-row preview | `RESULT-SOURCE-MAP.md`: preview described as 2 map rows + 5 case-study rows + 3 hash rows |
+| 10 | A per-regime CI for a different symbol was presented as evidence about the primary result's cross-regime mean | `TECHNICAL-PAPER.md`: SPY-v2's own `RISK_OFF` horizon-1 record quoted (`n=29`, mean −0.003479, both intervals include zero), with the explicit caveat that a per-regime interval is not a CI for the cross-regime mean |
+| 11 | "loss of `CALM_TREND`" was generalised to four symbols | `TECHNICAL-PAPER.md`: three of four (QQQ, IWM, TLT at zero; GLD retains it with 11) |
+| 12 | "all five benchmark models" | `SOURCE-GATE.md`: four benchmarks plus the FDM pipeline, with the development artifacts noted as having no `persistence` model |
+| 13 | "restores them" was true of the tested path only — a non-zero generator exit did not restore | `scripts/verify_pack.py`: restore moved into `finally`, so it runs on every path; `SOURCE-GATE.md` states the verified scope |
+
+### Evidence for the instrument fixes (forced failures, not assertions)
+
+| Run | Result |
+|---|---|
+| `d10a-regime/.venv/bin/python scripts/verify_pack.py` | `RESULT: all 5 check(s) passed`; `PASS: all 36 citation identifiers in CLAIM-REGISTER.md resolve`; tree left clean |
+| `/usr/bin/python3 scripts/verify_pack.py` (no matplotlib) | `RESULT: 1/5 check(s) failed: ['figures']`, exit 1; tracked figures restored |
+| Both tracked PNGs deleted, then verifier run | `FAIL [figures]: no committed figures/*.png found … Refusing to report a PASS on an empty figure set`, exit 1 (this run was **green** before round 5) |
+| Generator forced to `SystemExit(3)` | `FAIL [figures]: generate_figures.py exited non-zero`, exit 1, **both figures restored** (`git status` shows no figure deletions) |
+
+Values added to the paper this round were measured in-session before being written: GMM
+self-transition `0.286853` (`val_2024`) / `0.344565` (`holdout_2025`) / `0.364944`
+(`dev_formation`); 81/81/12 sparse split; QQQ `val_2024` volatility-bucket `CALM_TREND` h20
+stationary interval `[-0.024217, +0.047039]` (width `0.071255`, `n=19`); 2025 `holdout`
+`CALM_TREND` counts QQQ 0 / IWM 0 / TLT 0 / GLD 11; 135 robustness rows and 469 total
+`source_map` rows.
+
+No empirical reruns, no re-acquisition, no frozen-value changes, no hub or Issue #3 edits. The
+remediation is a normal follow-up commit.
 
 ---
 

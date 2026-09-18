@@ -111,7 +111,8 @@
     }
   },
   "bootstrap_parameterization": {
-    "requested_block_length_trading_days": 20,
+    "requested_block_length_regime_occurrences": 20,
+    "requested_block_length_note": "The value 20 counts REGIME OCCURRENCES, not trading days: block_bootstrap_mean_ci receives the filtered sequence of occurrence returns (src/financial_dynamics/backtesting/metrics.py). The experiment-config parameter this was read from retains the legacy 'trading days' wording for config-hash identity, so the unit is stated here and in SOURCE-GATE.md's 'Bootstrap / uncertainty detail' section instead of being renamed at the source.",
     "n_bootstrap": 1000,
     "confidence": 0.90,
     "methods": ["moving_block", "stationary"],
