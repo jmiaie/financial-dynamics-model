@@ -1,0 +1,3285 @@
+[
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_realized_vol_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_realized_vol_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.financial_dynamics_pipeline.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].regime_counts",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_self_transition",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_realized_vol_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_realized_vol_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.volatility_bucket.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==volatility_bucket].regime_counts",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_self_transition",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_realized_vol_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_realized_vol_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.trend_vol_grid.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==trend_vol_grid].regime_counts",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_self_transition",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h1",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_realized_vol_h5",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_realized_vol_h20",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.dev_formation.gaussian_mixture.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_dev_formation.json",
+    "key_path": "models[model==gaussian_mixture].regime_counts",
+    "sha256": "81a32e5362d81d630a5fb7e34cd807399b19562ca6586f40ae63aa90c0428b35",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_realized_vol_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_realized_vol_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.financial_dynamics_pipeline.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].regime_counts",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.mean_self_transition",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.mean_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.mean_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.mean_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.median_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.median_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.median_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.mean_realized_vol_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].key_metrics.mean_realized_vol_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.persistence.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==persistence].regime_counts",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_self_transition",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_realized_vol_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_realized_vol_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.volatility_bucket.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==volatility_bucket].regime_counts",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_self_transition",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_realized_vol_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_realized_vol_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.trend_vol_grid.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].regime_counts",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_self_transition",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h1",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_realized_vol_h5",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_realized_vol_h20",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.val_2024.gaussian_mixture.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].regime_counts",
+    "sha256": "fd89ee1551acad2a8474dce5494ae097a6c3af32057b9113a5877c862f3c56a6",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.median_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_realized_vol_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_realized_vol_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.financial_dynamics_pipeline.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].regime_counts",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.mean_self_transition",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.mean_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.mean_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.mean_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.median_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.median_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.median_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.mean_realized_vol_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].key_metrics.mean_realized_vol_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.persistence.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==persistence].regime_counts",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_self_transition",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.median_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_realized_vol_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].key_metrics.mean_realized_vol_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.volatility_bucket.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].regime_counts",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_self_transition",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.median_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_realized_vol_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].key_metrics.mean_realized_vol_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.trend_vol_grid.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].regime_counts",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_self_transition",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.mean_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.mean_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.mean_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.median_ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h1",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.median_ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.median_ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.median_return_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.vol_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_realized_vol_h5",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].key_metrics.mean_realized_vol_h20",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "primary.holdout_2025.gaussian_mixture.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].regime_counts",
+    "sha256": "7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.dev_formation.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "d7cfd94cf9029f201caac0a4dbe826b2473dfbe107c1a05629486155241963ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.val_2024.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.spy.holdout_2025.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.dev_formation.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "0d20fb114c671f37c2afcf9f9ffb733a9e7cd2fad4456ac5bfa8b7df8c47f08c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.val_2024.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.qqq.holdout_2025.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.dev_formation.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "6c2bc977bf717a6a072993abb679427207c77372914a74268567a25122c0d8e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.val_2024.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.iwm.holdout_2025.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.dev_formation.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "be7c9281381b21a5d711aef69aefbe2df2e4722e4b686d2c2965a1e8cb49f3fe",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.val_2024.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.tlt.holdout_2025.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.dev_formation.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.val_2024.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.self_trans",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_self_transition",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.ret_h1",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h1",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.ret_h5",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h5",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.ret_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_return_h20",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.downside_vol_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_downside_vol_h20",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.pos_ret_freq_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_positive_return_freq_h20",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.tail_q05_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_tail_q05_h20",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.adverse_dd_mean_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.mean_adverse_drawdown_h20",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "robustness.gld.holdout_2025.adverse_dd_worst_h20",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].key_metrics.worst_adverse_drawdown_h20",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.0.SPY.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[6].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.1.SPY.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[7].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.2.SPY.val_2024.financial_dynamics_pipeline.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[12].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.3.SPY.val_2024.financial_dynamics_pipeline.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[13].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.4.SPY.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[14].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.5.SPY.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[15].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.6.SPY.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[20].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.7.SPY.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[21].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.8.SPY.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[22].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.9.SPY.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[23].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.10.SPY.val_2024.volatility_bucket.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[6].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.11.SPY.val_2024.volatility_bucket.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[7].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.12.SPY.val_2024.volatility_bucket.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[14].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.13.SPY.val_2024.volatility_bucket.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[15].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.14.SPY.val_2024.volatility_bucket.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[22].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.15.SPY.val_2024.volatility_bucket.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[23].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.16.SPY.val_2024.trend_vol_grid.CHOP.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[2].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.17.SPY.val_2024.trend_vol_grid.CHOP.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[3].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.18.SPY.val_2024.trend_vol_grid.CHOP.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[10].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.19.SPY.val_2024.trend_vol_grid.CHOP.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[11].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.20.SPY.val_2024.trend_vol_grid.CHOP.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[18].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.21.SPY.val_2024.trend_vol_grid.CHOP.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[19].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.22.SPY.val_2024.gaussian_mixture.VOLATILE_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[4].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.23.SPY.val_2024.gaussian_mixture.VOLATILE_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[5].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.24.SPY.val_2024.gaussian_mixture.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[6].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.25.SPY.val_2024.gaussian_mixture.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[7].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.26.SPY.val_2024.gaussian_mixture.VOLATILE_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[12].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.27.SPY.val_2024.gaussian_mixture.VOLATILE_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[13].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.28.SPY.val_2024.gaussian_mixture.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[14].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.29.SPY.val_2024.gaussian_mixture.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[15].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.30.SPY.val_2024.gaussian_mixture.VOLATILE_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[20].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.31.SPY.val_2024.gaussian_mixture.VOLATILE_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[21].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.32.SPY.val_2024.gaussian_mixture.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[22].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.33.SPY.val_2024.gaussian_mixture.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[23].block_size",
+    "sha256": "ca2dc4574b4f6cb7cedb2c43554ae2226d90a92ccdaa96f200578bc1e8b75759",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.34.SPY.holdout_2025.trend_vol_grid.CHOP.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[6].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.35.SPY.holdout_2025.trend_vol_grid.CHOP.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[7].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.36.SPY.holdout_2025.trend_vol_grid.CHOP.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[14].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.37.SPY.holdout_2025.trend_vol_grid.CHOP.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[15].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.38.SPY.holdout_2025.trend_vol_grid.CHOP.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[22].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.39.SPY.holdout_2025.trend_vol_grid.CHOP.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[23].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.40.SPY.holdout_2025.gaussian_mixture.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[6].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.41.SPY.holdout_2025.gaussian_mixture.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[7].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.42.SPY.holdout_2025.gaussian_mixture.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[14].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.43.SPY.holdout_2025.gaussian_mixture.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[15].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.44.SPY.holdout_2025.gaussian_mixture.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[22].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.45.SPY.holdout_2025.gaussian_mixture.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_spy_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[23].block_size",
+    "sha256": "b9705206cb1ce8f27f2e4627879bb3f9feb8618f34882e1f8c32b4c2647500b7",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.46.QQQ.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[4].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.47.QQQ.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[5].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.48.QQQ.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[12].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.49.QQQ.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[13].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.50.QQQ.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[20].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.51.QQQ.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[21].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.52.QQQ.val_2024.volatility_bucket.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[20].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.53.QQQ.val_2024.volatility_bucket.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[21].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.54.QQQ.val_2024.gaussian_mixture.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[6].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.55.QQQ.val_2024.gaussian_mixture.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[7].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.56.QQQ.val_2024.gaussian_mixture.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[14].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.57.QQQ.val_2024.gaussian_mixture.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[15].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.58.QQQ.val_2024.gaussian_mixture.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[22].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.59.QQQ.val_2024.gaussian_mixture.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[23].block_size",
+    "sha256": "325bb10004e54a7a8fe31407b0f64d312cc6e6bc1f1b368ae906e84877c68559",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.60.QQQ.holdout_2025.trend_vol_grid.CHOP.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[6].block_size",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.61.QQQ.holdout_2025.trend_vol_grid.CHOP.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[7].block_size",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.62.QQQ.holdout_2025.trend_vol_grid.CHOP.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[14].block_size",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.63.QQQ.holdout_2025.trend_vol_grid.CHOP.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[15].block_size",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.64.QQQ.holdout_2025.trend_vol_grid.CHOP.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[22].block_size",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.65.QQQ.holdout_2025.trend_vol_grid.CHOP.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[23].block_size",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.66.IWM.val_2024.financial_dynamics_pipeline.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[2].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.67.IWM.val_2024.financial_dynamics_pipeline.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[3].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.68.IWM.val_2024.financial_dynamics_pipeline.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[8].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.69.IWM.val_2024.financial_dynamics_pipeline.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[9].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.70.IWM.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[14].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.71.IWM.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[15].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.72.IWM.val_2024.volatility_bucket.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[6].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.73.IWM.val_2024.volatility_bucket.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[7].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.74.IWM.val_2024.volatility_bucket.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[14].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.75.IWM.val_2024.volatility_bucket.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[15].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.76.IWM.val_2024.volatility_bucket.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[22].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.77.IWM.val_2024.volatility_bucket.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[23].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.78.IWM.val_2024.gaussian_mixture.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[4].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.79.IWM.val_2024.gaussian_mixture.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[5].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.80.IWM.val_2024.gaussian_mixture.VOLATILE_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[6].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.81.IWM.val_2024.gaussian_mixture.VOLATILE_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[7].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.82.IWM.val_2024.gaussian_mixture.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[12].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.83.IWM.val_2024.gaussian_mixture.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[13].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.84.IWM.val_2024.gaussian_mixture.VOLATILE_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[14].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.85.IWM.val_2024.gaussian_mixture.VOLATILE_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[15].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.86.IWM.val_2024.gaussian_mixture.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[20].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.87.IWM.val_2024.gaussian_mixture.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[21].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.88.IWM.val_2024.gaussian_mixture.VOLATILE_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[22].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.89.IWM.val_2024.gaussian_mixture.VOLATILE_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[23].block_size",
+    "sha256": "bc5a25cf7a244857f90bd9388210a9e4757a0357ecbc35e34507a0b06dcf67ae",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.90.IWM.holdout_2025.volatility_bucket.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[4].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.91.IWM.holdout_2025.volatility_bucket.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[5].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.92.IWM.holdout_2025.volatility_bucket.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[12].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.93.IWM.holdout_2025.volatility_bucket.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[13].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.94.IWM.holdout_2025.volatility_bucket.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[20].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.95.IWM.holdout_2025.volatility_bucket.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[21].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.96.IWM.holdout_2025.gaussian_mixture.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[4].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.97.IWM.holdout_2025.gaussian_mixture.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[5].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.98.IWM.holdout_2025.gaussian_mixture.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[12].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.99.IWM.holdout_2025.gaussian_mixture.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[13].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.100.IWM.holdout_2025.gaussian_mixture.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[20].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.101.IWM.holdout_2025.gaussian_mixture.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_iwm_holdout_2025.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[21].block_size",
+    "sha256": "244190c6ea0485d5cc3a2eb23a42a968b05a74da5023f0710f509ee8e6a34785",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.102.TLT.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[2].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.103.TLT.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[3].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.104.TLT.val_2024.financial_dynamics_pipeline.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[6].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.105.TLT.val_2024.financial_dynamics_pipeline.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[7].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.106.TLT.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[10].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.107.TLT.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[11].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.108.TLT.val_2024.financial_dynamics_pipeline.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[14].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.109.TLT.val_2024.financial_dynamics_pipeline.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[15].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.110.TLT.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[18].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.111.TLT.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[19].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.112.TLT.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[22].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.113.TLT.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[23].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.114.TLT.val_2024.volatility_bucket.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[6].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.115.TLT.val_2024.volatility_bucket.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[7].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.116.TLT.val_2024.volatility_bucket.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[14].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.117.TLT.val_2024.volatility_bucket.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[15].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.118.TLT.val_2024.volatility_bucket.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[22].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.119.TLT.val_2024.volatility_bucket.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[23].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.120.TLT.val_2024.gaussian_mixture.VOLATILE_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[4].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.121.TLT.val_2024.gaussian_mixture.VOLATILE_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[5].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.122.TLT.val_2024.gaussian_mixture.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[6].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.123.TLT.val_2024.gaussian_mixture.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[7].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.124.TLT.val_2024.gaussian_mixture.VOLATILE_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[12].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.125.TLT.val_2024.gaussian_mixture.VOLATILE_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[13].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.126.TLT.val_2024.gaussian_mixture.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[14].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.127.TLT.val_2024.gaussian_mixture.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[15].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.128.TLT.val_2024.gaussian_mixture.VOLATILE_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[20].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.129.TLT.val_2024.gaussian_mixture.VOLATILE_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[21].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.130.TLT.val_2024.gaussian_mixture.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[22].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.131.TLT.val_2024.gaussian_mixture.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_val_2024.json",
+    "key_path": "models[model==gaussian_mixture].bootstrap_records[23].block_size",
+    "sha256": "cdf644beb2436779ec16c5e7402ca4ac8291ad1e4f64857b9207ffe256bd02f4",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.132.TLT.holdout_2025.financial_dynamics_pipeline.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[4].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.133.TLT.holdout_2025.financial_dynamics_pipeline.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[5].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.134.TLT.holdout_2025.financial_dynamics_pipeline.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[10].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.135.TLT.holdout_2025.financial_dynamics_pipeline.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[11].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.136.TLT.holdout_2025.financial_dynamics_pipeline.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[16].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.137.TLT.holdout_2025.financial_dynamics_pipeline.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[17].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.138.TLT.holdout_2025.volatility_bucket.RISK_OFF.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[4].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.139.TLT.holdout_2025.volatility_bucket.RISK_OFF.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[5].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.140.TLT.holdout_2025.volatility_bucket.RISK_OFF.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[12].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.141.TLT.holdout_2025.volatility_bucket.RISK_OFF.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[13].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.142.TLT.holdout_2025.volatility_bucket.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[20].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.143.TLT.holdout_2025.volatility_bucket.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_tlt_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[21].block_size",
+    "sha256": "ec814ac9812fbcfe322e21c35e489a30c2a7203a7d4621ad8b9dc302b8df0828",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.144.GLD.dev_formation.financial_dynamics_pipeline.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[6].block_size",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.145.GLD.dev_formation.financial_dynamics_pipeline.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[7].block_size",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.146.GLD.dev_formation.financial_dynamics_pipeline.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[14].block_size",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.147.GLD.dev_formation.financial_dynamics_pipeline.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[15].block_size",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.148.GLD.dev_formation.financial_dynamics_pipeline.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[22].block_size",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.149.GLD.dev_formation.financial_dynamics_pipeline.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_dev_formation.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[23].block_size",
+    "sha256": "55db000677bc007c0af04affec7de1eabc821ceb2a72091c82840f98c83a83e5",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.150.GLD.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[6].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.151.GLD.val_2024.financial_dynamics_pipeline.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[7].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.152.GLD.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[14].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.153.GLD.val_2024.financial_dynamics_pipeline.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[15].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.154.GLD.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[20].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.155.GLD.val_2024.financial_dynamics_pipeline.RISK_OFF.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[21].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.156.GLD.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[22].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.157.GLD.val_2024.financial_dynamics_pipeline.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_val_2024.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[23].block_size",
+    "sha256": "c7b8fe49fa67c18a18105d9fb5f0d547498f57569133757013849beacbd7c137",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.158.GLD.holdout_2025.financial_dynamics_pipeline.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[6].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.159.GLD.holdout_2025.financial_dynamics_pipeline.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[7].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.160.GLD.holdout_2025.financial_dynamics_pipeline.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[14].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.161.GLD.holdout_2025.financial_dynamics_pipeline.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[15].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.162.GLD.holdout_2025.financial_dynamics_pipeline.CALM_TREND.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[22].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.163.GLD.holdout_2025.financial_dynamics_pipeline.CALM_TREND.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[23].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.164.GLD.holdout_2025.volatility_bucket.CALM_TREND.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[6].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.165.GLD.holdout_2025.volatility_bucket.CALM_TREND.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[7].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.166.GLD.holdout_2025.volatility_bucket.CALM_TREND.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[14].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.167.GLD.holdout_2025.volatility_bucket.CALM_TREND.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==volatility_bucket].bootstrap_records[15].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.168.GLD.holdout_2025.trend_vol_grid.CHOP.h1.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[6].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.169.GLD.holdout_2025.trend_vol_grid.CHOP.h1.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[7].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.170.GLD.holdout_2025.trend_vol_grid.CHOP.h5.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[14].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.171.GLD.holdout_2025.trend_vol_grid.CHOP.h5.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[15].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.172.GLD.holdout_2025.trend_vol_grid.CHOP.h20.moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[22].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "sparse_cell.173.GLD.holdout_2025.trend_vol_grid.CHOP.h20.stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_gld_holdout_2025.json",
+    "key_path": "models[model==trend_vol_grid].bootstrap_records[23].block_size",
+    "sha256": "cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.regime_counts",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].regime_counts.RISK_OFF",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.summary_record",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].summary_records[regime==RISK_OFF,horizon==1]",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.bootstrap_moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[regime==RISK_OFF,horizon==1,method==moving_block]",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.bootstrap_stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[regime==RISK_OFF,horizon==1,method==stationary]",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.superseded_150_resample_moving_block",
+    "file": "results/historical_regimes/superseded_150_resamples/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[regime==RISK_OFF,horizon==1,method==moving_block]",
+    "sha256": "5808f6480552b77c7eca47e480c51a0fdf1353453e0ee78a7e338d10504db8ba",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.bootstrap_volatile_trend_moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[regime==VOLATILE_TREND,horizon==1,method==moving_block]",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.bootstrap_volatile_trend_stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[regime==VOLATILE_TREND,horizon==1,method==stationary]",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.bootstrap_chop_moving_block",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[regime==CHOP,horizon==1,method==moving_block]",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "case_study.qqq_2025.bootstrap_chop_stationary",
+    "file": "results/historical_regimes/fdm_hist_regime_v1_robustness_qqq_holdout_2025.json",
+    "key_path": "models[model==financial_dynamics_pipeline].bootstrap_records[regime==CHOP,horizon==1,method==stationary]",
+    "sha256": "7af9c81baf9ee89568969323a53cfa35483a2d74580ea16f5ff532e45dbc867d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.dataset_v1_manifest",
+    "file": "data/manifests/yf_fd_etfs_daily_2015_2025_v1.json",
+    "key_path": "(whole file sha256)",
+    "sha256": "e969413cd8dc6ec45697c6da34196355c6f7cfeb031a5f16584b22a88dd60344",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.dataset_v2_manifest",
+    "file": "data/manifests/yf_fd_etfs_daily_2015_2025_v2.json",
+    "key_path": "(whole file sha256)",
+    "sha256": "8e55e45f4054ae28f48ae5e69d6979b1033c3f67f061a18b1531b93d552a3e8c",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.dataset_v2_provenance",
+    "file": "data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md",
+    "key_path": "(whole file sha256)",
+    "sha256": "8c23009abd5dee1930a02d1ec0011a78c21d9cfa41075be4ac8106976df3b83d",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.config_v1_primary",
+    "file": "configs/experiments/fdm_historical_regime_study_v1.yaml",
+    "key_path": "(whole file sha256)",
+    "sha256": "299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.config_v2_robustness",
+    "file": "configs/experiments/fdm_historical_regime_study_v2_robustness.yaml",
+    "key_path": "(whole file sha256)",
+    "sha256": "6e1044b4e46ae297f52efcd2b2a09d981d6a71d702fe2b58fd8a73ff9e746b4b",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.holdout_audit",
+    "file": "research/holdout-audit.md",
+    "key_path": "(whole file sha256)",
+    "sha256": "f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.dataset_v1_canonical",
+    "file": "data/manifests/yf_fd_etfs_daily_2015_2025_v1.json",
+    "key_path": "sha256.dataset_canonical",
+    "sha256": "91caa6cde08358091125a6576ff3f2be5666791b06df67d462c2aad6f771ada9",
+    "kind": "field_value"
+  },
+  {
+    "row_id": "hash_table.dataset_v2_canonical",
+    "file": "data/manifests/yf_fd_etfs_daily_2015_2025_v2.json",
+    "key_path": "sha256.dataset_canonical",
+    "sha256": "94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582",
+    "kind": "field_value"
+  },
+  {
+    "row_id": "hash_table.freeze_record_frozen_for_holdout_utc",
+    "file": "configs/experiments/fdm_historical_regime_study_v1.yaml",
+    "key_path": "freeze_record.frozen_for_holdout_utc",
+    "sha256": "299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.config_v1_status",
+    "file": "configs/experiments/fdm_historical_regime_study_v1.yaml",
+    "key_path": "status",
+    "sha256": "299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16",
+    "kind": "whole_file_sha256"
+  },
+  {
+    "row_id": "hash_table.holdout_audit_verdict",
+    "file": "research/holdout-audit.md",
+    "key_path": "## Verdict (first CLEAR-prefixed line)",
+    "sha256": "f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f",
+    "kind": "whole_file_sha256"
+  }
+]
