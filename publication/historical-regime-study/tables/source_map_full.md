@@ -1,6 +1,6 @@
 ### Full result -> source traceability table (machine-generated)
 
-467 rows. Regenerate with `python scripts/generate_tables.py` (writes this file and `source_map.json` together; never hand-edited).
+469 rows. Regenerate with `python scripts/generate_tables.py` (writes this file and `source_map.json` together; never hand-edited).
 
 | Row ID | Source file | JSON key path | sha256 |
 |---|---|---|---|
@@ -467,7 +467,9 @@
 | `hash_table.dataset_v2_provenance` | `data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md` | `(whole file sha256)` | `8c23009abd5dee1930a02d1ec0011a78c21d9cfa41075be4ac8106976df3b83d` |
 | `hash_table.config_v1_primary` | `configs/experiments/fdm_historical_regime_study_v1.yaml` | `(whole file sha256)` | `299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16` |
 | `hash_table.config_v2_robustness` | `configs/experiments/fdm_historical_regime_study_v2_robustness.yaml` | `(whole file sha256)` | `6e1044b4e46ae297f52efcd2b2a09d981d6a71d702fe2b58fd8a73ff9e746b4b` |
+| `hash_table.holdout_audit` | `research/holdout-audit.md` | `(whole file sha256)` | `f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f` |
 | `hash_table.dataset_v1_canonical` | `data/manifests/yf_fd_etfs_daily_2015_2025_v1.json` | `sha256.dataset_canonical` | `91caa6cde08358091125a6576ff3f2be5666791b06df67d462c2aad6f771ada9` |
 | `hash_table.dataset_v2_canonical` | `data/manifests/yf_fd_etfs_daily_2015_2025_v2.json` | `sha256.dataset_canonical` | `94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582` |
 | `hash_table.freeze_record_frozen_for_holdout_utc` | `configs/experiments/fdm_historical_regime_study_v1.yaml` | `freeze_record.frozen_for_holdout_utc` | `299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16` |
 | `hash_table.config_v1_status` | `configs/experiments/fdm_historical_regime_study_v1.yaml` | `status` | `299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16` |
+| `hash_table.holdout_audit_verdict` | `research/holdout-audit.md` | `## Verdict (first CLEAR-prefixed line)` | `f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f` |

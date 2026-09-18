@@ -235,7 +235,7 @@ a citation of record, not as a claim this document itself substantiates.
 |---|---|---|
 | Development / formation | 2015-01-01 to 2023-12-31 | **DEVELOPMENT / FORMATION** — used to fit benchmark thresholds and freeze configuration; not held out. |
 | Validation | 2024-01-01 to 2024-12-31 | **VALIDATION** — evaluated before the final freeze; used to confirm the frozen configuration behaved reasonably, not to retune after inspection. |
-| Holdout | 2025-01-01 to 2025-12-31 | **HISTORICAL EVALUATION** (evaluated once, after the freeze, on data not seen during formation/validation). **Never** described as "untouched holdout" or "clean holdout" — 2025 data existed and was in principle inspectable before the freeze date (2026-09-16); "historical evaluation" is the accurate label and is used throughout this pack. |
+| Holdout | 2025-01-01 to 2025-12-31 | **FINAL 2025 HOLDOUT EVALUATION.** Pre-study audit CLEAR (`research/holdout-audit.md`, verdict: "no evidence that calendar-year 2025 market data was previously inspected, tuned against, or used for empirical evaluation / performance claims in this repository"); the config was frozen (item 5's `freeze_record.frozen_for_holdout_utc`, 2026-09-16T02:58:00Z) before the 2025 run; the run then executed exactly once under that frozen configuration. That CLEAR-audit + freeze-then-single-execution sequence is what establishes holdout status — not the fact that 2025 market data existed and was in principle inspectable, which is true of every holdout period and is not itself evidence for or against holdout status (that was a category error in an earlier version of this pack; see the dated correction note in `QUANT-REDTEAM.md`). This label does **not** assert the period is "pristine," "untouched across every possible prior human exposure," or "prospective live-market validation" — only what the audit and freeze record directly support. |
 
 ## 13. Primacy statement
 
@@ -262,3 +262,11 @@ reports that agreement as a factual consistency observation, not as proof of eit
   `.github/workflows/mirror-to-public.yml` or `.github/workflows/publish.yml`).
 - No start of any Directive #11 work. This pack's terminal state is
   "READY FOR INDEPENDENT REVIEW. NO MERGE. NO D11." (see `D10-STATUS.md`).
+- **One narrow, explicitly authorized exception to "new files only under this directory":**
+  `.github/workflows/publication-pack.yml`, added 2026-09-18 at the coordinating session's
+  explicit direction (see `D10-STATUS.md`'s remediation-round note) so this pack has its own CI
+  verification gate, since `ci.yml` never runs on a PR targeting a non-`main` base branch. That
+  workflow only checks out the repo, installs dependencies, and runs read-only verification
+  against already-committed files (`scripts/verify_pack.py`, `ruff`, `mypy`) — it does not publish
+  anything, does not touch either of the two named publish workflows above, and does not modify
+  any file.

@@ -21,7 +21,7 @@ FDM regime counts: CALM_TREND 40, CHOP 789, RISK_OFF 341, VOLATILE_TREND 1034.
 
 FDM regime counts: CALM_TREND 8, CHOP 121, RISK_OFF 21, VOLATILE_TREND 102.
 
-### SPY-v1 primary -- Holdout (2025-01-01 to 2025-12-31) -- HISTORICAL EVALUATION
+### SPY-v1 primary -- Holdout (2025-01-01 to 2025-12-31) -- FINAL 2025 HOLDOUT EVALUATION (pre-study audit CLEAR; single execution under frozen config)
 
 | Model | Regimes | Bars | Self-trans. | mean ret h1 | mean ret h5 | mean ret h20 | median ret h1 | median ret h5 | median ret h20 | vol h5 | vol h20 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|

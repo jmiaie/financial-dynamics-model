@@ -101,11 +101,53 @@ overhead without changing what a reviewer actually needs to do (open the file, f
 matching those field values by eye — arrays here have single-digit lengths). Documented as a
 known notation choice rather than silently left ambiguous.
 
+## Remediation update — 2026-09-18 (post-initial-publish correction)
+
+**This is a dated correction to the P2 finding directly above ("Abstract's first inline reference
+to the 2025 period used '2025 holdout' unqualified"), not a silent edit of it.** That finding's
+own premise — "the abstract correctly introduces the period as 'a historical evaluation of
+2025'" — is now known to be **wrong**, identified by the orchestrating session and independently
+confirmed in this remediation pass: "historical evaluation" was itself a mislabel, reached by a
+category error (reasoning that "2025 data existed and was in principle inspectable before the
+freeze," which is true of every holdout period ever run and is not evidence for or against
+holdout status). The correct classification, confirmed by reading `research/holdout-audit.md`
+directly in this remediation session, is **final 2025 holdout evaluation**: the audit gives an
+explicit **CLEAR** verdict ("no evidence that calendar-year 2025 market data was previously
+inspected, tuned against, or used for empirical evaluation / performance claims in this
+repository"), the primary config was frozen before the 2025 run
+(`freeze_record.frozen_for_holdout_utc`, 2026-09-16T02:58:00Z), and the run then executed exactly
+once under that frozen configuration — a textbook final holdout, and also the terminology the
+source report (`research/historical-market-regime-study.md`) itself uses consistently throughout
+("HOLDOUT 2025," "the holdout (2025) run").
+
+**Scope of this correction.** Every occurrence of "historical evaluation" / "historical-evaluation"
+as a period classification was replaced with "final 2025 holdout evaluation" / "2025 holdout"
+across `SOURCE-GATE.md` §12, `TECHNICAL-PAPER.md` (abstract, §1.2, §2.3 header and body, §3, §6,
+§7), `CASE-STUDY.md`, `CLAIM-REGISTER.md` C19 (the claim's *reasoning* was rewritten, not just its
+label — the "data existed and was inspectable" justification was the actual defect), and
+`CITATION-REDTEAM.md`. `scripts/generate_tables.py`'s `PERIOD_LABELS` dict carried the same wrong
+string embedded in generated table headers — fixed at the source and the tables regenerated
+(`tables/primary_spy_v1.md` and downstream files), rather than hand-editing the generated output.
+A new hash-table entry (`hash_table.holdout_audit_verdict`, citing `research/holdout-audit.md`)
+was added to the source-map generator so this correction's own evidentiary basis is traceable the
+same way every other claim in this pack is.
+
+**This does not change the finding's original P2 disposition retroactively** — at the time that
+finding was written, the "historical evaluation" framing itself had not yet been identified as
+incorrect, so the internal-consistency issue it flagged (first mention qualified, second
+unqualified) was a real, if now moot, observation about a since-superseded label. It is left in
+place above as the accurate record of what was found and when, per this document's own
+"never silently rewrite a prior finding" convention.
+
 ## Summary
 
 - P0: 0
 - P1: 1 (fixed)
-- P2: 4 (2 fixed, 2 not fixed with rationale)
+- P2: 4 (2 fixed, 2 not fixed with rationale) + 1 remediation update (2025 period-label category
+  error, corrected 2026-09-18 at the coordinator's direction, independently confirmed against
+  `research/holdout-audit.md` in this pass)
 
-No fabricated, mis-transcribed, or incorrectly-labeled number was found in this pass. The one P1
-was a scope/labeling gap in a caveat, not an incorrect number.
+No fabricated, mis-transcribed, or incorrectly-labeled *number* was found in this pass. The one P1
+was a scope/labeling gap in a caveat, not an incorrect number. The 2026-09-18 remediation update is
+a labeling/classification correction, not a numeric one — no table value, hash, or statistic
+changed as part of it.

@@ -53,9 +53,14 @@
       "path": "configs/experiments/fdm_historical_regime_study_v2_robustness.yaml",
       "sha256": "6e1044b4e46ae297f52efcd2b2a09d981d6a71d702fe2b58fd8a73ff9e746b4b"
     },
+    "holdout_audit": {
+      "path": "research/holdout-audit.md",
+      "sha256": "f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f"
+    },
     "dataset_v1_canonical_sha256": "91caa6cde08358091125a6576ff3f2be5666791b06df67d462c2aad6f771ada9",
     "dataset_v2_canonical_sha256": "94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582",
     "freeze_record_frozen_for_holdout_utc": "2026-09-16T02:58:00Z",
-    "config_status": "frozen-for-holdout"
+    "config_status": "frozen-for-holdout",
+    "holdout_audit_verdict": "**CLEAR** \u2014 no evidence that calendar-year **2025** market data was previously inspected, tuned against, or used for empirical evaluation / performance claims in this repository."
   }
 }

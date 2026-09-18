@@ -19,13 +19,13 @@ This is explicitly **not** a directional-forecast-accuracy or trading-alpha clai
 differentiation in subsequent risk/return characteristics is a distinct question from whether
 that differentiation is tradeable after costs, and that question is out of scope here. The
 primary evaluation uses SPY over three walk-forward periods — development/formation
-(2015–2023), validation (2024), and a historical evaluation of 2025 — against four benchmark
+(2015–2023), validation (2024), and a final 2025 holdout evaluation — against four benchmark
 classifiers (persistence, volatility-bucket, trend/volatility grid, Gaussian mixture). A
 secondary, explicitly post-primary robustness evaluation repeats the same frozen methodology on
 QQQ, IWM, TLT, and GLD (plus a second SPY run) on a separately acquired dataset that is disclosed
 as not bit-identical to the primary dataset for four of the five symbols. The FDM pipeline shows
 a self-transition rate that sits consistently between the sticky simple benchmarks and a noisy
-Gaussian-mixture baseline across all three periods, and its 2025 evaluation result is the only model whose
+Gaussian-mixture baseline across all three periods, and its 2025 holdout result is the only model whose
 mean 1-day forward return was negative in that period — a finding whose 90% block-bootstrap
 confidence interval, examined in the robustness runs, does not exclude zero for the small-sample
 `RISK_OFF` regime specifically. All reported numbers trace to committed JSON artifacts; the
@@ -54,11 +54,19 @@ and never substitutes for or is merged into the primary SPY-v1 result.
 |---|---|---|
 | Development / formation | 2015-01-01 – 2023-12-31 | Fits benchmark thresholds; freezes configuration |
 | Validation | 2024-01-01 – 2024-12-31 | Evaluated before the final freeze |
-| Holdout | 2025-01-01 – 2025-12-31 | **Historical evaluation**, run once after the freeze |
+| Holdout | 2025-01-01 – 2025-12-31 | **Final 2025 holdout evaluation**, run once after the freeze |
 
-The 2025 period is referred to throughout this paper as **historical evaluation**, not
-"untouched" or "clean" holdout: the data existed and was in principle inspectable before the
-2026-09-16 freeze date. See `SOURCE-GATE.md` §12.
+The 2025 period is referred to throughout this paper as the **final 2025 holdout evaluation** (or
+"the 2025 holdout" for short). This classification rests on `research/holdout-audit.md`'s CLEAR
+verdict — no evidence of prior empirical inspection, tuning, or performance claims on calendar-2025
+data anywhere in this repository — combined with the config freeze (2026-09-16) preceding the
+single 2025 run. It is **not** based on, and does not require, "the data existed and was in
+principle inspectable before the freeze" — that is true of every holdout period ever run and is
+not itself evidence for or against holdout status; an earlier version of this paper used that
+reasoning and mislabeled the period "historical evaluation" as a result (corrected 2026-09-18; see
+`SOURCE-GATE.md` §12 and `QUANT-REDTEAM.md`'s dated remediation note). This label does not assert
+the period is "pristine," free of every conceivable prior human exposure, or a prospective
+live-market validation — only what the audit and freeze record directly support.
 
 ### 1.3 Model
 
@@ -144,7 +152,7 @@ FDM regime counts: CALM_TREND 40, CHOP 789, RISK_OFF 341, VOLATILE_TREND 1034.
 
 FDM regime counts: CALM_TREND 8, CHOP 121, RISK_OFF 21, VOLATILE_TREND 102.
 
-### 2.3 Historical evaluation (2025)
+### 2.3 Final 2025 holdout evaluation
 
 | Model | Regimes | Bars | Self-trans. | mean ret h1 | mean ret h5 | mean ret h20 | median ret h1 | median ret h5 | median ret h20 | vol h5 | vol h20 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -155,7 +163,7 @@ FDM regime counts: CALM_TREND 8, CHOP 121, RISK_OFF 21, VOLATILE_TREND 102.
 | Gaussian mixture | 4 | 250/250 | 0.345 | 0.001865 | 0.008368 | 0.030057 | 0.002310 | 0.009853 | 0.036033 | 0.01143 | 0.01186 |
 
 FDM regime counts: CHOP 113, RISK_OFF 29, VOLATILE_TREND 108. **`CALM_TREND` was never selected
-by the FDM pipeline in the 2025 historical-evaluation window** — reported exactly as observed,
+by the FDM pipeline in the 2025 holdout window** — reported exactly as observed,
 not adjusted.
 
 **Cross-regime differentiation.** Mean and median forward returns vary materially by
@@ -163,7 +171,7 @@ regime/model and horizon across all three periods. Multi-day (h20) realized vola
 for the Gaussian-mixture classification in every period (0.01208 / 0.00846 / 0.01186). The FDM
 pipeline's own relative volatility ranking is **not** consistent across periods: it has the
 lowest h5/h20 volatility of all four models in development (0.00766/0.00885); in validation it
-has the lowest h5 volatility (0.00609) while its h20 sits mid-pack; only in the 2025 evaluation is
+has the lowest h5 volatility (0.00609) while its h20 sits mid-pack; only in the 2025 holdout is
 its volatility elevated above the three non-GMM benchmarks at both h5 and h20, while remaining
 below GMM. No single directional claim about FDM's volatility level relative to the simpler
 benchmarks holds across all three periods.
@@ -179,7 +187,7 @@ extremes is desirable is a downstream-use-case judgment this paper does not make
 middle position is reported as an observed characteristic, not as evidence that FDM is
 "better" than either kind of benchmark.
 
-**The 2025 finding.** FDM's historical-evaluation mean 1-day forward return was negative
+**The 2025 finding.** FDM's holdout mean 1-day forward return was negative
 (−0.000293) — the only negative mean-return cell in this entire primary results set — while the
 corresponding median remained positive (+0.0014), and no benchmark showed a negative
 `mean_return_h1` in 2025. Given the aggregation caveat above (both figures are unweighted
@@ -223,7 +231,7 @@ described in §1.5's aggregation caveat, which applies to this table exactly as 
 
 (Full table with `positive_return_freq` correction context: `tables/robustness_cross_asset.md`.)
 
-**Cross-symbol pattern, reported factually.** `CALM_TREND` disappeared from the 2025 evaluation
+**Cross-symbol pattern, reported factually.** `CALM_TREND` disappeared from the 2025 holdout
 window in QQQ, IWM, and TLT (each drops to 3 observed regimes), matching SPY's own 2025 finding
 (§2.3); GLD is the exception, retaining `CALM_TREND` (11 observations). This is a
 fixed-centroid classification outcome on one calendar year across a non-bit-identical dataset —
@@ -353,14 +361,14 @@ than weakened:
   power for that regime specifically, and is the direct cause of the sparse-cell effective-block
   reduction disclosed in §4.1.
 - **Cross-program note:** SPY, QQQ, IWM, TLT, and GLD price history is also used by a different
-  repository's stat-arb research design; this study's 2025 evaluation is the event referenced as
+  repository's stat-arb research design; this study's 2025 holdout is the event referenced as
   "FDM's already-executed 2025 holdout" in that study's cross-repository exposure disclosure.
 
 ## 7. Conclusion
 
 The Financial Dynamics Model's regime classifications differentiate subsequent **risk
 characteristics** — self-transition persistence consistently, volatility level
-period-dependently, and one small-sample tail finding in the 2025 evaluation whose statistical
+period-dependently, and one small-sample tail finding in the 2025 holdout whose statistical
 robustness is itself limited by the number of observations available. This paper makes no
 forecast-accuracy or trading-alpha claim: it characterizes what regime membership says about the
 distribution of subsequent outcomes, not whether that information is exploitable after costs,

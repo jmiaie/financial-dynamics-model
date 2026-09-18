@@ -38,7 +38,13 @@ MODEL_ORDER = [
 PERIOD_LABELS = {
     "dev_formation": "Development / formation (2015-01-01 to 2023-12-31)",
     "val_2024": "Validation (2024-01-01 to 2024-12-31)",
-    "holdout_2025": "Holdout (2025-01-01 to 2025-12-31) -- HISTORICAL EVALUATION",
+    # Corrected 2026-09-18: "HISTORICAL EVALUATION" was a category error (see
+    # SOURCE-GATE.md Sec 12 and QUANT-REDTEAM.md's dated remediation note).
+    # Holdout status is established by research/holdout-audit.md's CLEAR
+    # verdict plus freeze-then-single-execution, not by "2025 data existed
+    # and was inspectable" (true of every holdout period, not evidence
+    # either way).
+    "holdout_2025": "Holdout (2025-01-01 to 2025-12-31) -- FINAL 2025 HOLDOUT EVALUATION (pre-study audit CLEAR; single execution under frozen config)",
 }
 PERIOD_ORDER = ["dev_formation", "val_2024", "holdout_2025"]
 ROBUSTNESS_SYMBOLS = ["spy", "qqq", "iwm", "tlt", "gld"]
@@ -68,14 +74,27 @@ def fmt(x: float | int | None, digits: int = 6) -> str:
 
 
 class SourceMap:
-    """Accumulates (table_row_id -> {file, key_path, sha256}) traceability rows."""
+    """Accumulates (table_row_id -> {file, key_path, sha256, kind}) traceability rows.
+
+    `kind` disambiguates what `sha256` actually means for this row:
+      - "whole_file_sha256" (default): `sha256` IS the sha256 of the entire
+        `file` -- directly re-verifiable with a plain `sha256sum`.
+      - "field_value": `sha256` is the *value* of the JSON/YAML/text field
+        named by `key_path` inside `file` (which, for the dataset_canonical
+        fields, itself happens to look like a sha256 but is NOT the hash of
+        `file` itself -- conflating the two was a real bug caught by
+        verify_pack.py's `hashes` check when it initially assumed every row
+        was a whole-file hash).
+    """
 
     def __init__(self) -> None:
         self.rows: list[dict[str, str]] = []
 
-    def add(self, row_id: str, file_rel: str, key_path: str, sha256: str) -> None:
+    def add(
+        self, row_id: str, file_rel: str, key_path: str, sha256: str, *, kind: str = "whole_file_sha256"
+    ) -> None:
         self.rows.append(
-            {"row_id": row_id, "file": file_rel, "key_path": key_path, "sha256": sha256}
+            {"row_id": row_id, "file": file_rel, "key_path": key_path, "sha256": sha256, "kind": kind}
         )
 
     def write(self, out_path: Path) -> None:
@@ -419,6 +438,7 @@ def gen_dataset_config_hash_table(
         ("dataset_v2_provenance", "data/manifests/yf_fd_etfs_daily_2015_2025_v2_PROVENANCE.md"),
         ("config_v1_primary", "configs/experiments/fdm_historical_regime_study_v1.yaml"),
         ("config_v2_robustness", "configs/experiments/fdm_historical_regime_study_v2_robustness.yaml"),
+        ("holdout_audit", "research/holdout-audit.md"),
     ]
     result: dict[str, Any] = {}
     lines = ["### Dataset / config file hashes", "", "| Item | Path | sha256 (file) |", "|---|---|---|"]
@@ -441,12 +461,14 @@ def gen_dataset_config_hash_table(
         "data/manifests/yf_fd_etfs_daily_2015_2025_v1.json",
         "sha256.dataset_canonical",
         result["dataset_v1_canonical_sha256"],
+        kind="field_value",
     )
     smap.add(
         "hash_table.dataset_v2_canonical",
         "data/manifests/yf_fd_etfs_daily_2015_2025_v2.json",
         "sha256.dataset_canonical",
         result["dataset_v2_canonical_sha256"],
+        kind="field_value",
     )
 
     # CLAIM-REGISTER.md C19 (period-labeling claim) cites the primary config's
@@ -478,6 +500,27 @@ def gen_dataset_config_hash_table(
         "configs/experiments/fdm_historical_regime_study_v1.yaml",
         "status",
         config_v1_digest,
+    )
+
+    # CLAIM-REGISTER.md C19 (corrected 2026-09-18): holdout status rests on
+    # research/holdout-audit.md's CLEAR verdict, not on "2025 data existed
+    # and was inspectable" (a category error; see SOURCE-GATE.md Sec 12).
+    # Extract and map the verdict line itself so this citation is traceable
+    # the same way every other one in this pack is.
+    holdout_audit_path = repo_root / "research/holdout-audit.md"
+    holdout_audit_digest = sha256_file(holdout_audit_path)
+    holdout_audit_text = holdout_audit_path.read_text(encoding="utf-8")
+    verdict_line = next(
+        (line.strip() for line in holdout_audit_text.splitlines() if line.strip().startswith("**CLEAR**")),
+        None,
+    )
+    result["holdout_audit_verdict"] = verdict_line
+    lines.append(f"`research/holdout-audit.md` verdict line: {verdict_line}")
+    smap.add(
+        "hash_table.holdout_audit_verdict",
+        "research/holdout-audit.md",
+        "## Verdict (first CLEAR-prefixed line)",
+        holdout_audit_digest,
     )
 
     (out_dir / "dataset_config_hashes.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

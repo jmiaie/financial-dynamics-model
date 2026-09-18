@@ -59,7 +59,7 @@ reproducible by direct string match, not just by prefix reasoning.
 
 ### P1 — C19 cited a JSON/YAML field path directly rather than a `RESULT-SOURCE-MAP.md` row ID, inconsistent with every other row in the register
 
-**Finding.** C19 (the "historical evaluation" labeling claim) cited
+**Finding.** C19 (the 2025 period-labeling claim) cited
 `` freeze_record.frozen_for_holdout_utc `` as a literal field path with no corresponding
 `hash_table.*` row — every other claim in the register cites a `RESULT-SOURCE-MAP.md` row ID, so
 this was an inconsistent citation style that also meant the underlying config file's hash was not
@@ -69,6 +69,19 @@ independently pinned anywhere a reviewer could check it via the standard row-ID 
 `hash_table.config_v1_status` rows to the generator (reading the field directly from the YAML
 config via `pyyaml`, already a project dependency) and updated C19 to cite them alongside the
 existing `hash_table.config_v1_primary` whole-file hash.
+
+## Remediation update — 2026-09-18 (post-initial-publish correction)
+
+C19's underlying *claim* was separately found to contain a category error (the period was labeled
+"historical evaluation" on the reasoning that "2025 data existed and was in principle
+inspectable," which is true of every holdout period and is not evidence either way) — see
+`QUANT-REDTEAM.md`'s dated remediation note and `SOURCE-GATE.md` §12 for the full correction. That
+fix is a claim/labeling correction, not a citation-integrity one, but it touches this document
+because C19's evidentiary basis grew a fourth citation as part of it:
+`hash_table.holdout_audit_verdict`, added to the generator to cite the exact CLEAR-verdict line in
+`research/holdout-audit.md` that now grounds the corrected claim. Re-running the mechanical
+orphan-check (below) after this addition confirms the new row resolves cleanly alongside the other
+three.
 
 ## Verification after fixes
 
