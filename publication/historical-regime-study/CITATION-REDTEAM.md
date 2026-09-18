@@ -9,7 +9,8 @@ each with "fixed before finalizing" or "not fixed, rationale."
 This pass was mechanical, not a re-read. A script extracted every backtick-quoted,
 dot-separated identifier from `CLAIM-REGISTER.md` (candidate row-ID citations) and checked each
 one against the literal set of `row_id` values in the freshly-regenerated `tables/source_map.json`
-(467 rows), resolving wildcard-style references (`prefix.*`) against any row starting with that
+(469 rows in the current map — it held 467 rows when this pass ran; see the remediation update
+below), resolving wildcard-style references (`prefix.*`) against any row starting with that
 prefix. Any candidate that resolved to nothing was treated as a potential orphaned citation and
 individually investigated (not assumed to be a false positive) until either fixed or confirmed as
 a non-row-ID reference (e.g. a literal JSON field path quoted in prose, not a `RESULT-SOURCE-MAP.md`
@@ -39,7 +40,8 @@ specific, publicly quoted number.
 source-map rows for every horizon-1 bootstrap record in the QQQ 2025 holdout file, not just
 `RISK_OFF` (new row IDs: `case_study.qqq_2025.bootstrap_volatile_trend_moving_block`,
 `case_study.qqq_2025.bootstrap_volatile_trend_stationary`, and the equivalent `CHOP` rows).
-Re-ran the generator (467 rows, up from 461) and updated C12's evidentiary-basis column to cite
+Re-ran the generator (467 rows at that point, up from 461; the map now holds 469 rows after the
+2026-09-18 remediation described below) and updated C12's evidentiary-basis column to cite
 the real row IDs. Re-ran the mechanical orphan check after the fix: zero unresolved citations
 remain.
 
@@ -87,7 +89,7 @@ three.
 ## Verification after fixes
 
 Re-running the mechanical check (extract every backtick-quoted dot-separated identifier from
-`CLAIM-REGISTER.md`, resolve against `tables/source_map.json`'s 467 row IDs, including wildcard
+`CLAIM-REGISTER.md`, resolve against `tables/source_map.json`'s 469 row IDs, including wildcard
 prefixes) now returns **zero unresolved citations** — every claim's evidentiary basis is a real,
 resolvable row.
 
