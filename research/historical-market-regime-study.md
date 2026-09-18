@@ -261,13 +261,33 @@ and the regression test in `tests/test_backtesting.py`). The pre-fix values are
 preserved at `results/historical_regimes/superseded_positive_return_freq_fix/`.
 
 **Block-bootstrap uncertainty** (moving-block and stationary, block length 20 trading days,
-150 resamples, 90% CI — full tables in each artifact's `bootstrap_records`; not an out-of-
-sample test, and it does not validate the regime definitions, only how stable each observed
-mean is under resampling that respects serial dependence). Representative h1 example,
-QQQ 2025 holdout: `RISK_OFF`'s mean forward return (n=29) is **−0.0043**, but its 90%
-moving-block CI is **[−0.0097, +0.0015]** — the negative mean does not survive resampling at
-this confidence level given how few RISK_OFF occurrences were observed. `VOLATILE_TREND`
-(n=121) is more stable: mean **+0.0021**, CI **[+0.0009, +0.0033]**, entirely positive.
+**1000 resamples** (corrected 2026-09-18, see below), 90% CI — full tables in each artifact's
+`bootstrap_records`; not an out-of-sample test, and it does not validate the regime
+definitions, only how stable each observed mean is under resampling that respects serial
+dependence). Representative h1 example, QQQ 2025 holdout: `RISK_OFF`'s mean forward return
+(n=29) is **−0.0043**, but its 90% moving-block CI is **[−0.0100, +0.0014]** — the negative
+mean does not survive resampling at this confidence level given how few RISK_OFF occurrences
+were observed. `VOLATILE_TREND` (n=121) is more stable: mean **+0.0021**, CI **[+0.0008,
++0.0037]**, entirely positive. Both conclusions are unchanged from the prior 150-resample run
+below; only the CI bounds themselves moved (tighter resample count naturally widens/narrows
+the estimated interval slightly, and neither interval crossed zero in the opposite direction).
+
+**Bootstrap resample count corrected 2026-09-18** (independent review, tracker Issue #3): the
+prior version of this section ran and reported these CIs at 150 resamples, then merely
+updated the reproduction command below to say `150` to match what was actually run --
+resolving the documentation mismatch but not the underlying requirement, which is 1000
+resamples (the script's own default, `n_bootstrap: int = 1000` in
+`block_bootstrap_mean_ci`/`regime_bootstrap_uncertainty`,
+`src/financial_dynamics/backtesting/metrics.py`). All 15 §5.4 robustness/characterization
+artifacts (QQQ/IWM/TLT/GLD/SPY × dev_formation/val_2024/holdout_2025) were regenerated at
+1000 resamples, fixed seed, block size 20, both moving-block and stationary methods, 90%
+confidence -- verified by full field-level diff against the pre-fix artifacts that only
+`bootstrap_records[].{ci_low,ci_high,n_bootstrap}` and the `created_utc` timestamp changed;
+every point estimate (`mean`, `n`, regime classifications, `positive_return_freq`, downside
+vol, tail q05, adverse drawdown) is byte-identical. SPY-v1 primary evidence
+(`fdm_hist_regime_v1_{dev_formation,val_2024,holdout_2025}.json`, no "robustness" in the
+filename) was not touched. The pre-fix, 150-resample artifacts are preserved at
+`results/historical_regimes/superseded_150_resamples/`, not deleted.
 
 **Cross-symbol pattern, reported factually, not overclaimed:**
 - **`CALM_TREND` disappeared from the 2025 holdout in QQQ, IWM, and TLT** (3 of 4 symbols;
@@ -405,7 +425,7 @@ report does not have access to (see Limitations). The FDM regime set also lost
   separate, non-aggregated-across-mean/median metric that partially addresses it for those
   four symbols.
 - **Moving-block and stationary bootstrap uncertainty intervals are now reported for the
-  §5.4 cross-asset robustness runs** (`--include-bootstrap`, 150 resamples, 90% CI, block
+  §5.4 cross-asset robustness runs** (`--include-bootstrap`, 1000 resamples, 90% CI, block
   length 20 trading days) but **not for SPY's primary v1 result**, for the same
   re-run-avoidance reason as the bullet above. The CIs characterize sampling uncertainty in
   the observed regime-conditional mean given the observed serial-dependence structure; they
@@ -446,16 +466,19 @@ python scripts/acquire_yf_fd_etfs_daily.py --dataset-id yf_fd_etfs_daily_2015_20
   --raw-dir <dir>
 python scripts/run_historical_regime_study.py \
   --config configs/experiments/fdm_historical_regime_study_v2_robustness.yaml \
-  --primary-symbol QQQ --allow-holdout --include-bootstrap --bootstrap-n-resamples 150
+  --primary-symbol QQQ --allow-holdout --include-bootstrap --bootstrap-n-resamples 1000
 # repeat --primary-symbol for IWM, TLT, GLD. For SPY (post-primary characterization
 # only -- never a replacement primary/holdout), add --force-robustness-label so the
 # run is labeled and filed as robustness rather than mistaken for SPY-v1's own primary:
 #   --primary-symbol SPY --force-robustness-label --allow-holdout --include-bootstrap \
-#   --bootstrap-n-resamples 150
+#   --bootstrap-n-resamples 1000
 ```
-`--bootstrap-n-resamples 150` must be passed explicitly -- the script's own default
-(1000) does not match what was actually run and recorded in the committed artifacts
-(`bootstrap_records[].n_bootstrap`); omitting the flag reproduces different CIs, not
-the ones in this report.
+`--bootstrap-n-resamples 1000` now matches the script's own default (`n_bootstrap: int = 1000`
+in `block_bootstrap_mean_ci`/`regime_bootstrap_uncertainty`) and what was actually run and
+recorded in the committed artifacts (`bootstrap_records[].n_bootstrap`) -- corrected
+2026-09-18 from an earlier version of this command that passed `150` to match a
+150-resample run instead of raising the run itself to the required standard. The flag is
+kept explicit here (rather than relying on the default silently) so this command remains
+self-documenting if the script's default ever changes.
 
 Ledger: `research/experiment-ledger.csv`. Artifacts: `results/historical_regimes/*.json`.
