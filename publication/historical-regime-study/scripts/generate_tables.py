@@ -554,7 +554,14 @@ def main() -> None:
 
     manifest = {
         "generated_by": "publication/historical-regime-study/scripts/generate_tables.py",
-        "repo_root": str(repo_root),
+        # Deliberately no absolute repo_root path here: this manifest is a
+        # committed artifact that must be byte-identical when regenerated in
+        # a different environment (e.g. a CI runner, whose checkout path is
+        # necessarily different from a local clone's) -- an earlier version
+        # of this script embedded str(repo_root) here, which broke exactly
+        # that reproducibility guarantee the first time this pack's CI
+        # workflow ran on a real GitHub Actions runner (verify_pack.py's
+        # `tables` check correctly caught it: only this one field differed).
         "n_sparse_bootstrap_rows": len(sparse_rows),
         "primary_periods": list(primary_data.keys()),
         "robustness_symbols_periods": [f"{s}/{p}" for (s, p) in robustness_data],

@@ -1,6 +1,5 @@
 {
   "generated_by": "publication/historical-regime-study/scripts/generate_tables.py",
-  "repo_root": "/home/user/financial-dynamics-model",
   "n_sparse_bootstrap_rows": 174,
   "primary_periods": [
     "dev_formation",
