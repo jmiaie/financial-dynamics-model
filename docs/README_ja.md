@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
 [![Tests](https://img.shields.io/badge/tests-321%20passed-0d7377?style=flat-square)](#テスト)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
-[![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#テスト)
+[![Coverage](https://img.shields.io/badge/coverage-93%25-0d7377?style=flat-square)](#テスト)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
