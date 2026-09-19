@@ -109,5 +109,7 @@ module = [
     "scipy.*",
     "sklearn.*",
     "yfinance.*",
+    "pandas.*",
+    "yaml.*",
 ]
 ignore_missing_imports = true
