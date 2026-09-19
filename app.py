@@ -461,7 +461,7 @@ def main():
 
             if error:
                 st.warning(
-                    f"⚠️ Live data unavailable for **{symbol}** (Yahoo Finance rate limit on shared cloud IPs). "
+                    f"⚠️ Live data unavailable for **{symbol}** ({error}). "
                     "Showing synthetic demo data instead.",
                     icon="📊",
                 )
