@@ -422,7 +422,7 @@ def main():
         st.divider()
         st.markdown("**Pipeline Config**")
 
-        if st.button("🔄 Load Data & Run Pipeline", use_container_width=True):
+        if st.button("🔄 Load Data & Run Pipeline", width="stretch"):
             st.session_state.run_pipeline = True
 
         st.divider()
@@ -609,25 +609,25 @@ def main():
         # Charts
         st.subheader("📈 Price & Regime Analysis")
         fig_price = plot_price_with_regimes(df, results)
-        st.plotly_chart(fig_price, use_container_width=True)
+        st.plotly_chart(fig_price, width="stretch")
 
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("📊 Regime Probabilities")
             fig_probs = plot_regime_probabilities(results)
             if fig_probs:
-                st.plotly_chart(fig_probs, use_container_width=True)
+                st.plotly_chart(fig_probs, width="stretch")
 
         with col2:
             st.subheader("🔄 Transition Matrix")
             tm = pipeline._transition_engine.get_transition_matrix()
             fig_tm = plot_transition_matrix(tm)
-            st.plotly_chart(fig_tm, use_container_width=True)
+            st.plotly_chart(fig_tm, width="stretch")
 
         st.subheader("🎯 Engineered Features")
         fig_features = plot_features(results)
         if fig_features:
-            st.plotly_chart(fig_features, use_container_width=True)
+            st.plotly_chart(fig_features, width="stretch")
 
         # 3D phase-space attractor field
         st.divider()
@@ -714,7 +714,7 @@ def main():
                 show_transitions_markers=show_shifts,
                 animate=animate,
             )
-            st.plotly_chart(fig_3d, use_container_width=True)
+            st.plotly_chart(fig_3d, width="stretch")
         else:
             st.info("Need at least 10 valid bars for the 3D phase-space view.")
 
@@ -731,14 +731,14 @@ def main():
             vol_col1, vol_col2 = st.columns(2)
             with vol_col1:
                 if "vol_violin" in vol_figures:
-                    st.plotly_chart(vol_figures["vol_violin"], use_container_width=True)
+                    st.plotly_chart(vol_figures["vol_violin"], width="stretch")
                 if "vol_timeseries" in vol_figures:
-                    st.plotly_chart(vol_figures["vol_timeseries"], use_container_width=True)
+                    st.plotly_chart(vol_figures["vol_timeseries"], width="stretch")
             with vol_col2:
                 if "vol_heatmap" in vol_figures:
-                    st.plotly_chart(vol_figures["vol_heatmap"], use_container_width=True)
+                    st.plotly_chart(vol_figures["vol_heatmap"], width="stretch")
                 if "vol_transitions" in vol_figures:
-                    st.plotly_chart(vol_figures["vol_transitions"], use_container_width=True)
+                    st.plotly_chart(vol_figures["vol_transitions"], width="stretch")
         else:
             st.info("Insufficient data for regime-volatility mapping (need ≥10 valid bars).")
 
@@ -786,7 +786,7 @@ def main():
                     font=dict(color=COLOR_SCHEME["text"]),
                     height=300,
                 )
-                st.plotly_chart(fig_forecast, use_container_width=True)
+                st.plotly_chart(fig_forecast, width="stretch")
 
         # Signal detection
         st.divider()
@@ -849,7 +849,7 @@ def main():
             available_cols = [col for col in display_cols if col in results.columns]
             st.dataframe(
                 results[available_cols].tail(20),
-                use_container_width=True,
+                width="stretch",
                 height=300,
             )
 
