@@ -76,12 +76,16 @@ def main() -> None:
     result = calibrator.calibrate(df, labels, search_space=search_space)
 
     print(f"\n  Baseline accuracy:        {result.baseline_accuracy:.1%}")
-    print(f"  + fitted centroids:       {result.centroid_only_accuracy:.1%}  "
-          f"(delta {result.centroid_only_accuracy - result.baseline_accuracy:+.1%})")
-    print(f"  + tuned hyperparameters:  {result.tuned_accuracy:.1%}  "
-          f"(delta {result.tuned_accuracy - result.baseline_accuracy:+.1%})")
+    print(
+        f"  + fitted centroids:       {result.centroid_only_accuracy:.1%}  "
+        f"(delta {result.centroid_only_accuracy - result.baseline_accuracy:+.1%})"
+    )
+    print(
+        f"  + tuned hyperparameters:  {result.tuned_accuracy:.1%}  "
+        f"(delta {result.tuned_accuracy - result.baseline_accuracy:+.1%})"
+    )
 
-    print(f"\n  Confusion matrix (calibrated):")
+    print("\n  Confusion matrix (calibrated):")
     print(f"  {result.tuned_result.confusion_matrix.to_string()}")
 
     output_path = Path(args.output)

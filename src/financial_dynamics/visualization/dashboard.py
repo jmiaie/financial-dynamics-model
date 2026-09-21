@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import warnings
 from typing import TYPE_CHECKING
 
 import matplotlib.gridspec as gridspec
@@ -13,6 +12,7 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 
 from financial_dynamics.types import NUM_REGIMES, REGIME_NAMES, Regime
+from financial_dynamics.visualization._utils import safe_regime_lookup
 from financial_dynamics.visualization.phase_space import REGIME_COLORS
 from financial_dynamics.visualization.trajectory import TrajectoryPlotter
 from financial_dynamics.visualization.vector_field import VectorFieldPlotter
@@ -74,14 +74,8 @@ class SystemDashboard:
 
         if len(valid) > 0:
             for i in range(len(valid) - 1):
-                regime_str = valid.iloc[i]
-                try:
-                    regime = Regime[regime_str]
-                except KeyError:
-                    warnings.warn(
-                        f"Unknown regime '{regime_str}' at index {valid.index[i]}",
-                        stacklevel=2,
-                    )
+                regime = safe_regime_lookup(valid.iloc[i], valid.index[i])
+                if regime is None:
                     continue
                 ax.axvspan(
                     valid.index[i],

@@ -3,23 +3,23 @@
 Interactive dashboard for market regime classification with live yfinance data.
 """
 
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
-import streamlit as st
-import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
+import pandas as pd
 import plotly.express as px
-import warnings
+import plotly.graph_objects as go
+import streamlit as st
 
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
 from financial_dynamics.data_loader import fetch_ohlcv
-from financial_dynamics.types import Regime, REGIME_NAMES
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.signals.detector import SignalDetector, SignalType
+from financial_dynamics.types import REGIME_NAMES, Regime
+from financial_dynamics.visualization._utils import safe_regime_lookup
 from financial_dynamics.visualization.phase_space_3d import build_phase_space_3d
 from financial_dynamics.visualization.regime_vol_map import build_regime_vol_map_plotly
 
@@ -172,7 +172,7 @@ def _get_logo_html(base_path: str) -> str:
     png_path = base_path + ".png"
 
     if os.path.exists(svg_path):
-        with open(svg_path, "r") as f:
+        with open(svg_path) as f:
             return f.read()
     elif os.path.exists(png_path):
         import base64
@@ -220,24 +220,18 @@ def plot_price_with_regimes(df: pd.DataFrame, results: pd.DataFrame):
     valid = regime_col.dropna()
 
     if len(valid) > 0:
-        y_min, y_max = df["close"].min() * 0.95, df["close"].max() * 1.05
         for i in range(len(valid) - 1):
-            try:
-                regime = Regime[valid.iloc[i]]
-                color = REGIME_COLORS_PLOTLY[regime]
-                fig.add_vrect(
-                    x0=valid.index[i],
-                    x1=valid.index[i + 1],
-                    fillcolor=color,
-                    opacity=0.15,
-                    layer="below",
-                    line_width=0,
-                )
-            except KeyError:
-                warnings.warn(
-                    f"Unknown regime '{valid.iloc[i]}' at index {valid.index[i]}",
-                    stacklevel=2,
-                )
+            regime = safe_regime_lookup(valid.iloc[i], valid.index[i])
+            if regime is None:
+                continue
+            fig.add_vrect(
+                x0=valid.index[i],
+                x1=valid.index[i + 1],
+                fillcolor=REGIME_COLORS_PLOTLY[regime],
+                opacity=0.15,
+                layer="below",
+                line_width=0,
+            )
 
     fig.update_layout(
         title="Market Price with Regime Classification",
@@ -358,7 +352,7 @@ def plot_features(results: pd.DataFrame):
         COLOR_SCHEME["accent"],
     ]
 
-    for col, name, color in zip(feat_cols, feat_names, colors):
+    for col, name, color in zip(feat_cols, feat_names, colors, strict=True):
         fig.add_trace(
             go.Scatter(
                 x=valid.index,
@@ -546,7 +540,6 @@ def main():
         col1, col2, col3, col4 = st.columns(4)
 
         current_regime = results["risk_adjusted_regime"].iloc[-1] if len(results) > 0 else None
-        current_probs = None
         confidence = 0.0
 
         if current_regime:
@@ -554,7 +547,6 @@ def main():
             prob_cols = [f"post_prob_{r.name}" for r in Regime]
             if all(col in results.columns for col in prob_cols):
                 probs = results[prob_cols].iloc[-1].values
-                current_probs = probs
                 confidence = probs[int(current_regime)]
 
         with col1:
@@ -593,7 +585,7 @@ def main():
 
         with col4:
             warmup = pipeline.warmup_bars
-            is_ready = "✓ Ready" if bars_processed >= warmup else f"Warming up..."
+            is_ready = "✓ Ready" if bars_processed >= warmup else "Warming up..."
             st.markdown(
                 f"""
             <div class="metric-card">

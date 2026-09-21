@@ -11,7 +11,6 @@ import pandas as pd
 
 from financial_dynamics.backtesting import BacktestEvaluator
 from financial_dynamics.config import PipelineConfig
-from financial_dynamics.types import REGIME_NAMES, Regime
 
 
 def parse_args() -> argparse.Namespace:
@@ -102,17 +101,18 @@ def main() -> None:
     print(f"  Evaluated bars: {result.evaluated_bars}")
     print(f"  Overall accuracy: {result.accuracy:.1%}")
 
-    print(f"\n  Confusion Matrix:")
+    print("\n  Confusion Matrix:")
     print(f"  {result.confusion_matrix.to_string()}")
 
-    print(f"\n  Classification Report:")
+    print("\n  Classification Report:")
     print(f"  {result.classification_report.to_string()}")
 
     # Rolling evaluation
     if args.rolling:
         print(f"\n  Rolling evaluation (window={args.window_size}, step={args.step_size}):")
         rolling = evaluator.evaluate_rolling(
-            df, true_labels,
+            df,
+            true_labels,
             window_size=args.window_size,
             step_size=args.step_size,
         )
