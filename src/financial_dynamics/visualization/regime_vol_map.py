@@ -8,7 +8,7 @@ with volatility shifts.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -84,8 +84,8 @@ def _plot_vol_violins(valid: pd.DataFrame, ax: Axes) -> None:
 
     for idx, pc in enumerate(parts["bodies"]):  # type: ignore[arg-type, var-annotated]
         regime = Regime(positions[idx])
-        pc.set_facecolor(REGIME_COLORS[regime])  # type: ignore[union-attr]
-        pc.set_alpha(0.6)  # type: ignore[union-attr]
+        pc.set_facecolor(REGIME_COLORS[regime])
+        pc.set_alpha(0.6)
 
     for component in ["cbars", "cmins", "cmaxes", "cmedians"]:
         if component in parts:
@@ -245,7 +245,7 @@ def _plot_transition_vol_shifts(valid: pd.DataFrame, ax: Axes) -> None:
 def build_regime_vol_map_plotly(
     results: pd.DataFrame,
     pipeline: FinancialDynamicsPipeline | None = None,
-) -> dict:
+) -> dict[str, Any]:
     """Build an interactive Plotly regime-volatility map for Streamlit.
 
     Returns a dict of Plotly figures keyed by panel name.
