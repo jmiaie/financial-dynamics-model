@@ -8,6 +8,64 @@ not `main`). **That base commit is fixed and is not this branch's current HEAD**
 its own commit history on top of it (see each "Remediation round" section below for that round's
 resulting HEAD, or `git log --oneline -1` for the actual current value).
 
+## Post-review integration status
+
+This publication pack was originally authored and reviewed under a
+no-merge / stop-at-independent-review instruction. That language is preserved
+below as a historical record of the authoring phase.
+
+The pack has subsequently been integrated into `main`. This integration does
+not, by itself, constitute Directive #10 program sign-off.
+
+Current lifecycle status:
+INTEGRATED ON MAIN / FINAL D10 PROGRAM SIGN-OFF PENDING.
+
+| Integration record | Value |
+| --- | --- |
+| Accepted D9 head | `5d01cf8e2d3334602fbd8e2b114f6bff92d78f31` |
+| Cleared publication head / accepted publication ancestor | `7c1208106378203e0b6dbe5ce513c659bcd07b2c` (PR #15 head) |
+| Current `main` head | `2b0a919e4500dabda3c0b6430494361a50d36e4f` |
+| Integration path | Pack authored on `publication/historical-regime-study` (cleared head `7c12081`), merged via PR **#15** into `research/historical-regime-validation` (merge `2f403dad18`, 2026-09-18T13:23:04Z); that line merged to `main` via PR **#12** (`e3a6393`); post-review D10-A remediation rounds then landed directly on `main` (`9996200` → `fa53d2a` → `c5ba8e3` → `2b0a919e`). |
+| Relevant pull requests | #15 (pack, merged), #12 (line → `main`, merged); #13, #14 remain open (PR hygiene inventory) |
+| Exact-head CI evidence | At exact `main` head `2b0a919e`: CI run `35401861654` (success) — https://github.com/jmiaie/financial-dynamics-model/actions/runs/35401861654 ; Publication Pack (D10-A) run `35386559835` (success) — https://github.com/jmiaie/financial-dynamics-model/actions/runs/35386559835 . `Mirror to Public Repo` run `35401861672` failed (non-destructive `403`; investigated separately, see the FDM mirror-workflow review). |
+| Diff from accepted D9 is publication-only | **Yes** — `git diff --name-status 5d01cf8e 2b0a919e` yields only `.github/workflows/publication-pack.yml` (added) and `publication/historical-regime-study/**`. No accepted empirical source, configuration, dataset manifest, research report, or result artifact appears in that diff. |
+| Disclosed integration nuance | The pack reached `main` partly through PR merges and partly as direct commits on `main` (remediation rounds 4–7, `9996200`–`2b0a919e`). No accepted artifact changed in either route. |
+
+**Current program state.** D9: COMPLETE / ACCEPTED. D10: TECHNICALLY
+INTEGRATED / FORMAL SIGN-OFF PENDING. D11: PARTIALLY STARTED THROUGH THE
+PUBLIC HUB / NOT FORMALLY ACTIVATED. D12: DRAFTED / BLOCKED BY D11 HIRING
+EVIDENCE. D13: DRAFTED / NOT YET JUSTIFIED.
+
+**Final D10 program sign-off remains PENDING.** No authoritative
+`DIRECTIVE #10 PUBLICATION PACK SIGN-OFF: YES` has been issued for this pack.
+A D9 program sign-off is not a D10 program sign-off. This section records
+integration state only: it is not a sign-off, and it does not strengthen,
+weaken, or restate any finding, number, or claim in the pack.
+
+### How to read the rest of this directory
+
+Every "no merge", "no pull request merged", "draft PR only", "not on `main`",
+"not from `main`", "no external publication", and "READY FOR INDEPENDENT
+(D10) REVIEW" statement preserved below, or elsewhere in this directory, is
+**authoring-phase language** kept deliberately as the contemporaneous record
+(append-only history; the historical record is not rewritten). Where such a
+statement could be read as describing the *current* lifecycle state, this
+section supersedes it; the statement itself is left unedited. The
+machine-readable `reproducibility.json` field `merge` is likewise left
+byte-unchanged on purpose, so the pack's own hash and regeneration gates stay
+valid at the recorded tip.
+
+*Repository visibility note:* the host repository is public, so this pack is
+world-readable on `main`. No PyPI/npm release, website deployment, or other
+external-service publication was performed.
+
+---
+
+*Post-review integration section added 2026-09-21 as documentation-only
+reconciliation. No empirical artifact, configuration, dataset manifest,
+experiment identity, ledger row, number, or finding was changed; no
+rerun, retune, or reacquisition was performed.*
+
 ## Deliverables checklist
 
 | # | Deliverable | Path | Status |
@@ -290,3 +348,5 @@ remediation is a normal follow-up commit.
 ---
 
 ## READY FOR INDEPENDENT D10 REVIEW. NO MERGE. NO D11.
+
+*(Authoring-phase heading — 2026-09-18. Superseded as a statement of current state: the pack is now integrated on `main`. See "Post-review integration status" at the top of this file.)*
