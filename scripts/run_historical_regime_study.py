@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run Directive #9 historical regime study on frozen local data only.
+"""Run the historical regime study on frozen local data only.
 
 Examples:
   # Development (2015-2023) + validation (2024); holdout blocked

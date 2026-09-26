@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CI verification script for the D10-A publication pack.
+"""CI verification script for the historical regime study reproducibility bundle.
 
 Runs entirely offline against the already-committed repository state. It
 NEVER invokes `scripts/run_historical_regime_study.py` or

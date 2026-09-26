@@ -1,7 +1,7 @@
 {
-  "_purpose": "Machine-readable reproduction record for the D10-A publication pack. Every field below is either quoted verbatim from an already-committed source (config, manifest, report) or independently recomputed in this session against already-committed artifacts. This file does NOT authorize or perform any re-run; commands are reproduced for reference exactly as the source report documents them.",
+  "_purpose": "Machine-readable reproduction record for the historical regime study reproducibility bundle. Every field below is either quoted verbatim from an already-committed source (config, manifest, report) or independently recomputed in this session against already-committed artifacts. This file does NOT authorize or perform any re-run; commands are reproduced for reference exactly as the source report documents them.",
   "package_versions": {
-    "note": "Discovered from pyproject.toml / requirements.txt (declared floors) and /tmp/fdm-venv (the environment actually used to verify hashes and run tests/tables/figures for this pack). Not necessarily the exact environment that originally produced the committed artifacts, which is not recorded in this repository.",
+    "note": "Discovered from pyproject.toml / requirements.txt (declared floors) and /tmp/fdm-venv (the environment actually used to verify hashes and run tests/tables/figures for this bundle). Not necessarily the exact environment that originally produced the committed artifacts, which is not recorded in this repository.",
     "python_requires": ">=3.10",
     "mypy_typecheck_python_version": "3.12",
     "declared_floors_requirements_txt": {
@@ -64,7 +64,7 @@
     }
   },
   "regeneration_commands": {
-    "_note": "Reproduced verbatim in substance from research/historical-market-regime-study.md Sec 8. These commands are NOT executed by this publication pack and this pack does not authorize their execution -- D10 performs no re-run of any evaluation period.",
+    "_note": "Reproduced verbatim in substance from research/historical-market-regime-study.md Sec 8. These commands are NOT executed by this bundle and this bundle does not authorize their execution -- this bundle performs no re-run of any evaluation period.",
     "primary_v1": [
       "python scripts/run_historical_regime_study.py --config configs/experiments/fdm_historical_regime_study_v1.yaml --allow-holdout"
     ],
@@ -75,7 +75,7 @@
       "# repeat --primary-symbol for IWM, TLT, GLD",
       "python scripts/run_historical_regime_study.py --config configs/experiments/fdm_historical_regime_study_v2_robustness.yaml --primary-symbol SPY --force-robustness-label --allow-holdout --include-bootstrap --bootstrap-n-resamples 1000"
     ],
-    "bootstrap_flag_note": "--bootstrap-n-resamples 1000 matches the script's own default (n_bootstrap: int = 1000 in block_bootstrap_mean_ci/regime_bootstrap_uncertainty, src/financial_dynamics/backtesting/metrics.py) and what is actually recorded in every committed artifact's bootstrap_records[].n_bootstrap. Kept explicit here (rather than relying on the default silently) so the command remains self-documenting if the script's default ever changes. An earlier, superseded run used 150 resamples; those artifacts are preserved at results/historical_regimes/superseded_150_resamples/, not deleted, and are not used as evidence in this pack except as an explicit before/after contrast in CASE-STUDY.md."
+    "bootstrap_flag_note": "--bootstrap-n-resamples 1000 matches the script's own default (n_bootstrap: int = 1000 in block_bootstrap_mean_ci/regime_bootstrap_uncertainty, src/financial_dynamics/backtesting/metrics.py) and what is actually recorded in every committed artifact's bootstrap_records[].n_bootstrap. Kept explicit here (rather than relying on the default silently) so the command remains self-documenting if the script's default ever changes. An earlier, superseded run used 150 resamples; those artifacts are preserved at results/historical_regimes/superseded_150_resamples/, not deleted, and are not used as evidence in this bundle except as an explicit before/after contrast in CASE-STUDY.md."
   },
   "output_artifact_hashes": {
     "primary": {
@@ -121,7 +121,7 @@
     "source_function": "src/financial_dynamics/backtesting/metrics.py: block_bootstrap_mean_ci (line 428), regime_bootstrap_uncertainty (line 486)"
   },
   "this_pack_generation": {
-    "note": "Tables and figures in this pack were generated deterministically, offline, from the already-committed artifacts listed above -- no network calls, no re-running of any experiment.",
+    "note": "Tables and figures in this bundle were generated deterministically, offline, from the already-committed artifacts listed above -- no network calls, no re-running of any experiment.",
     "tables_script": "publication/historical-regime-study/scripts/generate_tables.py",
     "figures_script": "publication/historical-regime-study/scripts/generate_figures.py",
     "regenerate_with": "python publication/historical-regime-study/scripts/generate_tables.py && python publication/historical-regime-study/scripts/generate_figures.py"

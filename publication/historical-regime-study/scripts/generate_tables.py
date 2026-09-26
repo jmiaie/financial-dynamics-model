@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic, offline table generator for the D10-A publication pack.
+"""Deterministic, offline table generator for the historical regime study reproducibility bundle.
 
 Reads ONLY already-committed JSON artifacts under `results/historical_regimes/`
 and hashes them; writes Markdown/CSV tables under `publication/historical-regime-study/tables/`
@@ -39,8 +39,7 @@ PERIOD_LABELS = {
     "dev_formation": "Development / formation (2015-01-01 to 2023-12-31)",
     "val_2024": "Validation (2024-01-01 to 2024-12-31)",
     # Corrected 2026-09-18: "HISTORICAL EVALUATION" was a category error (see
-    # SOURCE-GATE.md field 7 / its "Period classification detail" section,
-    # and QUANT-REDTEAM.md's dated remediation note).
+    # SOURCE-GATE.md field 7 / its "Period classification detail" section).
     # Holdout status is established by research/holdout-audit.md's CLEAR
     # verdict plus freeze-then-single-execution, not by "2025 data existed
     # and was inspectable" (true of every holdout period, not evidence
@@ -395,7 +394,7 @@ def gen_case_study_record(
     # VOLATILE_TREND's (and CHOP's) horizon-1 bootstrap records for contrast
     # against RISK_OFF -- map every horizon-1 regime/method combination in
     # this file, not just RISK_OFF, so none of the figure's/paper's numbers
-    # is an orphaned citation (found in CITATION-REDTEAM.md).
+    # is an orphaned citation (found during independent review).
     other_regime_records: dict[str, dict[str, Any]] = {}
     for rec in fdm["bootstrap_records"]:
         if rec["horizon"] != 1 or rec["regime"] == "RISK_OFF":
@@ -475,7 +474,7 @@ def gen_dataset_config_hash_table(
     # CLAIM-REGISTER.md C19 (period-labeling claim) cites the primary config's
     # own freeze timestamp field -- map it explicitly so that citation is not
     # an orphan relative to the rest of this source map (found in
-    # CITATION-REDTEAM.md).
+    # independent review).
     import yaml
 
     config_v1_path = repo_root / "configs/experiments/fdm_historical_regime_study_v1.yaml"

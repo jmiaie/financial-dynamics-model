@@ -60,7 +60,7 @@ This performs no network access and reads only already-committed files under `re
 - §4.2/`CASE-STUDY.md` (QQQ 2025 RISK_OFF worked example): every field quoted in the case study —
   regime count, summary record, both bootstrap methods' records, and the pre-fix 150-resample
   comparison record — has a `case_study.qqq_2025.*` row.
-- Every dataset/config hash cited anywhere in this pack (`SOURCE-GATE.md`, `TECHNICAL-PAPER.md`,
+- Every dataset/config hash cited anywhere in this bundle (`SOURCE-GATE.md`, `TECHNICAL-PAPER.md`,
   `reproducibility.json`) has a `hash_table.*` row.
 
 **Not covered by an individual row (by design):** narrative/discussion sentences in

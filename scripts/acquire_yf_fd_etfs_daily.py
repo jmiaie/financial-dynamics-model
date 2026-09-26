@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Acquire and freeze yf_fd_etfs_daily_2015_2025_v1 for Directive #9.
+"""Acquire and freeze yf_fd_etfs_daily_2015_2025_v1.
 
 Raw CSVs are written under data/raw/ (gitignored). Manifests under
 data/manifests/ are committed. Network acquisition is for local/agent

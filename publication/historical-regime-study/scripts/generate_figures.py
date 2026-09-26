@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic figure generator for the D10-A publication pack.
+"""Deterministic figure generator for the historical regime study reproducibility bundle.
 
 Produces a bootstrap-CI forest plot from already-committed JSON artifacts
 under `results/historical_regimes/`. No network calls, no randomness (all
@@ -27,7 +27,7 @@ try:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 except ImportError:
-    print("matplotlib not available -- skipping figure generation (see D10-STATUS.md).")
+    print("matplotlib not available -- skipping figure generation.")
     sys.exit(0)
 
 

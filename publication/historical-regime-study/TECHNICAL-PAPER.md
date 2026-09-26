@@ -2,9 +2,9 @@
 
 ## A Walk-Forward Evaluation of the Financial Dynamics Model
 
-**Status:** D10-A publication pack, draft, for independent review. Repackages already-accepted,
-already-computed D9-A evidence for external readers. Performs no new empirical work. See
-`SOURCE-GATE.md` for the full provenance record and `D10-STATUS.md` for pack status.
+**Status:** Write-up of already-computed evidence from the pre-registered historical regime study,
+for external readers. Performs no new empirical work. See `SOURCE-GATE.md` for the full
+provenance record.
 
 ---
 
@@ -64,8 +64,7 @@ single 2025 run. It is **not** based on, and does not require, "the data existed
 principle inspectable before the freeze" — that is true of every holdout period ever run and is
 not itself evidence for or against holdout status; an earlier version of this paper used that
 reasoning and mislabeled the period "historical evaluation" as a result (corrected 2026-09-18; see
-`SOURCE-GATE.md` field 7 and its "Period classification detail" section, and
-`QUANT-REDTEAM.md`'s dated remediation note). This label does not assert
+`SOURCE-GATE.md` field 7 and its "Period classification detail" section). This label does not assert
 the period is "pristine," free of every conceivable prior human exposure, or a prospective
 live-market validation — only what the audit and freeze record directly support.
 
@@ -245,7 +244,7 @@ it does not by itself distinguish a genuine 2025 market characteristic from a ce
 artifact. QQQ and IWM's `mean_return_h1` are negative in the 2025 window (−0.000439, −0.000528),
 the same sign as SPY's headline 2025 finding (−0.000293); TLT and GLD are positive
 (+0.001272, +0.002259) — consistent with an equity-specific rather than universal 2025 pattern,
-but three equity instruments remains a small sample, and this pack does not claim statistical
+but three equity instruments remains a small sample, and this bundle does not claim statistical
 significance for that split (§4 addresses the bootstrap evidence directly on QQQ's `RISK_OFF`
 cell).
 
@@ -294,8 +293,7 @@ observation — e.g. QQQ `val_2024`, volatility-bucket, `CALM_TREND`, horizon 20
 be read as evidence of stability; the stationary rows in the same set do not collapse.
 
 Full listing of all 174 rows: `tables/bootstrap_sparse_cells_full.md`. A histogram of effective
-block sizes across these rows is at `figures/sparse_cell_effective_block_sizes.png` (see
-`D10-STATUS.md` if matplotlib was unavailable at generation time).
+block sizes across these rows is at `figures/sparse_cell_effective_block_sizes.png`.
 
 ### 4.2 Representative example — QQQ 2025, horizon 1
 
@@ -340,7 +338,7 @@ its own robustness run reports SPY-v2 `RISK_OFF` at horizon 1 with `n=29`, mean 
 per-regime interval for one symbol is not a confidence interval for the primary result's
 unweighted cross-regime mean, so this bounds the small-sample reading rather than testing it. This is not a failure of the study —
 it is the correct and honest reading of a small-sample regime cell under resampling that respects
-serial dependence, and it is the reason this pack treats the 2025 finding as reported rather than
+serial dependence, and it is the reason this bundle treats the 2025 finding as reported rather than
 as confirmed.
 
 The cross-asset robustness runs (§3) extend the same pattern (loss of `CALM_TREND` in 2025 in three of the four additional symbols —
