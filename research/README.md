@@ -1,4 +1,4 @@
-# Research provenance (Directive #9)
+# Research provenance
 
 | Artifact | Purpose |
 |---|---|

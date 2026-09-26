@@ -20,5 +20,5 @@ venv/
 .hypothesis/
 .ruff_cache/
 
-# Directive #9: raw vendor snapshots stay local / gitignored
+# Raw vendor snapshots stay local / gitignored
 data/raw/

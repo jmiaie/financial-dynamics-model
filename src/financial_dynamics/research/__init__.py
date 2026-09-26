@@ -1,4 +1,4 @@
-"""Research helpers for Directive #9 historical empirical studies."""
+"""Research helpers for historical empirical studies."""
 
 from financial_dynamics.research.historical_study import (
     PeriodSpec,

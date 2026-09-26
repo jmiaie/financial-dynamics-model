@@ -1,14 +1,12 @@
-# Source Gate
+# Provenance Record
 
-**Purpose.** This document is the single admission gate for the D10-A publication pack. Fields
-1–14 below are the **authoritative Phase 0 SOURCE-GATE MATRIX schema** for this program — exactly
-these 14 things, each concise, in exactly this order, nothing substituted or added. Every other
-piece of provenance, methodology, and disclosure this pack needs (artifact inventories, bootstrap
-sparse-cell disclosure, full period-classification reasoning, full limitations list, standing
-prohibitions, reviewer instructions) is preserved in full in the **named, unnumbered sections
-after field 14** — nothing was deleted in restructuring this document, only relocated. It does not
-introduce any new number; every value below is either a verbatim hash produced by `sha256sum`
-against a committed file, or a verbatim quotation, cited as such.
+**Purpose.** This document is the provenance record for the historical regime study's
+reproducibility bundle. Fields 1–14 below are a fixed, concise provenance schema; the fuller
+provenance, methodology, and disclosure material (artifact inventories, bootstrap sparse-cell
+disclosure, period-classification reasoning, limitations, scope constraints, reviewer instructions)
+is in the **named, unnumbered sections after field 14**. It does not introduce any new number;
+every value below is either a verbatim hash produced by `sha256sum` against a committed file, or a
+verbatim quotation, cited as such.
 
 ---
 
@@ -16,22 +14,17 @@ against a committed file, or a verbatim quotation, cited as such.
 
 `jmiaie/financial-dynamics-model`
 
-## 2. Source PR / branch
+## 2. Source branch
 
-D9-A accepted evidence: **PR #13**, branch `research/historical-regime-validation` (open,
-unmerged, at the time of this pack's creation). This publication pack's own branch,
-`publication/historical-regime-study`, is kept **distinct** from PR #13's branch — it is created
-from PR #13's branch at a specific commit (field 3) but is not the same branch and does not touch
-PR #13's own commits.
+The study's evidence was produced on branch `research/historical-regime-validation`. This bundle
+was prepared on a separate branch, `publication/historical-regime-study`, created from that
+branch at the commit in field 3, and has since been merged into `main`.
 
-## 3. Accepted HEAD
+## 3. Evidence base commit
 
-`5d01cf8e2d3334602fbd8e2b114f6bff92d78f31` — the accepted D9-A evidence base / branch point this
-publication pack was created from. **This value is fixed and does not change** as this publication
-pack's own commits accumulate on top of it. **This publication branch's own current HEAD is a
-different, later value** — this document never asserts they are the same; see "Additional
-provenance" below for how to find the current HEAD, and never assume a historical revision of this
-field's value elsewhere in this pack (e.g. in git commit messages) equals the branch's current tip.
+`5d01cf8e2d3334602fbd8e2b114f6bff92d78f31` — the commit holding the study's evidence, from which
+this bundle was created. **This value is fixed**; later commits (including the current `main`
+HEAD) are different, later values. See "Additional provenance" below.
 
 ## 4. Experiment ID
 
@@ -56,9 +49,8 @@ detail" below.
 
 **FINAL 2025 HOLDOUT EVALUATION.** Pre-study audit **CLEAR** (`research/holdout-audit.md`); the
 primary config was frozen before this evaluation; the 2025 run then executed exactly once under
-that frozen configuration. **Never** "HISTORICAL EVALUATION" for D9-A's primary 2025 result — that
-was a category error in an earlier version of this pack, corrected 2026-09-18 (dated remediation
-note: `QUANT-REDTEAM.md`). Full reasoning and the period-classification table: "Period
+that frozen configuration. An earlier draft labeled this period "historical evaluation"; that was
+a category error, corrected 2026-09-18 after independent review. Full reasoning and the period-classification table: "Period
 classification detail" below.
 
 ## 8. Final config SHA
@@ -78,13 +70,9 @@ commit, freeze timestamp, robustness config): "Config detail" below.
 
 ## 11. Independent review status
 
-External program-audit citation, accepted by Phase 0, **not independently re-derived or
-re-verified by this pack's authors**:
-
-> "Directive #9 Final Four-Stream Independent Program Audit — SIGN-OFF YES; P0=0; P1=0;
-> HISTORICAL EMPIRICAL VALIDATION COMPLETE / ACCEPTED."
-
-Full citation detail and framing: "Independent review status — full citation detail" below.
+The study and this bundle were checked by an independent reviewer who reported no blocking issues.
+That review is external to this repository and is **not itself reproduced or verified here**; the
+verifiable evidence is the committed artifacts, hashes, and `scripts/verify_pack.py` checks.
 
 ## 12. Primary finding
 
@@ -96,7 +84,7 @@ elevated to primary status. Full results tables: `TECHNICAL-PAPER.md` §2.
 ## 13. Primary null / negative finding
 
 **No statistically validated predictive edge was demonstrated by the primary study.** Earlier,
-stronger predictive/alpha interpretations are withdrawn. This pack does **not** say proven alpha,
+stronger predictive/alpha interpretations are withdrawn. This bundle does **not** say proven alpha,
 directional forecasting success, true latent regime recovery, or economically significant trading
 edge — see the bootstrap evidence in `TECHNICAL-PAPER.md` §4 and `CASE-STUDY.md` (QQQ `RISK_OFF`'s
 negative mean does not survive resampling at 90% confidence).
@@ -115,40 +103,29 @@ instances). Full limitations list: "Known limitations / caveats (full)" below.
 # Additional provenance, methodology, and disclosure
 
 Everything below is **unnumbered** by design (so future SOURCE-GATE schema changes cannot silently
-break a numbered cross-reference again) and should be cited elsewhere in this pack by these
+break a numbered cross-reference again) and should be cited elsewhere in this bundle by these
 section names, not by a number.
 
 ## Additional provenance
 
 - Immediate parent of the accepted HEAD (field 3): `6297e3c5046554a85bb81fff0e2abd742aa8dc89`
-  ("D9-A: fix positive_return_freq metric, add SPY-v2 post-primary characterization").
-- This publication branch (`publication/historical-regime-study`) was created from the accepted
-  HEAD in field 3 (not from `main`; `main` does not contain this evidence while PR #13 is open and
-  unmerged).
-- **Current branch HEAD:** this publication pack has its own commit history on top of field 3's
-  accepted HEAD (multiple publication-content commits as of this writing). This document
-  deliberately does **not** hardcode that current HEAD value, because it changes with every
-  publication-pack commit and a stale hardcoded value here would silently become wrong exactly the
-  way an earlier version of this field did. To find the actual current HEAD: `git log --oneline -1`
-  on this branch, or the HEAD SHA reported in the pull request itself, or `D10-STATUS.md`'s most
-  recent remediation-round note (updated each round with that round's resulting HEAD).
+  (the commit that fixed the `positive_return_freq` metric and added the SPY-v2 post-primary
+  characterization).
+- This bundle's branch was created from the commit in field 3 and later merged into `main`; use
+  `git log` to see the current HEAD.
 - Experiment ID detail: primary `fdm_hist_regime_v1` (SPY, v1 dataset); secondary
   `fdm_hist_regime_v1_robustness_{symbol}_{period}` for `symbol` in `{spy, qqq, iwm, tlt, gld}` and
   `period` in `{dev_formation, val_2024, holdout_2025}` — 15 artifacts total. SPY's entry in this
   secondary set is the post-primary characterization run (source report §5.5), never a second
   primary.
 
-## Program background
+## Background
 
-This is a **Directive #10-A (D10-A)** publication/communication deliverable. D10 is authorized as
-a write-up phase for already-accepted, already-computed evidence; it performs **no new empirical
-work** (no retraining, no retuning, no re-acquisition, no re-running any evaluation period, no
-alteration of any existing result artifact). The evidence it packages was produced under
-**Directive #9-A (D9-A)**, the historical-regime-validation research/remediation stream in this
-repository, tracked upstream in `jmiaie/quant-research-portfolio` Issue #3. D9-A's own
-defect-remediation work is recorded on PR #13 / branch `research/historical-regime-validation` and
-in `research/historical-market-regime-study.md`, which this pack summarizes and repackages for
-external readers without modification.
+This bundle is a write-up of already-computed evidence; it performs **no new empirical work** (no
+retraining, no retuning, no re-acquisition, no re-running any evaluation period, no alteration of
+any existing result artifact). The underlying study is documented in
+`research/historical-market-regime-study.md`, which this bundle summarizes for external readers
+without modification.
 
 ## Primary artifact inventory (full)
 
@@ -159,7 +136,7 @@ external readers without modification.
 | Holdout (2025) | `results/historical_regimes/fdm_hist_regime_v1_holdout_2025.json` | `7595a3474e839dc3e62def6687a9e7f3ad497aba5bfce711111fff2547f68937` |
 
 The holdout-file hash matches field 10 above exactly; the dev_formation and val_2024 hashes were
-computed independently in the original build of this pack (`sha256sum`) and re-verified in every
+computed independently in the original build of this bundle (`sha256sum`) and re-verified in every
 subsequent remediation round via `scripts/verify_pack.py`.
 
 These three artifacts are intentionally **slim**: each `models[i]` entry carries `regime_counts`
@@ -192,7 +169,7 @@ All paths are `results/historical_regimes/fdm_hist_regime_v1_robustness_{symbol}
 | GLD | holdout_2025 | `cb9c04ba4ed4760c3738177f0a46e9c9744f5f61c280fe5a4071a75410e7308f` |
 
 Pre-fix (150-resample) versions of all 15 files are preserved, not deleted, at
-`results/historical_regimes/superseded_150_resamples/`; this pack does not use their numbers
+`results/historical_regimes/superseded_150_resamples/`; this bundle does not use their numbers
 except in `CASE-STUDY.md`, where one is cited explicitly as the superseded value for contrast.
 
 ## Dataset provenance detail
@@ -221,8 +198,7 @@ except in `CASE-STUDY.md`, where one is cited explicitly as the superseded value
 
 - **Primary (frozen-for-holdout):** `configs/experiments/fdm_historical_regime_study_v1.yaml`,
   sha256 = `299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16`.
-  Freeze commit `596a22527b6f0107ba5baf55dd2edd68a1d991fe` ("D9-A: FINAL CONFIGURATION FROZEN for
-  holdout"); freeze timestamp `2026-09-16T02:58:00Z` (`freeze_record.frozen_for_holdout_utc` in
+  Freeze commit `596a22527b6f0107ba5baf55dd2edd68a1d991fe` (the final configuration-freeze commit); freeze timestamp `2026-09-16T02:58:00Z` (`freeze_record.frozen_for_holdout_utc` in
   the config file). `status: frozen-for-holdout` and `constraints.no_retune_after_freeze: true`
   are both present in the committed file as read directly.
 - **Robustness/characterization:**
@@ -262,7 +238,7 @@ peak-to-trough decline, not just start-to-end return), `mean_duration`/`median_d
 **Scope of the primary claim.** This study characterizes **subsequent risk characteristics**
 conditional on regime (volatility, tail risk, drawdown, self-transition persistence) — it is
 **not** a directional-forecast-accuracy or trading-alpha claim. The source report states this
-explicitly in its Research Question section and repeats it in Limitations; this pack preserves
+explicitly in its Research Question section and repeats it in Limitations; this bundle preserves
 that framing throughout (see `CLAIM-REGISTER.md`).
 
 ## Bootstrap / uncertainty detail
@@ -327,24 +303,18 @@ Reproduced in substance from `research/historical-market-regime-study.md` §7, n
   2025 holdout" in a different repository's (`Advanced_Algorithmic_Trading_Simulator_public`)
   cross-repository exposure disclosure.
 
-## Independent review status — full citation detail
+## Independent review status — detail
 
-> "Directive #9 Final Four-Stream Independent Program Audit — SIGN-OFF YES; P0=0; P1=0;
-> HISTORICAL EMPIRICAL VALIDATION COMPLETE / ACCEPTED."
-
-This text is reproduced exactly as supplied to this pack's authors, attributed as an external
-citation (the "Grokbot four-stream independent audit"), accepted by Phase 0 of this program.
-**This pack's authors did not have access to that audit and did not independently re-derive or
-verify its sign-off**; it is quoted here as a citation of record, not as a claim this document
-itself substantiates.
+See field 11. The external review is cited for context only; nothing in this bundle depends on it,
+and no claim here is presented as substantiated by it.
 
 ## Period classification detail
 
-| Period | Dates | Label (use exactly this, everywhere in this pack) |
+| Period | Dates | Label (use exactly this, everywhere in this bundle) |
 |---|---|---|
 | Development / formation | 2015-01-01 to 2023-12-31 | **DEVELOPMENT / FORMATION** — used to fit benchmark thresholds and freeze configuration; not held out. |
 | Validation | 2024-01-01 to 2024-12-31 | **VALIDATION** — evaluated before the final freeze; used to confirm the frozen configuration behaved reasonably, not to retune after inspection. |
-| Holdout | 2025-01-01 to 2025-12-31 | **FINAL 2025 HOLDOUT EVALUATION.** Pre-study audit CLEAR (`research/holdout-audit.md`, verdict: "no evidence that calendar-year 2025 market data was previously inspected, tuned against, or used for empirical evaluation / performance claims in this repository"); the config was frozen (`freeze_record.frozen_for_holdout_utc`, 2026-09-16T02:58:00Z, "Config detail" above) before the 2025 run; the run then executed exactly once under that frozen configuration. That CLEAR-audit + freeze-then-single-execution sequence is what establishes holdout status — not the fact that 2025 market data existed and was in principle inspectable, which is true of every holdout period and is not itself evidence for or against holdout status (that was a category error in an earlier version of this pack; see the dated correction note in `QUANT-REDTEAM.md`). This label does **not** assert the period is "pristine," "untouched across every possible prior human exposure," or "prospective live-market validation" — only what the audit and freeze record directly support. |
+| Holdout | 2025-01-01 to 2025-12-31 | **FINAL 2025 HOLDOUT EVALUATION.** Pre-study audit CLEAR (`research/holdout-audit.md`, verdict: "no evidence that calendar-year 2025 market data was previously inspected, tuned against, or used for empirical evaluation / performance claims in this repository"); the config was frozen (`freeze_record.frozen_for_holdout_utc`, 2026-09-16T02:58:00Z, "Config detail" above) before the 2025 run; the run then executed exactly once under that frozen configuration. That CLEAR-audit + freeze-then-single-execution sequence is what establishes holdout status — not the fact that 2025 market data existed and was in principle inspectable, which is true of every holdout period and is not itself evidence for or against holdout status (that was a category error in an earlier draft, corrected 2026-09-18). This label does **not** assert the period is "pristine," "untouched across every possible prior human exposure," or "prospective live-market validation" — only what the audit and freeze record directly support. |
 
 ## Primacy statement (full)
 
@@ -352,39 +322,26 @@ itself substantiates.
 result** of this study. SPY-v2 (the post-primary characterization run described in the source
 report's §5.5) and the QQQ/IWM/TLT/GLD v2 robustness runs (§5.4, "Secondary / robustness artifact
 inventory" above) are explicitly **post-primary / robustness / characterization only**. They are
-never described in this pack as equal-status to SPY-v1, as a replacement primary, as a second
+never described in this bundle as equal-status to SPY-v1, as a replacement primary, as a second
 observation of the primary result, or as validating or invalidating it. Where SPY-v1 and SPY-v2
 agree numerically (e.g. `mean_return_h1` in the 2025 period, matching to 4 significant figures
-despite non-bit-identical input data), this pack reports that agreement as a factual consistency
+despite non-bit-identical input data), this bundle reports that agreement as a factual consistency
 observation, not as proof of either result.
 
-## Standing prohibitions
+## Scope constraints
 
 - No retraining, retuning, re-acquisition of data, or re-running of any evaluation period.
 - No modification of any existing result artifact, config, dataset manifest, or source file under
   `results/`, `configs/`, `src/`, `data/`, or the existing `research/historical-market-regime-study.md`.
-- No modification of `research/experiment-ledger.csv` (append-only program convention; out of
-  scope for this docs-only pack).
-- This pack is **draft-only**: it does not merge its own pull request, does not touch `main`, and
-  does not touch PR #13 (`research/historical-regime-validation`) except as this PR's read-only
-  base branch.
-- No external publication of any kind (no npm/pypi publish, no website deploy, no use of
-  `.github/workflows/mirror-to-public.yml` or `.github/workflows/publish.yml`).
-- No start of any Directive #11 work. This pack's terminal state is
-  "READY FOR INDEPENDENT D10 REVIEW. NO MERGE. NO D11." (see `D10-STATUS.md`).
-- **One narrow, explicitly authorized exception to "new files only under this directory":**
-  `.github/workflows/publication-pack.yml`, added 2026-09-18 at the coordinating session's
-  explicit direction (see `D10-STATUS.md`'s remediation-round notes) so this pack has its own CI
-  verification gate, since `ci.yml` never runs on a PR targeting a non-`main` base branch. That
-  workflow only checks out the repo, installs dependencies, and runs verification against
-  already-committed files (`scripts/verify_pack.py`, `ruff`, `mypy`). Note that
-  `scripts/verify_pack.py` is not read-only with respect to the working tree: it regenerates
-  `tables/` and `figures/` in place in order to compare them against the committed bytes, and restores
-them on **every** path — including a non-zero generator exit or a byte mismatch, both of which were
-  forced and confirmed to restore the tracked figures (2026-09-18). Committed figures are deleted before
-  regeneration so a no-op generator cannot be scored against the file's own stale bytes, and an empty
-  committed-figure set is now a FAILURE rather than a skip. The workflow itself commits nothing, publishes nothing, and does not touch
-  either of the two named publish workflows above.
+- No modification of `research/experiment-ledger.csv` (append-only).
+- Verification runs in `.github/workflows/regime-study-verify.yml`, which only checks out the repo,
+  installs dependencies, and runs checks against already-committed files
+  (`scripts/verify_pack.py`, `ruff`, `mypy`). Note that `scripts/verify_pack.py` is not read-only
+  with respect to the working tree: it regenerates `tables/` and `figures/` in place in order to
+  compare them against the committed bytes, and restores them on **every** path — including a
+  non-zero generator exit or a byte mismatch. Committed figures are deleted before regeneration so
+  a no-op generator cannot be scored against the file's own stale bytes, and an empty
+  committed-figure set is a failure rather than a skip. The workflow commits and publishes nothing.
 
 ## Reviewer instructions
 
@@ -392,9 +349,9 @@ To check any value in fields 1–14 or any relocated section above: every hash i
 re-verifiable — with `sha256sum` against the named file at the branch's current HEAD, except the
 two `dataset_canonical` entries, which are canonical hashes of the manifests' constituent file
 hashes rather than hashes of the manifest files (see `RESULT-SOURCE-MAP.md`); every number
-elsewhere in this pack traces to one of these files via `RESULT-SOURCE-MAP.md` and
+elsewhere in this bundle traces to one of these files via `RESULT-SOURCE-MAP.md` and
 `tables/source_map.json` (see that document's own "How to check a number" section). Running
 `python publication/historical-regime-study/scripts/verify_pack.py` re-derives and re-checks every
 hash cited in this document, confirms `tables/`/`figures/` regenerate byte-identically, and
-confirms every `CLAIM-REGISTER.md` citation resolves — the same offline, no-rerun check this pack's
+confirms every `CLAIM-REGISTER.md` citation resolves — the same offline, no-rerun check this bundle's
 own CI workflow runs on every push.

@@ -8,24 +8,24 @@
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![CI](https://img.shields.io/github/actions/workflow/status/jmiaie/financial-dynamics-model/ci.yml?style=flat-square&label=CI)](https://github.com/jmiaie/financial-dynamics-model/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-275%20passed-0d7377?style=flat-square)](#testing)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
-[![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#testing)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
 **Transforms raw OHLCV data into explainable regime probabilities for quantitative trading and risk management.**
 
-[Live Demo](https://financial-dynamics-model.streamlit.app) &nbsp;|&nbsp; [Documentation](#documentation) &nbsp;|&nbsp; [Install](#installation) &nbsp;|&nbsp; [API Reference](#python-api)
+[Live Demo](https://financial-dynamics-model.streamlit.app) (or run locally: `streamlit run app.py`) &nbsp;|&nbsp; [Documentation](#documentation) &nbsp;|&nbsp; [Install](#installation) &nbsp;|&nbsp; [API Reference](#python-api)
 
 **[English](README.md)** &nbsp;|&nbsp; [中文](docs/README_zh.md) &nbsp;|&nbsp; [日本語](docs/README_ja.md) &nbsp;|&nbsp; [한국어](docs/README_ko.md) &nbsp;|&nbsp; [Español](docs/README_es.md) &nbsp;|&nbsp; [Português](docs/README_pt.md)
+
+<sub>Translations may be out of date; the English README is authoritative.</sub>
 
 ---
 
 <table>
 <tr>
 <td align="center"><strong>Chronology-Safe</strong><br><sub>Validation</sub></td>
-<td align="center"><strong>275</strong><br><sub>Unit Tests</sub></td>
+<td align="center"><strong>321</strong><br><sub>Tests</sub></td>
 <td align="center"><strong>5</strong><br><sub>Pipeline Phases</sub></td>
 <td align="center"><strong>4</strong><br><sub>Market Regimes</sub></td>
 <td align="center"><strong>12</strong><br><sub>3D Viz Layers</sub></td>
@@ -33,6 +33,36 @@
 </table>
 
 </div>
+
+---
+
+## Findings
+
+Historical regime study (details: [technical paper](publication/historical-regime-study/TECHNICAL-PAPER.md),
+[full report](research/historical-market-regime-study.md), artifacts in [`results/historical_regimes/`](results/historical_regimes/)).
+Pre-registered, frozen configuration; SPY daily data over development/formation (2015–2023),
+validation (2024), and a single-run 2025 holdout, against four simple benchmarks. This is a study of
+subsequent **risk characteristics** by regime, **not** a forecasting or trading-alpha claim.
+
+- **Persistence:** the pipeline's regime self-transition rate sits between the sticky simple
+  benchmarks (persistence, volatility-bucket) and a noisy Gaussian-mixture baseline in 2024 and 2025;
+  in development (no persistence model) the ordering holds versus volatility-bucket (0.923, FDM 0.736, GMM 0.365). This does not isolate the
+  effect of the stabilization mechanism, since GMM is not an ablation of FDM.
+- **2025 holdout (negative result):** the pipeline's mean 1-day forward return was −0.000293, the
+  only negative model/period cell in the primary results. `CALM_TREND` was never selected in 2025.
+- **Robustness (secondary, separate non-bit-identical dataset):** QQQ and IWM 2025 1-day means are
+  also negative (−0.000439, −0.000528); TLT and GLD are positive (+0.001272, +0.002259).
+- **Null result on significance:** QQQ's 2025 `RISK_OFF` mean 1-day return (n=29, −0.0043) has 90%
+  block-bootstrap intervals that include zero (moving-block [−0.0100, +0.0014], stationary
+  [−0.0096, +0.0011]). The study does not claim statistical significance.
+
+Reproduce the tables/figures and check every cited hash offline with
+`python publication/historical-regime-study/scripts/verify_pack.py`.
+
+The `results/synthetic/`, `results/benchmarks/`, `results/temporal_validation/` and
+`results/walk_forward/` directories are empty placeholders: no results are committed there, and no
+script in this repository currently writes to them. Only `results/historical_regimes/` holds
+committed results.
 
 ---
 
@@ -48,7 +78,7 @@
 
 ## Why Financial Dynamics?
 
-Most regime detection tools are either black-box neural networks or simplistic threshold rules. Financial Dynamics sits in the sweet spot: **fully transparent Bayesian inference** with **production-grade engineering**.
+Most regime detection tools are either black-box neural networks or simplistic threshold rules. Financial Dynamics sits in the sweet spot: **fully transparent Bayesian inference** with **tested, typed, chronology-safe research code**.
 
 Every probability is traceable. Every transition is explainable. Every signal has a clear mathematical origin.
 
@@ -107,7 +137,7 @@ streamlit run app.py
 
 Load any ticker (SPY, QQQ, AAPL, BTC-USD) and watch regime classification in real-time. Charts update instantly, forecasts auto-compute, signals fire as regimes shift.
 
-> **Try it now:** [financial-dynamics-model.streamlit.app](https://financial-dynamics-model.streamlit.app)
+> **Try it now:** [financial-dynamics-model.streamlit.app](https://financial-dynamics-model.streamlit.app) — or run locally: `streamlit run app.py`
 
 ### Python API
 
@@ -310,7 +340,7 @@ risk:
 
 ## Testing
 
-**275 tests** across **24 test files** — 98% coverage (90% minimum enforced in CI).
+**321 tests** across **23 test files** — 93% line coverage of `financial_dynamics` when last measured (90% minimum enforced in CI).
 
 ```bash
 make test            # run full suite

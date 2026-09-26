@@ -1,4 +1,4 @@
-"""Offline tests for Directive #9 historical study helpers."""
+"""Offline tests for historical study helpers."""
 
 from __future__ import annotations
 

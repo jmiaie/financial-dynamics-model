@@ -28,7 +28,7 @@ provide ground-truth regime identities. Centroids are fixed a priori (theory-bas
 **This report does not make a trading-alpha claim.** Regime differentiation in subsequent
 risk/return characteristics is a distinct question from whether that differentiation is
 tradeable after costs, timing constraints, and capacity — that question is out of scope here
-(it belongs to Directive #9's stat-arb workstream, which operates on a different set of
+(it belongs to a separate statistical-arbitrage study, which operates on a different set of
 instruments and a different research design).
 
 ## 2. Data
@@ -65,7 +65,7 @@ reproduce this study from scratch.
 
 **Config:** `configs/experiments/fdm_historical_regime_study_v1.yaml`, status
 `frozen-for-holdout`. **Freeze commit:** `596a22527b6f0107ba5baf55dd2edd68a1d991fe`
-("D9-A: FINAL CONFIGURATION FROZEN for holdout"), an ancestor of this branch that
+(the final configuration-freeze commit), an ancestor of this branch that
 modifies exactly this config file to the frozen state evaluated below (verified via
 `git merge-base --is-ancestor` against a full, unshallowed clone — not assumed).
 **Freeze timestamp:** `2026-09-16T02:58:00Z` (`freeze_record.frozen_for_holdout_utc`
@@ -437,7 +437,7 @@ report does not have access to (see Limitations). The FDM regime set also lost
   characterization on a non-bit-comparable dataset, not a restatement of the SPY result.
 - **`mean_realized_vol_h1 = 0.0` throughout is a known artifact**, not a finding (see §5).
 - **Cross-program note:** SPY, QQQ, IWM, TLT, and GLD price history is also used by
-  Directive #9's Stat-Arb v3 study (a different repository, different research design).
+  a separate stat-arb study (a different repository, different research design).
   This report's 2025 holdout evaluation is the event referenced as "FDM's already-executed
   2025 holdout" in that study's cross-repository exposure disclosure
   (`Advanced_Algorithmic_Trading_Simulator_public`'s `research/holdout-audit.md`).

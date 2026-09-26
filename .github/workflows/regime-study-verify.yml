@@ -1,11 +1,8 @@
-name: Publication Pack (D10-A)
+name: Regime Study Verification
 
-# Verification gate for publication/historical-regime-study/ ONLY. This
-# workflow validates the publication pack -- it never re-runs, retunes, or
-# re-acquires anything from the underlying D9 empirical study. It exists
-# because the repo's main ci.yml only triggers on PRs into `main`, and this
-# pack's PR intentionally targets a non-main base branch (PR #13's own
-# branch), so ci.yml never runs on it.
+# Verifies the reproducibility bundle in publication/historical-regime-study/:
+# artifact hashes, table/figure regeneration, and citation integrity. It never
+# re-runs, retunes, or re-downloads anything from the underlying study.
 
 on:
   push:
@@ -13,7 +10,7 @@ on:
   pull_request:
     paths:
       - publication/historical-regime-study/**
-      - .github/workflows/publication-pack.yml
+      - .github/workflows/regime-study-verify.yml
 
 permissions:
   contents: read
@@ -35,18 +32,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[all]"
           pip install ruff
-          # Pin matplotlib to the exact version the pack's figures were
+          # Pin matplotlib to the exact version the bundle's figures were
           # authored and verified against, to maximize byte-identical
           # reproducibility of the committed PNGs across environments
           # (matplotlib bundles its own default font + freetype build, so
           # pinning the wheel version is the main lever available here).
           pip install "matplotlib==3.11.2"
 
-      - name: Verify publication pack (hashes, tables, figures, citations, no-rerun)
+      - name: Verify reproducibility bundle (hashes, tables, figures, citations, no-rerun)
         run: python publication/historical-regime-study/scripts/verify_pack.py
 
-      - name: Lint publication pack scripts
+      - name: Lint bundle scripts
         run: ruff check publication/historical-regime-study/scripts/
 
-      - name: Typecheck publication pack scripts
+      - name: Typecheck bundle scripts
         run: mypy publication/historical-regime-study/scripts/ --ignore-missing-imports
