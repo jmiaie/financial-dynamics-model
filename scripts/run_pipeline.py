@@ -7,10 +7,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import numpy as np
 
-from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.config import PipelineConfig
+from financial_dynamics.pipeline import FinancialDynamicsPipeline
 from financial_dynamics.types import REGIME_NAMES, Regime
 
 
@@ -121,10 +120,10 @@ def main() -> None:
     print(f"  Valid predictions: {len(valid)} / {len(results)}")
 
     if len(valid) > 0:
-        print(f"\n  Predicted regime distribution:")
+        print("\n  Predicted regime distribution:")
         print(f"  {valid['risk_adjusted_regime'].value_counts().to_string()}")
 
-        print(f"\n  Transition Matrix (learned):")
+        print("\n  Transition Matrix (learned):")
         tm = report["transition_matrix"]
         header = "  " + " ".join(f"{REGIME_NAMES[r]:>14}" for r in Regime)
         print(header)
@@ -140,7 +139,7 @@ def main() -> None:
         print(f"  Visualization skipped (missing dependency): {e}")
     else:
         dashboard = SystemDashboard(pipeline)
-        fig = dashboard.plot(df, results)
+        dashboard.plot(df, results)
         output_path = Path("financial_dynamics_dashboard.png")
         try:
             dashboard.save(str(output_path))
