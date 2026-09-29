@@ -53,7 +53,7 @@ jobs:
         run: ruff format --check src/ tests/
 
       - name: Check linting
-        run: ruff check src/ tests/
+        run: ruff check src/ tests/ scripts/ examples/
 
   typecheck:
     runs-on: ubuntu-latest
