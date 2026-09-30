@@ -3,7 +3,7 @@
 ## Run Locally (60 seconds)
 
 ```bash
-cd /home/user/Ominnow_private
+cd /path/to/financial-dynamics-model
 streamlit run app.py
 ```
 
@@ -156,3 +156,9 @@ Want to modify colors, add more indicators, or change the layout?
 **Questions?** Check README.md or DEPLOYMENT_GUIDE.md
 
 🚀 **Ready to launch!**
+
+---
+
+## Related exploration (private)
+
+A richer interactive Streamlit exploration sibling is maintained privately under the **Ominnow** project name for client demos. This public repository remains the citeable library, tests, and deployable demo (`app.py` / Streamlit Cloud). Do not hard-code private checkout paths in public docs.

@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Regime detection quickstart notebook** — `notebooks/regime_detection_quickstart.ipynb` runs the public API on synthetic OHLCV (no network); labels recovery as synthetic-only pedagogy, not historical performance.
+- **README honesty / citeability notes** — explicit no-investment-advice disclaimer; notebook quickstart link; public/private sibling framing for the richer Streamlit exploration work without private paths.
+- **Streamlit quick-start path fix** — local run instructions use this repository (removed stale private checkout path).
+
+### Stable public API surface (v1.1.0 — cite this until the next tagged release)
+
+Intentionally **not** bumping `__version__` in this change set. External citations should continue to target **1.1.0** until Jeff cuts a release. Public exports from `financial_dynamics`:
+
+| Symbol | Role |
+|--------|------|
+| `FinancialDynamicsPipeline` | Batch `run(df)` / streaming `step(bar)` / `forecast(horizon)` / `reset()` |
+| `Regime`, `REGIME_NAMES`, `NUM_REGIMES` | Four-regime enum + labels |
+| `FeatureVector`, `RegimeProbabilities`, `BarState` | Core typed payloads |
+| `RegimeForecast` | k-step path + expected duration |
+| `Signal`, `SignalDetector`, `SignalType` | Regime-change / risk signals |
+| `fetch_ohlcv`, `fetch_multi_asset` | Optional live loaders (`[data]` extra) |
+
+CLI: `fdm` / `python -m financial_dynamics` (`--version`, symbol, `--period`, `--forecast`).
+
+### Deferred
+
+- Git tag / PyPI publish for a post-1.1.0 version (owner decision when API delta warrants it).
+- Deep sync of private Ominnow Streamlit exploration features into this public app (export when ready; keep private paths out of public docs).
+
 ## [1.1.0] - 2026-05-20
 
 ### Added
@@ -68,3 +96,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.1.0]: https://github.com/jmiaie/financial-dynamics-model/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/jmiaie/financial-dynamics-model/releases/tag/v1.0.0
+
+[Unreleased]: https://github.com/jmiaie/financial-dynamics-model/compare/v1.1.0...HEAD
