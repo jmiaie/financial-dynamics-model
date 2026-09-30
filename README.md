@@ -76,6 +76,12 @@ committed results.
 
 ---
 
+## Disclaimer
+
+**Not investment advice.** This repository is an engineering and research library for regime classification, risk characterization, and reproducible demos. It does **not** recommend trades, allocations, or securities. Synthetic recovery metrics and dashboard examples are pedagogical. Historical study artifacts characterize inferred regimes; they do **not** assert a statistically validated predictive edge or live-trading performance. Aligns with the Micap [quant research portfolio](https://github.com/jmiaie/quant-research-portfolio-public) honesty standard (null / negative results reported as found).
+
+---
+
 ## Why Financial Dynamics?
 
 Most regime detection tools are either black-box neural networks or simplistic threshold rules. Financial Dynamics sits in the sweet spot: **fully transparent Bayesian inference** with **tested, typed, chronology-safe research code**.
@@ -160,6 +166,16 @@ forecast = pipeline.forecast(horizon=10)
 print(f"Expected duration: {forecast.expected_duration:.1f} bars")
 print(f"Path: {' → '.join(r.name for r in forecast.most_likely_path[:5])}")
 ```
+
+
+### Notebook (synthetic, offline)
+
+```bash
+pip install -e ".[dev]"
+jupyter notebook notebooks/regime_detection_quickstart.ipynb
+```
+
+See [`notebooks/regime_detection_quickstart.ipynb`](notebooks/regime_detection_quickstart.ipynb) for a no-network regime-detection walkthrough on synthetic OHLCV. Recovery rates printed there are **synthetic-only** and are not historical performance.
 
 ### CLI
 
@@ -419,6 +435,9 @@ examples/
 ├── forecasting.py               # k-step regime predictions
 └── signals.py                   # Regime change & risk signal detection
 
+notebooks/
+└── regime_detection_quickstart.ipynb  # Synthetic offline regime demo
+
 app.py                           # Streamlit interactive dashboard
 config/default.yaml              # All tunable parameters
 ```
@@ -435,6 +454,8 @@ python examples/multi_asset.py --refs QQQ,IWM,TLT,GLD # Cross-asset stress
 python examples/backtesting.py                         # Accuracy on synthetic data
 python examples/forecasting.py --horizon 20            # Regime forecast
 python examples/signals.py --symbol QQQ                # Signal detection
+# Notebook (synthetic, offline):
+#   notebooks/regime_detection_quickstart.ipynb
 ```
 
 ---
@@ -571,6 +592,7 @@ See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for Porkbun DNS + Streamlit Cloud
 | [STREAMLIT_QUICK_START.md](STREAMLIT_QUICK_START.md) | Run the dashboard locally |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Development setup, code style, architecture |
 | [CHANGELOG.md](CHANGELOG.md) | Release notes and version history |
+| [notebooks/regime_detection_quickstart.ipynb](notebooks/regime_detection_quickstart.ipynb) | Synthetic offline regime-detection quickstart |
 | [config/default.yaml](config/default.yaml) | All tunable parameters |
 
 ---
@@ -590,6 +612,15 @@ make all                # lint + typecheck + test + build
 See [CONTRIBUTING.md](CONTRIBUTING.md) for code style, architecture guide, and testing conventions.
 
 ---
+
+## Related projects
+
+| Project | Role |
+|---------|------|
+| This repo (`financial-dynamics-model`) | Public citeable library, tests, Streamlit Cloud demo |
+| **Ominnow** (private) | Richer Streamlit exploration sibling for client demos — not a public clone path; export public-safe bits here when ready |
+| [quant-research-portfolio-public](https://github.com/jmiaie/quant-research-portfolio-public) | Portfolio index framing this library as descriptive regime/risk characterization (no predictive-edge claim) |
+
 
 ## License
 
