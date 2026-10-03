@@ -13,7 +13,8 @@ Opens at `http://localhost:8501`
 
 ## Option 1: Streamlit Cloud + Custom Subdomain (Recommended)
 
-Deploy the app on Streamlit Cloud, then point `fdm.micapai.com` to it via Porkbun DNS.
+Deploy the app on Streamlit Cloud, then point `fdm.micapai.com` to it with a
+**Cloudflare Redirect Rule** on the `micapai.com` zone (see Step 3).
 
 ### Step 1: Push to Public Repo
 
@@ -37,18 +38,33 @@ git push public claude/financial-dynamics-model-fnA1n:main --force
 
 The app will be live at: `https://financial-dynamics-model.streamlit.app`
 
-### Step 3: Point fdm.micapai.com
+### Step 3: Point fdm.micapai.com (Cloudflare)
 
-In Porkbun's DNS panel for `micapai.com`:
+As of **2026-09-29**, DNS for `micapai.com` is on **Cloudflare** (zone owned by
+`jeffrey.milam@gmail.com`), not Porkbun URL Forwarding.
 
-1. Go to **Domain Management** → **micapai.com** → **DNS Records**
-2. Use **URL Forwarding**:
-   - **Subdomain:** `fdm`
-   - **Destination:** `https://financial-dynamics-model.streamlit.app`
-   - **Type:** Temporary (302)
-3. Save — propagation takes 5-15 minutes
+**Active redirect (preferred):** Cloudflare Redirect Rule **"fdm → Streamlit FDM"**
 
-Result: `fdm.micapai.com` → live dashboard. Main site untouched.
+| Field | Value |
+|-------|-------|
+| When | Hostname equals `fdm.micapai.com` |
+| Then | 301 redirect to `https://financial-dynamics-model.streamlit.app` |
+
+Result: `https://fdm.micapai.com` → Streamlit FDM app (301).
+
+**Other hosts on the zone:** wildcard `*.micapai.com` still **CNAME**s to Porkbun
+`uixie` → `www.micap.ai`. That wildcard covers non-`fdm` subdomains; do **not**
+replace it when adjusting the FDM redirect. The FDM hostname is handled by the
+Redirect Rule above (hostname-equals match), not by Porkbun URL Forward.
+
+If recreating the rule in Cloudflare Dashboard:
+
+1. **Rules** → **Redirect Rules** → create/edit **"fdm → Streamlit FDM"**
+2. Custom filter expression: `http.host eq "fdm.micapai.com"`
+3. Target URL: `https://financial-dynamics-model.streamlit.app` (or
+   `https://financial-dynamics-model.streamlit.app/$1` if you preserve path)
+4. Status code: **301**
+5. Deploy — usually live within a minute
 
 ---
 
