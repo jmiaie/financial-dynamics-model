@@ -1,4 +1,4 @@
-# Historical regime study artifacts (Directive #9)
+# Historical regime study artifacts
 
 JSON summaries produced by `scripts/run_historical_regime_study.py` from frozen local data only.
 

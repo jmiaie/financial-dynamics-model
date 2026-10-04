@@ -1,9 +1,9 @@
-# Holdout audit — FDM Directive #9 (2025 calendar year)
+# Holdout audit — historical regime study (2025 calendar year)
 
 **Repository:** `jmiaie/financial-dynamics-model`  
 **Branch:** `research/historical-regime-validation`  
 **Audit date (PT):** 2026-09-15  
-**Holdout window under D9:** calendar **2025-01-01 ≤ t < 2026-01-01**  
+**Holdout window under the study protocol:** calendar **2025-01-01 ≤ t < 2026-01-01**  
 **Dataset ID:** `yf_fd_etfs_daily_2015_2025_v1`
 
 ## Verdict

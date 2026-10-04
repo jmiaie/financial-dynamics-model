@@ -54,7 +54,7 @@
     },
     "holdout_audit": {
       "path": "research/holdout-audit.md",
-      "sha256": "f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f"
+      "sha256": "190cc3a0e98e90176a31b241ef2ff2eee850c46a17b05effb8a97ff61e797e61"
     },
     "dataset_v1_canonical_sha256": "91caa6cde08358091125a6576ff3f2be5666791b06df67d462c2aad6f771ada9",
     "dataset_v2_canonical_sha256": "94ea2886772afc7adcbf070bf1563a59295c1e7b1f837e157dfe5880c5b12582",

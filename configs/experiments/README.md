@@ -1,4 +1,4 @@
-# Experiment configs (Directive #9)
+# Experiment configs
 
 Pre-registered / frozen study configs live here.
 
