@@ -31,7 +31,7 @@ CLI: `fdm` / `python -m financial_dynamics` (`--version`, symbol, `--period`, `-
 ### Deferred
 
 - Git tag / PyPI publish for a post-1.1.0 version (owner decision when API delta warrants it).
-- Deep sync of private Ominnow Streamlit exploration features into this public app (export when ready; keep private paths out of public docs).
+- Port additional Streamlit exploration features into this public app when they are ready for public release.
 
 ## [1.1.0] - 2026-05-20
 

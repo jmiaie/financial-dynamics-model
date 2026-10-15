@@ -628,7 +628,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for code style, architecture guide, and t
 | Project | Role |
 |---------|------|
 | This repo (`financial-dynamics-model`) | Public citeable library, tests, Streamlit Cloud demo |
-| **Ominnow** (private) | Richer Streamlit exploration sibling for client demos — not a public clone path; export public-safe bits here when ready |
 | [quant-research-portfolio-public](https://github.com/jmiaie/quant-research-portfolio-public) | Portfolio index framing this library as descriptive regime/risk characterization (no predictive-edge claim) |
 
 

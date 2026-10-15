@@ -16,13 +16,12 @@ Opens at `http://localhost:8501`
 Deploy the app on Streamlit Cloud, then point `fdm.micapai.com` to it with a
 **Cloudflare Redirect Rule** on the `micapai.com` zone (see Step 3).
 
-### Step 1: Push to Public Repo
+### Step 1: Land changes on `main`
 
 ```bash
-# From your local machine (not cloud IDE)
-cd Ominnow_private
-git remote add public https://github.com/jmiaie/financial-dynamics-model.git
-git push public claude/financial-dynamics-model-fnA1n:main --force
+git clone https://github.com/jmiaie/financial-dynamics-model.git
+cd financial-dynamics-model
+# open a pull request for your change; Streamlit Cloud deploys from main once it merges
 ```
 
 ### Step 2: Deploy on Streamlit Cloud

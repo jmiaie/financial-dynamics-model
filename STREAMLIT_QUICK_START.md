@@ -159,6 +159,6 @@ Want to modify colors, add more indicators, or change the layout?
 
 ---
 
-## Related exploration (private)
+## Related exploration
 
-A richer interactive Streamlit exploration sibling is maintained privately under the **Ominnow** project name for client demos. This public repository remains the citeable library, tests, and deployable demo (`app.py` / Streamlit Cloud). Do not hard-code private checkout paths in public docs.
+Additional interactive exploration features are developed separately and ported here when ready for public release. This public repository remains the citeable library, tests, and deployable demo (`app.py` / Streamlit Cloud).
