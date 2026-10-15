@@ -272,7 +272,7 @@ were observed. `VOLATILE_TREND` (n=121) is more stable: mean **+0.0021**, CI **[
 below; only the CI bounds themselves moved (tighter resample count naturally widens/narrows
 the estimated interval slightly, and neither interval crossed zero in the opposite direction).
 
-**Bootstrap resample count corrected 2026-09-18** (independent review, tracker Issue #3): the
+**Bootstrap resample count corrected 2026-09-18** (independent review, study tracker): the
 prior version of this section ran and reported these CIs at 150 resamples, then merely
 updated the reproduction command below to say `150` to match what was actually run --
 resolving the documentation mismatch but not the underlying requirement, which is 1000
