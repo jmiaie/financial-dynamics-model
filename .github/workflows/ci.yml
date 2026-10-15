@@ -33,6 +33,27 @@ jobs:
       - name: Run tests with coverage
         run: HYPOTHESIS_PROFILE=ci pytest tests/ -v --tb=short --cov=financial_dynamics --cov-fail-under=90
 
+  locked-env:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+
+      - name: Install from lock
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install -e . --no-deps
+
+      - name: Run fast tests
+        run: python -m pytest -q -m "not slow"
+
   lint:
     runs-on: ubuntu-latest
     steps:

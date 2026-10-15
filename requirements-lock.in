@@ -1,0 +1,6 @@
+# Extra inputs for requirements-lock.txt, on top of pyproject.toml extras [all].
+# ruff: lint tooling used by CI. matplotlib/numpy: the exact set the regime-study
+# bundle's figures were verified against (publication/historical-regime-study/requirements.txt).
+ruff
+matplotlib==3.11.2
+numpy==2.5.3
