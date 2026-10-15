@@ -2,6 +2,9 @@
 # The gate is interpreter-sensitive: a python without matplotlib fails the figure
 # check CLOSED ("regeneration produced no file"), which is correct behaviour but
 # reads like an artifact defect. Install these before running verify_pack.py.
-# Verified set for byte-identical figure regeneration: Python 3.12.3.
+# Verified set for byte-identical figure regeneration. verify_pack.py refuses
+# raster comparison under any other Matplotlib version so an environment
+# mismatch cannot be misreported as a research or rendering regression.
+# Confirmed on CPython 3.12.3 and 3.12.14.
 matplotlib==3.11.2
 numpy==2.5.3

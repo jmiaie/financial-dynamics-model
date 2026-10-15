@@ -350,8 +350,10 @@ re-verifiable — with `sha256sum` against the named file at the branch's curren
 two `dataset_canonical` entries, which are canonical hashes of the manifests' constituent file
 hashes rather than hashes of the manifest files (see `RESULT-SOURCE-MAP.md`); every number
 elsewhere in this bundle traces to one of these files via `RESULT-SOURCE-MAP.md` and
-`tables/source_map.json` (see that document's own "How to check a number" section). Running
+`tables/source_map.json` (see that document's own "How to check a number" section). After installing
+`publication/historical-regime-study/requirements.txt`,
 `python publication/historical-regime-study/scripts/verify_pack.py` re-derives and re-checks every
-hash cited in this document, confirms `tables/`/`figures/` regenerate byte-identically, and
+hash cited in this document, confirms `tables/`/`figures/` regenerate byte-identically under the
+declared Matplotlib renderer, and
 confirms every `CLAIM-REGISTER.md` citation resolves — the same offline, no-rerun check this bundle's
 own CI workflow runs on every push.

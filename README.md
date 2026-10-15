@@ -12,7 +12,7 @@
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
-**Transforms raw OHLCV data into explainable regime probabilities for quantitative trading and risk management.**
+**Transforms raw OHLCV data into explainable regime probabilities for quantitative research and risk analytics.**
 
 [Live Demo](https://financial-dynamics-model.streamlit.app) (or run locally: `streamlit run app.py`) &nbsp;|&nbsp; [Documentation](#documentation) &nbsp;|&nbsp; [Install](#installation) &nbsp;|&nbsp; [API Reference](#python-api)
 
@@ -56,8 +56,17 @@ subsequent **risk characteristics** by regime, **not** a forecasting or trading-
   block-bootstrap intervals that include zero (moving-block [−0.0100, +0.0014], stationary
   [−0.0096, +0.0011]). The study does not claim statistical significance.
 
-Reproduce the tables/figures and check every cited hash offline with
-`python publication/historical-regime-study/scripts/verify_pack.py`.
+Reproduce the tables/figures and check every cited hash offline in the pinned publication
+environment:
+
+```bash
+python -m pip install -r publication/historical-regime-study/requirements.txt
+python publication/historical-regime-study/scripts/verify_pack.py
+```
+
+The verifier requires the declared Matplotlib version before touching tracked figures and restores
+the committed PNG bytes after every pass or failure. This keeps an environment mismatch distinct
+from a research-data or figure-generation regression.
 
 The `results/synthetic/`, `results/benchmarks/`, `results/temporal_validation/` and
 `results/walk_forward/` directories are empty placeholders: no results are committed there, and no
@@ -86,7 +95,7 @@ committed results.
 
 Most regime detection tools are either black-box neural networks or simplistic threshold rules. Financial Dynamics sits in the sweet spot: **fully transparent Bayesian inference** with **tested, typed, chronology-safe research code**.
 
-Every probability is traceable. Every transition is explainable. Every signal has a clear mathematical origin.
+Every probability is traceable. Every transition is explainable. Every configured event has a clear mathematical origin.
 
 ```
                          ┌─────────────────────────────────┐
@@ -141,7 +150,9 @@ pip install -e ".[all]"
 streamlit run app.py
 ```
 
-Load any ticker (SPY, QQQ, AAPL, BTC-USD) and watch regime classification in real-time. Charts update instantly, forecasts auto-compute, signals fire as regimes shift.
+Load any supported ticker (SPY, QQQ, AAPL, BTC-USD) and inspect the regime classification for the
+downloaded bars. Charts, transition-based forecasts, and configured regime-change alerts update
+with the selected data. These outputs are research diagnostics, not trade recommendations.
 
 > **Try it now:** [financial-dynamics-model.streamlit.app](https://financial-dynamics-model.streamlit.app) — or run locally: `streamlit run app.py`
 
@@ -249,7 +260,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">Regime</th>
 <th>Characteristics</th>
 <th width="60">Feature Signature</th>
-<th width="140">Trading Signal</th>
+<th width="140">Illustrative Interpretation</th>
 </tr>
 <tr>
 <td>
@@ -258,7 +269,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>Low volatility, strong uptrend, minimal drawdown, stable correlations</td>
 <td><code>[0.1, 0.8, 0.05, 0.1, 0.1]</code></td>
-<td>Long accumulation</td>
+<td>Lower-volatility directional state</td>
 </tr>
 <tr>
 <td>
@@ -267,7 +278,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>High volatility, directional momentum, recoveries from dips</td>
 <td><code>[0.8, 0.7, 0.3, 0.5, 0.6]</code></td>
-<td>Trend-following</td>
+<td>Higher-volatility directional state</td>
 </tr>
 <tr>
 <td>
@@ -276,7 +287,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>Low volatility, weak trend, mean-reverting, range-bound</td>
 <td><code>[0.4, 0.2, 0.15, 0.3, 0.3]</code></td>
-<td>Range trading</td>
+<td>Range-bound state</td>
 </tr>
 <tr>
 <td>
@@ -285,7 +296,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>High volatility, deep drawdowns, shock clusters, stress contagion</td>
 <td><code>[0.9, 0.3, 0.8, 0.9, 0.9]</code></td>
-<td>Hedging / defensive</td>
+<td>Stress-state flag</td>
 </tr>
 </table>
 
@@ -466,10 +477,10 @@ python examples/signals.py --symbol QQQ                # Signal detection
 <tr>
 <td width="50%">
 
-**Hedge Funds & Prop Desks**
-- Explainable regime filter for systematic strategies
-- Position sizing by regime (scale vega/delta)
-- Early warning for Risk-Off confirmation
+**Research & Analytics Teams**
+- Explainable regime labels for exploratory analysis
+- Candidate conditioning variables for strategy research
+- Auditable transition and classification diagnostics
 
 **Quant Researchers**
 - Modular, testable regime detection
@@ -480,14 +491,14 @@ python examples/signals.py --symbol QQQ                # Signal detection
 <td width="50%">
 
 **Risk Management**
-- Transparent regime forecasts for stress tests
-- Multi-asset contagion signals
-- Real-time pre-shift warnings
+- Transition-based regime scenarios for stress-test research
+- Multi-asset stress indicators
+- Configured alerts when classifications or confidence change
 
 **Fintech & Robo-Advisors**
 - Client-friendly regime labels
-- Explainable allocation shifts
-- Automated defensive rebalancing
+- Explainable educational dashboards
+- Human-reviewed inputs for product research
 
 </td>
 </tr>
@@ -556,7 +567,7 @@ See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for Porkbun DNS + Streamlit Cloud
 | `pipeline.reset()` | `None` | Reset all internal state for a fresh run |
 | `fetch_ohlcv(symbol)` | `DataFrame` | Load OHLCV data from Yahoo Finance |
 | `fetch_multi_asset(symbol, refs)` | `DataFrame` | OHLCV + cross-asset reference close prices |
-| `detector.check(bar_state)` | `list[Signal]` | Check for actionable signals on a bar |
+| `detector.check(bar_state)` | `list[Signal]` | Emit configured regime-change and confidence events for a bar |
 | `save_state(pipeline, path)` | `None` | Serialize pipeline state to JSON |
 | `load_state(path)` | `Pipeline` | Restore pipeline from saved state |
 

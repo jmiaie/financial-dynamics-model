@@ -392,7 +392,7 @@ def main():
     # Header
     st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
     st.markdown(
-        '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
+        '<p class="subtitle">Transparent Bayesian market-regime classification for research and risk analytics</p>',
         unsafe_allow_html=True,
     )
     st.divider()
@@ -788,7 +788,7 @@ def main():
 
         # Signal detection
         st.divider()
-        st.subheader("🔔 Signals & Alerts")
+        st.subheader("🔔 Classification Events & Alerts")
 
         detector = SignalDetector()
         signals = []
@@ -828,7 +828,7 @@ def main():
                     f"Bar {signal.bar_index} | Confidence: {signal.confidence:.1%}"
                 )
         else:
-            st.info("No signals detected yet. Data is still warming up or regime is stable.")
+            st.info("No configured events detected yet. Data is still warming up or the classification is stable.")
 
         # Data inspector
         with st.expander("📋 Data Inspector"):

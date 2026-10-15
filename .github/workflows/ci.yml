@@ -54,6 +54,9 @@ jobs:
       - name: Run fast tests
         run: python -m pytest -q -m "not slow"
 
+      - name: Verify publication pack under locked renderer
+        run: python publication/historical-regime-study/scripts/verify_pack.py
+
   lint:
     runs-on: ubuntu-latest
     steps:
