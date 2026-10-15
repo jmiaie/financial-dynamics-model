@@ -3244,7 +3244,7 @@
     "row_id": "hash_table.holdout_audit",
     "file": "research/holdout-audit.md",
     "key_path": "(whole file sha256)",
-    "sha256": "f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f",
+    "sha256": "190cc3a0e98e90176a31b241ef2ff2eee850c46a17b05effb8a97ff61e797e61",
     "kind": "whole_file_sha256"
   },
   {
@@ -3279,7 +3279,7 @@
     "row_id": "hash_table.holdout_audit_verdict",
     "file": "research/holdout-audit.md",
     "key_path": "## Verdict (first CLEAR-prefixed line)",
-    "sha256": "f71f6a132a8611dbb661ea7dd9a5e7960dc5253342143e9cc9e94098e434bb0f",
+    "sha256": "190cc3a0e98e90176a31b241ef2ff2eee850c46a17b05effb8a97ff61e797e61",
     "kind": "whole_file_sha256"
   }
 ]

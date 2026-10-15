@@ -10,7 +10,7 @@ individual *daily* returns positive inside each forward window, then
 averaged across occurrences -- not the fraction of *occurrences* whose
 horizon-level (compounded) `forward_return` was positive, which is what the
 name means everywhere else in this report (alongside `mean_return`,
-`median_return`, `tail_q05`) and what Directive #9 requires. See
+`median_return`, `tail_q05`) and what the study protocol requires. See
 `src/financial_dynamics/backtesting/metrics.py`'s `historical_regime_statistics`
 and `tests/test_backtesting.py::TestHistoricalRegimeStatistics::test_positive_return_freq_is_horizon_level_not_daily_level`
 for the fix and a deterministic regression test proving the two definitions
