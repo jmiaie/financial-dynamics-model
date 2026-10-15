@@ -609,6 +609,16 @@ pre-commit install
 make all                # lint + typecheck + test + build
 ```
 
+#### Reproducible install (development)
+
+For an exact, repeatable dev environment, install from the resolved lock instead of the version ranges:
+
+```bash
+pip install -r requirements-lock.txt && pip install -e . --no-deps
+```
+
+The lock targets Python 3.12 and is a development convenience only; the published package still uses the ranges in `pyproject.toml`. Regenerate it (Python 3.12 + [uv](https://docs.astral.sh/uv/)) with the command in the header of `requirements-lock.txt`.
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for code style, architecture guide, and testing conventions.
 
 ---
