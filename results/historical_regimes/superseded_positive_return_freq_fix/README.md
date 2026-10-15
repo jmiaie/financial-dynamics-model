@@ -3,7 +3,7 @@
 These 12 files are the QQQ/IWM/TLT/GLD v2 cross-asset-robustness artifacts
 (`dev_formation`/`val_2024`/`holdout_2025` × 4 symbols) as originally
 committed on 2026-09-17, **before** a metric-definition defect was fixed in
-`positive_return_freq` (independent review, tracker Issue #3).
+`positive_return_freq` (independent review, study tracker).
 
 **The defect**: `positive_return_freq` was computed as the fraction of
 individual *daily* returns positive inside each forward window, then
