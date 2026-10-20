@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Stable public API surface (v1.1.0 — cite this until the next tagged release)
 
-Intentionally **not** bumping `__version__` in this change set. External citations should continue to target **1.1.0** until Jeff cuts a release. Public exports from `financial_dynamics`:
+Intentionally **not** bumping `__version__` in this change set. External citations should continue to target **1.1.0** until the next tagged release. Public exports from `financial_dynamics`:
 
 | Symbol | Role |
 |--------|------|

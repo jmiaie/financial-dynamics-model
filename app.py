@@ -447,7 +447,7 @@ def main():
                 unsafe_allow_html=True,
             )
         st.markdown(
-            '**Authors:** Jeff Milam & <a href="https://micap.ai" target="_blank">Micap.AI</a>',
+            '**Author:** <a href="https://micap.ai" target="_blank">Micap AI LLC</a>',
             unsafe_allow_html=True,
         )
 

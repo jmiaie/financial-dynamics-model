@@ -40,7 +40,7 @@ The app will be live at: `https://financial-dynamics-model.streamlit.app`
 ### Step 3: Point fdm.micapai.com (Cloudflare)
 
 As of **2026-09-29**, DNS for `micapai.com` is on **Cloudflare** (zone owned by
-`jeffrey.milam@gmail.com`), not Porkbun URL Forwarding.
+the domain registrar account), not Porkbun URL Forwarding.
 
 **Active redirect (preferred):** Cloudflare Redirect Rule **"fdm → Streamlit FDM"**
 
