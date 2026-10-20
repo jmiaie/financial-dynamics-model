@@ -14,7 +14,9 @@
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
-**Transforma datos OHLCV sin procesar en probabilidades de régimen explicables para trading cuantitativo y gestión de riesgo.**
+**Transforma datos OHLCV sin procesar en probabilidades de régimen de mercado explicables para investigación y análisis de riesgo.**
+
+<sub>El [estudio histórico de regímenes](../publication/historical-regime-study/TECHNICAL-PAPER.md) preregistrado (SPY 2015–2025, holdout 2025) informa diferencias descriptivas entre regímenes y <strong>ninguna evidencia de ventaja predictiva o de trading</strong>.</sub>
 
 [Demo en vivo](https://financial-dynamics-model.streamlit.app) &nbsp;|&nbsp; [Documentación](#documentación) &nbsp;|&nbsp; [Instalación](#instalación) &nbsp;|&nbsp; [Referencia de la API](#api-de-python)
 
@@ -54,7 +56,7 @@ Cada probabilidad es trazable. Cada transición es explicable. Cada señal tiene
      │                 │        │                  │        │                 │
      │ pipeline.run()  │        │  3D Interactivo  │        │  run_pipeline   │
      │ pipeline.step() │        │  Gráficos Live   │        │  run_backtest   │
-     │ pipeline.fore-  │        │  Feed de señales │        │  run_calibrate  │
+     │ pipeline.fore-  │        │ Avisos de régimen│        │  run_calibrate  │
      │   cast()        │        │  Pronósticos     │        │  run_benchmark  │
      └─────────────────┘        └──────────────────┘        └─────────────────┘
 ```
@@ -185,7 +187,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">Régimen</th>
 <th>Características</th>
 <th width="60">Firma de Características</th>
-<th width="140">Señal de Trading</th>
+<th width="160">Postura indicativa (ilustrativa)</th>
 </tr>
 <tr>
 <td>
@@ -353,11 +355,6 @@ config/default.yaml              # Todos los parámetros configurables
 <tr>
 <td width="50%">
 
-**Fondos de Cobertura y Mesas de Operaciones**
-- Filtro de régimen explicable para estrategias sistemáticas
-- Dimensionamiento de posiciones por régimen (escalar vega/delta)
-- Alerta temprana para confirmación de Risk-Off
-
 **Investigadores Cuantitativos**
 - Detección de regímenes modular y testeable
 - Matrices de transición aprendidas
@@ -369,12 +366,7 @@ config/default.yaml              # Todos los parámetros configurables
 **Gestión de Riesgo**
 - Pronósticos de régimen transparentes para pruebas de estrés
 - Señales de contagio multi-activo
-- Alertas en tiempo real previas a cambios de régimen
-
-**Fintech y Robo-Advisors**
-- Etiquetas de régimen amigables para el cliente
-- Cambios de asignación explicables
-- Rebalanceo defensivo automatizado
+- Alertas de cambio de régimen (descriptivas, no predictivas)
 
 </td>
 </tr>

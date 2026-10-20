@@ -14,7 +14,9 @@
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
-**Transforma dados brutos OHLCV em probabilidades de regime interpretaveis para trading quantitativo e gestao de risco.**
+**Transforma dados brutos OHLCV em probabilidades de regime de mercado interpretaveis para pesquisa e analise de risco.**
+
+<sub>O [estudo historico de regimes](../publication/historical-regime-study/TECHNICAL-PAPER.md) pre-registrado (SPY 2015-2025, holdout de 2025) relata diferencas descritivas entre regimes e <strong>nenhuma evidencia de vantagem preditiva ou de trading</strong>.</sub>
 
 [Demo ao Vivo](https://financial-dynamics-model.streamlit.app) &nbsp;|&nbsp; [Documentacao](#documentacao) &nbsp;|&nbsp; [Instalacao](#instalacao) &nbsp;|&nbsp; [Referencia da API](#api-python)
 
@@ -54,7 +56,7 @@ Cada probabilidade e rastreavel. Cada transicao e explicavel. Cada sinal tem uma
      │                 │        │                  │        │                 │
      │ pipeline.run()  │        │  3D Interativo   │        │  run_pipeline   │
      │ pipeline.step() │        │  Graficos Live   │        │  run_backtest   │
-     │ pipeline.fore-  │        │  Feed de Sinais  │        │  run_calibrate  │
+     │ pipeline.fore-  │        │ Alertas de regime│        │  run_calibrate  │
      │   cast()        │        │  Previsoes       │        │  run_benchmark  │
      └─────────────────┘        └──────────────────┘        └─────────────────┘
 ```
@@ -183,7 +185,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">Regime</th>
 <th>Caracteristicas</th>
 <th width="60">Assinatura de Features</th>
-<th width="140">Sinal de Trading</th>
+<th width="160">Postura indicativa (ilustrativa)</th>
 </tr>
 <tr>
 <td>
@@ -351,11 +353,6 @@ config/default.yaml              # Todos os parametros ajustaveis
 <tr>
 <td width="50%">
 
-**Fundos de Hedge e Mesas Proprietarias**
-- Filtro de regime explicavel para estrategias sistematicas
-- Dimensionamento de posicao por regime (escalar vega/delta)
-- Alerta antecipado para confirmacao de Risk-Off
-
 **Pesquisadores Quantitativos**
 - Deteccao de regime modular e testavel
 - Matrizes de transicao aprendidas
@@ -367,12 +364,7 @@ config/default.yaml              # Todos os parametros ajustaveis
 **Gestao de Risco**
 - Previsoes de regime transparentes para testes de estresse
 - Sinais de contagio multi-ativo
-- Alertas em tempo real pre-mudanca de regime
-
-**Fintech e Robo-Advisors**
-- Rotulos de regime compreensiveis para o cliente
-- Mudancas de alocacao explicaveis
-- Rebalanceamento defensivo automatizado
+- Alertas de mudanca de regime (descritivos, nao preditivos)
 
 </td>
 </tr>

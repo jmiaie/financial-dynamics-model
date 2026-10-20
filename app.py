@@ -392,7 +392,7 @@ def main():
     # Header
     st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
     st.markdown(
-        '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
+        '<p class="subtitle">Transparent, Bayesian market regime classification for research and risk analysis</p>',
         unsafe_allow_html=True,
     )
     st.divider()

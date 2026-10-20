@@ -14,7 +14,9 @@
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
-**원시 OHLCV 데이터를 설명 가능한 레짐 확률로 변환하여 퀀트 트레이딩과 리스크 관리에 활용합니다.**
+**원시 OHLCV 데이터를 설명 가능한 시장 레짐 확률로 변환하여 연구 및 리스크 분석에 활용합니다.**
+
+<sub>사전 등록된 [과거 레짐 연구](../publication/historical-regime-study/TECHNICAL-PAPER.md)(SPY 2015–2025, 2025년 홀드아웃)는 레짐 간 기술적(descriptive) 차이를 보고하며, <strong>예측 또는 트레이딩 우위(엣지)의 증거는 없습니다</strong>.</sub>
 
 [라이브 데모](https://financial-dynamics-model.streamlit.app) &nbsp;|&nbsp; [문서](#문서) &nbsp;|&nbsp; [설치](#설치) &nbsp;|&nbsp; [API 레퍼런스](#python-api)
 
@@ -54,7 +56,7 @@
      │                 │        │                  │        │                 │
      │ pipeline.run()  │        │  인터랙티브 3D   │        │  run_pipeline   │
      │ pipeline.step() │        │  실시간 차트     │        │  run_backtest   │
-     │ pipeline.fore-  │        │  시그널 피드     │        │  run_calibrate  │
+     │ pipeline.fore-  │        │  레짐 알림       │        │  run_calibrate  │
      │   cast()        │        │  예측            │        │  run_benchmark  │
      └─────────────────┘        └──────────────────┘        └─────────────────┘
 ```
@@ -183,7 +185,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">레짐</th>
 <th>특성</th>
 <th width="60">특성 시그니처</th>
-<th width="140">트레이딩 시그널</th>
+<th width="160">참고 스탠스 (예시)</th>
 </tr>
 <tr>
 <td>
@@ -351,11 +353,6 @@ config/default.yaml              # 전체 튜닝 가능 파라미터
 <tr>
 <td width="50%">
 
-**헤지펀드 및 프롭 데스크**
-- 체계적 전략을 위한 설명 가능한 레짐 필터
-- 레짐 기반 포지션 사이징 (베가/델타 스케일링)
-- 리스크오프 확정 조기 경보
-
 **퀀트 연구원**
 - 모듈형, 테스트 가능한 레짐 탐지
 - 학습된 전이 행렬
@@ -367,12 +364,7 @@ config/default.yaml              # 전체 튜닝 가능 파라미터
 **리스크 관리**
 - 스트레스 테스트를 위한 투명한 레짐 예측
 - 멀티 자산 전이 시그널
-- 실시간 사전 전환 경고
-
-**핀테크 및 로보어드바이저**
-- 고객 친화적 레짐 라벨
-- 설명 가능한 자산배분 변경
-- 자동 방어적 리밸런싱
+- 레짐 전환 알림 (기술적 지표이며 예측이 아님)
 
 </td>
 </tr>
