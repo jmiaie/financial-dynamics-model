@@ -7,7 +7,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-0d7377.svg?style=flat-square)](../LICENSE)
 [![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#测试)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#测试)
@@ -437,7 +437,7 @@ pytest tests/ -v
 
 ## 许可证
 
-[MIT](../LICENSE) — Jeff Milam & [Micap.AI](https://micap.ai)
+[Apache-2.0](../LICENSE) — Micap AI LLC ([NOTICE](../NOTICE))
 
 ---
 

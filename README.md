@@ -7,7 +7,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![CI](https://img.shields.io/github/actions/workflow/status/jmiaie/financial-dynamics-model/ci.yml?style=flat-square&label=CI)](https://github.com/jmiaie/financial-dynamics-model/actions)
-[![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-0d7377.svg?style=flat-square)](LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
@@ -633,7 +633,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for code style, architecture guide, and t
 
 ## License
 
-[MIT](LICENSE) — Jeff Milam & [Micap.AI](https://micap.ai)
+Licensed under the [Apache License 2.0](LICENSE). Copyright 2025-2026 Micap AI LLC; see [NOTICE](NOTICE).
+Releases up to and including 1.1.0 were published under the MIT License.
 
 ---
 

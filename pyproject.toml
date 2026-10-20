@@ -7,10 +7,10 @@ name = "financial-dynamics"
 dynamic = ["version"]
 description = "Bayesian system-dynamics pipeline for market regime classification"
 readme = "README.md"
-license = "MIT"
+license = "Apache-2.0"
 requires-python = ">=3.10"
 authors = [
-    { name = "Jeff Milam" },
+    { name = "Micap AI LLC", email = "contact@micap.pro" },
 ]
 keywords = [
     "finance",
@@ -25,7 +25,7 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
