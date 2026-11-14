@@ -7,14 +7,16 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-0d7377.svg?style=flat-square)](../LICENSE)
 [![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#测试)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#测试)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
-**将原始 OHLCV 数据转化为可解释的体制概率，服务于量化交易与风险管理。**
+**将原始 OHLCV 数据转化为可解释的市场体制概率，服务于研究与风险分析。**
+
+<sub>预注册的[历史体制研究](../publication/historical-regime-study/TECHNICAL-PAPER.md)（SPY 2015–2025，2025 年留出期）报告了各体制间的描述性差异，<strong>但没有发现预测或交易优势的证据</strong>。</sub>
 
 [在线演示](https://financial-dynamics-model.streamlit.app) &nbsp;|&nbsp; [技术文档](#技术文档) &nbsp;|&nbsp; [安装](#安装) &nbsp;|&nbsp; [API 参考](#python-api)
 
@@ -54,7 +56,7 @@
      │                 │        │                  │        │                 │
      │ pipeline.run()  │        │  交互式 3D 可视化│        │  run_pipeline   │
      │ pipeline.step() │        │  实时图表        │        │  run_backtest   │
-     │ pipeline.fore-  │        │  信号流          │        │  run_calibrate  │
+     │ pipeline.fore-  │        │  体制提醒        │        │  run_calibrate  │
      │   cast()        │        │  预测            │        │  run_benchmark  │
      └─────────────────┘        └──────────────────┘        └─────────────────┘
 ```
@@ -183,7 +185,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">体制</th>
 <th>特征描述</th>
 <th width="60">特征向量</th>
-<th width="140">交易信号</th>
+<th width="160">参考姿态（示例）</th>
 </tr>
 <tr>
 <td>
@@ -351,11 +353,6 @@ config/default.yaml              # 全部可调参数
 <tr>
 <td width="50%">
 
-**对冲基金与自营交易台**
-- 系统化策略的可解释体制过滤器
-- 基于体制的仓位管理（调整 vega/delta 敞口）
-- 风险规避体制的早期预警
-
 **量化研究员**
 - 模块化、可测试的体制检测框架
 - 可学习的转移矩阵
@@ -367,12 +364,7 @@ config/default.yaml              # 全部可调参数
 **风险管理**
 - 透明的体制预测，服务于压力测试
 - 多资产传导信号
-- 实时体制前移预警
-
-**金融科技与智能投顾**
-- 面向客户的直观体制标签
-- 可解释的资产配置调整
-- 自动化防御性再平衡
+- 体制转换提示（描述性，非预测）
 
 </td>
 </tr>
@@ -437,7 +429,7 @@ pytest tests/ -v
 
 ## 许可证
 
-[MIT](../LICENSE) — Jeff Milam & [Micap.AI](https://micap.ai)
+[Apache-2.0](../LICENSE) — Micap AI LLC ([NOTICE](../NOTICE))
 
 ---
 

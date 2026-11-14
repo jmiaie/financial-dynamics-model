@@ -392,7 +392,7 @@ def main():
     # Header
     st.markdown('<h1 class="main-title">📊 Financial Dynamics Model</h1>', unsafe_allow_html=True)
     st.markdown(
-        '<p class="subtitle">Transparent, Bayesian market regime classification for quantitative trading</p>',
+        '<p class="subtitle">Transparent, Bayesian market regime classification for research and risk analysis</p>',
         unsafe_allow_html=True,
     )
     st.divider()
@@ -447,7 +447,7 @@ def main():
                 unsafe_allow_html=True,
             )
         st.markdown(
-            '**Authors:** Jeff Milam & <a href="https://micap.ai" target="_blank">Micap.AI</a>',
+            '**Author:** <a href="https://micap.ai" target="_blank">Micap AI LLC</a>',
             unsafe_allow_html=True,
         )
 

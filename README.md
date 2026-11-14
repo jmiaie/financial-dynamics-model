@@ -7,12 +7,14 @@
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![CI](https://img.shields.io/github/actions/workflow/status/jmiaie/financial-dynamics-model/ci.yml?style=flat-square&label=CI)](https://github.com/jmiaie/financial-dynamics-model/actions)
-[![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-0d7377.svg?style=flat-square)](LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
-**Transforms raw OHLCV data into explainable regime probabilities for quantitative trading and risk management.**
+**Transforms raw OHLCV data into explainable market-regime probabilities for research and risk analysis.**
+
+<sub>The pre-registered [historical regime study](publication/historical-regime-study/TECHNICAL-PAPER.md) (SPY 2015–2025, single-run 2025 holdout) reports descriptive regime differences and <strong>no evidence of a predictive or trading edge</strong>.</sub>
 
 [Live Demo](https://financial-dynamics-model.streamlit.app) (or run locally: `streamlit run app.py`) &nbsp;|&nbsp; [Documentation](#documentation) &nbsp;|&nbsp; [Install](#installation) &nbsp;|&nbsp; [API Reference](#python-api)
 
@@ -100,7 +102,7 @@ Every probability is traceable. Every transition is explainable. Every signal ha
      │                 │        │                  │        │                 │
      │ pipeline.run()  │        │  Interactive 3D  │        │  run_pipeline   │
      │ pipeline.step() │        │  Live Charts     │        │  run_backtest   │
-     │ pipeline.fore-  │        │  Signal Feed     │        │  run_calibrate  │
+     │ pipeline.fore-  │        │  Regime Alerts   │        │  run_calibrate  │
      │   cast()        │        │  Forecasts       │        │  run_benchmark  │
      └─────────────────┘        └──────────────────┘        └─────────────────┘
 ```
@@ -249,7 +251,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">Regime</th>
 <th>Characteristics</th>
 <th width="60">Feature Signature</th>
-<th width="140">Trading Signal</th>
+<th width="160">Indicative posture (illustrative)</th>
 </tr>
 <tr>
 <td>
@@ -466,11 +468,6 @@ python examples/signals.py --symbol QQQ                # Signal detection
 <tr>
 <td width="50%">
 
-**Hedge Funds & Prop Desks**
-- Explainable regime filter for systematic strategies
-- Position sizing by regime (scale vega/delta)
-- Early warning for Risk-Off confirmation
-
 **Quant Researchers**
 - Modular, testable regime detection
 - Learned transition matrices
@@ -479,15 +476,10 @@ python examples/signals.py --symbol QQQ                # Signal detection
 </td>
 <td width="50%">
 
-**Risk Management**
+**Risk Analysis**
 - Transparent regime forecasts for stress tests
 - Multi-asset contagion signals
-- Real-time pre-shift warnings
-
-**Fintech & Robo-Advisors**
-- Client-friendly regime labels
-- Explainable allocation shifts
-- Automated defensive rebalancing
+- Regime-change alerts (descriptive, not predictive)
 
 </td>
 </tr>
@@ -633,7 +625,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for code style, architecture guide, and t
 
 ## License
 
-[MIT](LICENSE) — Jeff Milam & [Micap.AI](https://micap.ai)
+Licensed under the [Apache License 2.0](LICENSE). Copyright 2025-2026 Micap AI LLC; see [NOTICE](NOTICE).
+Releases up to and including 1.1.0 were published under the MIT License.
 
 ---
 

@@ -7,14 +7,16 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Python](https://img.shields.io/pypi/pyversions/financial-dynamics?style=flat-square)](https://pypi.org/project/financial-dynamics/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-0d7377.svg?style=flat-square)](../LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-0d7377.svg?style=flat-square)](../LICENSE)
 [![Tests](https://img.shields.io/badge/tests-268%20passed-0d7377?style=flat-square)](#テスト)
 [![Downloads](https://img.shields.io/pypi/dm/financial-dynamics?color=0d7377&style=flat-square)](https://pypi.org/project/financial-dynamics/)
 [![Coverage](https://img.shields.io/badge/coverage-98%25-0d7377?style=flat-square)](#テスト)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-0d7377?style=flat-square)](https://mypy-lang.org/)
 [![Streamlit](https://img.shields.io/badge/demo-live-0d7377?style=flat-square&logo=streamlit)](https://financial-dynamics-model.streamlit.app)
 
-**生のOHLCVデータを、定量トレーディングおよびリスク管理のための説明可能なレジーム確率に変換します。**
+**生のOHLCVデータを、研究およびリスク分析のための説明可能な市場レジーム確率に変換します。**
+
+<sub>事前登録された[過去レジーム研究](../publication/historical-regime-study/TECHNICAL-PAPER.md)（SPY 2015–2025、2025年ホールドアウト）は、レジーム間の記述的な差異を報告しており、<strong>予測上・トレーディング上の優位性（エッジ）を示す証拠はありません</strong>。</sub>
 
 [ライブデモ](https://financial-dynamics-model.streamlit.app) &nbsp;|&nbsp; [ドキュメント](#ドキュメント) &nbsp;|&nbsp; [インストール](#インストール) &nbsp;|&nbsp; [APIリファレンス](#python-api)
 
@@ -54,7 +56,7 @@
      │                 │        │                  │        │                 │
      │ pipeline.run()  │        │  インタラクティブ3D │        │  run_pipeline   │
      │ pipeline.step() │        │  ライブチャート    │        │  run_backtest   │
-     │ pipeline.fore-  │        │  シグナルフィード   │        │  run_calibrate  │
+     │ pipeline.fore-  │        │  レジームアラート   │        │  run_calibrate  │
      │   cast()        │        │  予測             │        │  run_benchmark  │
      └─────────────────┘        └──────────────────┘        └─────────────────┘
 ```
@@ -183,7 +185,7 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">レジーム</th>
 <th>特性</th>
 <th width="60">特徴量シグネチャ</th>
-<th width="140">トレーディングシグナル</th>
+<th width="160">参考スタンス（例示）</th>
 </tr>
 <tr>
 <td>
@@ -351,11 +353,6 @@ config/default.yaml              # 全チューニングパラメータ
 <tr>
 <td width="50%">
 
-**ヘッジファンド & プロップデスク**
-- システマティック戦略のための説明可能なレジームフィルター
-- レジーム別ポジションサイジング（ベガ/デルタのスケーリング）
-- リスクオフ確認の早期警告
-
 **クオンツ研究者**
 - モジュール式でテスト可能なレジーム検出
 - 学習済み遷移行列
@@ -367,12 +364,7 @@ config/default.yaml              # 全チューニングパラメータ
 **リスク管理**
 - ストレステスト向けの透明なレジーム予測
 - マルチアセット伝染シグナル
-- リアルタイムのプレシフト警告
-
-**フィンテック & ロボアドバイザー**
-- 顧客向けの分かりやすいレジームラベル
-- 説明可能なアロケーション変更
-- 自動ディフェンシブリバランス
+- レジーム変化アラート（記述的であり、予測ではない）
 
 </td>
 </tr>
@@ -437,7 +429,7 @@ pytest tests/ -v
 
 ## ライセンス
 
-[MIT](../LICENSE) — Jeff Milam & [Micap.AI](https://micap.ai)
+[Apache-2.0](../LICENSE) — Micap AI LLC ([NOTICE](../NOTICE))
 
 ---
 

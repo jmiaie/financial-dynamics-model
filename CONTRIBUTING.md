@@ -76,4 +76,4 @@ Use the GitHub issue templates for bug reports and feature requests. Include a m
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing, you agree that your contributions will be licensed under the Apache License, Version 2.0 (see `LICENSE` and `NOTICE`).

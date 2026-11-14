@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **License changed from MIT to Apache-2.0** (copyright holder Micap AI LLC; see `LICENSE` and the new `NOTICE`). Releases up to and including 1.1.0 were published under the MIT License and remain available under those terms.
+- **Package metadata:** `pyproject.toml` author is now Micap AI LLC (contact@micap.pro); license expression and classifier updated to Apache-2.0. PyPI metadata changes only with the next published release.
+
+- **README framing aligned with the historical study:** research/risk-analysis wording, "Trading Signal" column renamed "Indicative posture (illustrative)", hedge-fund/robo-advisor pitch removed, and a link to the study's no-predictive-edge finding under the title (translations mirrored minimally).
+
 ### Added
 
 - **Regime detection quickstart notebook** — `notebooks/regime_detection_quickstart.ipynb` runs the public API on synthetic OHLCV (no network); labels recovery as synthetic-only pedagogy, not historical performance.
@@ -15,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Stable public API surface (v1.1.0 — cite this until the next tagged release)
 
-Intentionally **not** bumping `__version__` in this change set. External citations should continue to target **1.1.0** until Jeff cuts a release. Public exports from `financial_dynamics`:
+Intentionally **not** bumping `__version__` in this change set. External citations should continue to target **1.1.0** until the next tagged release. Public exports from `financial_dynamics`:
 
 | Symbol | Role |
 |--------|------|
