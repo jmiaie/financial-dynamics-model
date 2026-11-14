@@ -14,7 +14,7 @@ Opens at `http://localhost:8501`
 ## What You Get
 
 ✅ **Interactive Dashboard**
-- Real-time price chart with regime backgrounds
+- Price chart with regime backgrounds for the selected downloaded bars
 - Regime probability stacked area chart
 - Transition matrix heatmap
 - 5D feature time series
@@ -72,7 +72,7 @@ See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for Vercel setup.
 | **Transition Matrix** | 4×4 heatmap showing learned probabilities (From → To) |
 | **Features Over Time** | 5 lines: volatility, trend, drawdown, stress, shock |
 | **Forecast** | Bar chart showing most likely regime for next 10 bars |
-| **Classification events** | Configured alerts for regime changes, confidence drops and Risk-Off flags |
+| **Classification events** | Configured alerts for regime changes, confidence drops, and Risk-Off flags |
 | **Data Inspector** | View raw pipeline output for debugging |
 
 ---

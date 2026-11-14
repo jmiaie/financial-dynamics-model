@@ -58,8 +58,17 @@ subsequent **risk characteristics** by regime, **not** a forecasting or trading-
   block-bootstrap intervals that include zero (moving-block [−0.0100, +0.0014], stationary
   [−0.0096, +0.0011]). The study does not claim statistical significance.
 
-Reproduce the tables/figures and check every cited hash offline with
-`python publication/historical-regime-study/scripts/verify_pack.py`.
+Reproduce the tables/figures and check every cited hash offline in the pinned publication
+environment:
+
+```bash
+python -m pip install -r publication/historical-regime-study/requirements.txt
+python publication/historical-regime-study/scripts/verify_pack.py
+```
+
+The verifier requires the declared Matplotlib version before it touches the tracked figures, and
+it restores the committed PNG bytes after every pass or failure. An environment mismatch is
+therefore reported as such, not as a research-data or figure-generation regression.
 
 The `results/synthetic/`, `results/benchmarks/`, `results/temporal_validation/` and
 `results/walk_forward/` directories are empty placeholders: no results are committed there, and no
