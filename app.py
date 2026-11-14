@@ -395,6 +395,11 @@ def main():
         '<p class="subtitle">Transparent, Bayesian market regime classification for research and risk analysis</p>',
         unsafe_allow_html=True,
     )
+    st.caption(
+        "Research and educational demonstration only. Not investment advice, not a recommendation "
+        "to buy or sell any security, and not a trading signal service. Regime labels describe "
+        "past data; the accompanying study found no predictive edge."
+    )
     st.divider()
 
     # Sidebar configuration
@@ -788,7 +793,7 @@ def main():
 
         # Signal detection
         st.divider()
-        st.subheader("🔔 Signals & Alerts")
+        st.subheader("🔔 Classification Events")
 
         detector = SignalDetector()
         signals = []
@@ -828,7 +833,7 @@ def main():
                     f"Bar {signal.bar_index} | Confidence: {signal.confidence:.1%}"
                 )
         else:
-            st.info("No signals detected yet. Data is still warming up or regime is stable.")
+            st.info("No classification events yet. Data is still warming up or the label is stable.")
 
         # Data inspector
         with st.expander("📋 Data Inspector"):
