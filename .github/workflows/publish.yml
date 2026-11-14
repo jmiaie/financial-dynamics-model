@@ -22,6 +22,21 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Check the release tag matches the package version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          version="$(sed -n 's/^__version__ = "\(.*\)"$/\1/p' src/financial_dynamics/__init__.py)"
+          if [ "${RELEASE_TAG#v}" != "$version" ]; then
+            echo "Release tag $RELEASE_TAG does not match __version__ $version" >&2
+            exit 1
+          fi
+
+      - name: Run the fast test suite
+        run: |
+          pip install -e ".[all]"
+          python -m pytest -q -m "not slow"
+
       - name: Build package
         run: |
           pip install hatchling

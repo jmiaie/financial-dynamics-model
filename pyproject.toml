@@ -22,7 +22,7 @@ keywords = [
     "risk-management",
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",

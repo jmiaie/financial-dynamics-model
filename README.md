@@ -143,7 +143,7 @@ pip install -e ".[all]"
 streamlit run app.py
 ```
 
-Load any ticker (SPY, QQQ, AAPL, BTC-USD) and watch regime classification in real-time. Charts update instantly, forecasts auto-compute, signals fire as regimes shift.
+Load any ticker (SPY, QQQ, AAPL, BTC-USD) and watch regime classification in real-time. Charts update as data loads, forecasts recompute, and classification events are listed as the regime label changes. The dashboard is a research demonstration, not investment advice and not a trading signal service.
 
 > **Try it now:** [financial-dynamics-model.streamlit.app](https://financial-dynamics-model.streamlit.app) — or run locally: `streamlit run app.py`
 
@@ -251,7 +251,6 @@ python scripts/run_benchmark.py --config config/default.yaml
 <th width="180">Regime</th>
 <th>Characteristics</th>
 <th width="60">Feature Signature</th>
-<th width="160">Indicative posture (illustrative)</th>
 </tr>
 <tr>
 <td>
@@ -260,7 +259,6 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>Low volatility, strong uptrend, minimal drawdown, stable correlations</td>
 <td><code>[0.1, 0.8, 0.05, 0.1, 0.1]</code></td>
-<td>Long accumulation</td>
 </tr>
 <tr>
 <td>
@@ -269,7 +267,6 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>High volatility, directional momentum, recoveries from dips</td>
 <td><code>[0.8, 0.7, 0.3, 0.5, 0.6]</code></td>
-<td>Trend-following</td>
 </tr>
 <tr>
 <td>
@@ -278,7 +275,6 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>Low volatility, weak trend, mean-reverting, range-bound</td>
 <td><code>[0.4, 0.2, 0.15, 0.3, 0.3]</code></td>
-<td>Range trading</td>
 </tr>
 <tr>
 <td>
@@ -287,7 +283,6 @@ python scripts/run_benchmark.py --config config/default.yaml
 </td>
 <td>High volatility, deep drawdowns, shock clusters, stress contagion</td>
 <td><code>[0.9, 0.3, 0.8, 0.9, 0.9]</code></td>
-<td>Hedging / defensive</td>
 </tr>
 </table>
 
