@@ -4,8 +4,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
-  - package-ecosystem: pip
-    directory: /
-    schedule:
-      interval: monthly
-    open-pull-requests-limit: 5
+  # No pip entry: requirements-lock.txt targets Python 3.12 and pins matplotlib 3.11.2, which
+  # Dependabot cannot resolve under this package's Python 3.10 floor. The lock is upgraded with the
+  # uv command in its header and audited with pip-audit.
