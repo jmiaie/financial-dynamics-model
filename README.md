@@ -57,6 +57,11 @@ subsequent **risk characteristics** by regime, **not** a forecasting or trading-
 - **Null result on significance:** QQQ's 2025 `RISK_OFF` mean 1-day return (n=29, −0.0043) has 90%
   block-bootstrap intervals that include zero (moving-block [−0.0100, +0.0014], stationary
   [−0.0096, +0.0011]). The study does not claim statistical significance.
+- **Follow-up test against a volatility bucket (2026-11-14):** as a forecaster of next-day variance,
+  the regime labels are worse than a simple quartile of trailing 20-day volatility (pooled five-ETF
+  QLIKE difference +0.173, p = 0.012) and only slightly better than using no labels. Pre-specified
+  comparison on previously inspected data; see the
+  [report](research/vol_benchmark/REPORT.md) and [protocol](research/vol_benchmark/PROTOCOL.md).
 
 Reproduce the tables/figures and check every cited hash offline in the pinned publication
 environment:
