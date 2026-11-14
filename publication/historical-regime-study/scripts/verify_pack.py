@@ -20,10 +20,9 @@ non-zero if any check fails):
 2. tables    -- re-running scripts/generate_tables.py reproduces the
                 committed tables/ directory byte-for-byte (via `git diff
                 --exit-code`).
-3. figures   -- re-running scripts/generate_figures.py reproduces the
-                committed figures/*.png; byte-identical is tried first, and
-                only on failure does this fall back to a pixel-content
-                comparison, with the outcome logged explicitly either way.
+3. figures   -- after verifying the declared Matplotlib runtime, re-running
+                scripts/generate_figures.py must reproduce the committed
+                figures/*.png byte-for-byte.
                 The committed PNGs are deleted before generation, so if
                 generation is skipped or writes nothing (e.g. matplotlib is
                 missing) the check FAILS: a figure missing after the run is
@@ -56,6 +55,7 @@ import sys
 from pathlib import Path
 
 PACK_DIR = Path("publication/historical-regime-study")
+EXPECTED_MATPLOTLIB_VERSION = "3.11.2"
 FORBIDDEN_SCRIPTS = [
     "scripts/run_historical_regime_study.py",
     "scripts/acquire_yf_fd_etfs_daily.py",
@@ -119,7 +119,9 @@ def check_hashes(repo_root: Path) -> None:
             )
         verified_hashes.add(actual_hash)
         n_checked += 1
-    log(f"PASS: {n_checked} unique cited files re-verified (whole-file sha256) against source_map.json")
+    log(
+        f"PASS: {n_checked} unique cited files re-verified (whole-file sha256) against source_map.json"
+    )
 
     # 1c. field_value rows: re-derive the actual field value from the file
     # and confirm it matches what source_map.json recorded. Currently this
@@ -161,8 +163,10 @@ def check_hashes(repo_root: Path) -> None:
             "SOURCE-GATE.md cites hash(es) not found among the freshly-verified "
             f"file hash set (possible stale/typo): {sorted(unverifiable)}"
         )
-    log(f"PASS: all {len(cited_hashes)} distinct sha256 literals in SOURCE-GATE.md "
-        f"are verified-current file hashes")
+    log(
+        f"PASS: all {len(cited_hashes)} distinct sha256 literals in SOURCE-GATE.md "
+        f"are verified-current file hashes"
+    )
 
 
 def check_tables(repo_root: Path) -> None:
@@ -193,34 +197,22 @@ def check_tables(repo_root: Path) -> None:
     log("PASS: regenerated tables/ byte-identical to committed output")
 
 
-def _compare_png_pixels(path_a: Path, path_b: Path) -> tuple[bool, str]:
-    """Best-effort content-level PNG comparison, used only as a fallback
-    when byte-identical regeneration fails (e.g. cross-environment
-    font/freetype rendering differences). Returns (equivalent, detail)."""
-    try:
-        import numpy as np
-        from matplotlib import image as mpimg
-    except ImportError as exc:  # pragma: no cover - matplotlib is a base dep
-        return False, f"cannot run pixel fallback, missing dependency: {exc}"
-
-    arr_a = mpimg.imread(path_a)
-    arr_b = mpimg.imread(path_b)
-    if arr_a.shape != arr_b.shape:
-        return False, f"shape mismatch {arr_a.shape} vs {arr_b.shape}"
-    diff = np.abs(arr_a.astype(float) - arr_b.astype(float))
-    mean_abs_diff = float(diff.mean())
-    max_abs_diff = float(diff.max())
-    # Tolerance: mean per-channel difference under 1/255 (i.e. sub-single-bit
-    # on average) and no single pixel/channel off by more than ~2/255 --
-    # tight enough to catch a genuinely different figure, loose enough to
-    # tolerate anti-aliasing/font-hinting variance across environments.
-    equivalent = mean_abs_diff < (1.0 / 255.0) and max_abs_diff < (3.0 / 255.0)
-    detail = f"shape={arr_a.shape}, mean_abs_diff={mean_abs_diff:.6f}, max_abs_diff={max_abs_diff:.6f}"
-    return equivalent, detail
-
-
 def check_figures(repo_root: Path) -> None:
-    log("=== Check: figures (regeneration must match committed, byte-ideal / pixel-fallback) ===")
+    log("=== Check: figures (pinned runtime; regeneration must be byte-identical) ===")
+    try:
+        import matplotlib
+    except ImportError as exc:  # pragma: no cover - dependency gate
+        raise CheckFailure(
+            "matplotlib is required for figure verification; install "
+            "publication/historical-regime-study/requirements.txt"
+        ) from exc
+    if matplotlib.__version__ != EXPECTED_MATPLOTLIB_VERSION:
+        raise CheckFailure(
+            "figure verification requires matplotlib=="
+            f"{EXPECTED_MATPLOTLIB_VERSION}, found {matplotlib.__version__}; "
+            "install publication/historical-regime-study/requirements.txt. "
+            "Refusing to compare raster output from an undeclared renderer."
+        )
     figures_dir = repo_root / PACK_DIR / "figures"
     committed_pngs = sorted(figures_dir.glob("*.png"))
     # Fail closed on an EMPTY committed-figure set. This branch used to log
@@ -256,7 +248,6 @@ def check_figures(repo_root: Path) -> None:
             log(result.stderr)
             raise CheckFailure("generate_figures.py exited non-zero")
 
-        any_pixel_fallback = False
         for name, old_bytes in committed_bytes.items():
             new_path = figures_dir / name
             if not new_path.exists():
@@ -270,37 +261,12 @@ def check_figures(repo_root: Path) -> None:
             if new_bytes == old_bytes:
                 log(f"PASS (byte-identical): {name}")
                 continue
-            # Byte-identical failed -- fall back to a content-level comparison.
-            # Restore the committed bytes to a temp file for comparison, then
-            # write the regenerated bytes back (the regenerated file is already
-            # on disk at new_path).
-            tmp_committed = new_path.with_suffix(".committed.png")
-            tmp_committed.write_bytes(old_bytes)
-            try:
-                equivalent, detail = _compare_png_pixels(tmp_committed, new_path)
-            finally:
-                tmp_committed.unlink(missing_ok=True)
-            if not equivalent:
-                raise CheckFailure(
-                    f"{name}: NOT byte-identical to committed AND pixel-content "
-                    f"comparison exceeded tolerance ({detail}) -- treating as a "
-                    f"real regression, not environment noise"
-                )
-            any_pixel_fallback = True
-            log(
-                f"PASS (pixel-content-equivalent, NOT byte-identical -- "
-                f"cross-environment rendering variance, within tolerance: {detail}): {name}"
+            raise CheckFailure(
+                f"{name}: not byte-identical under the declared renderer "
+                f"(matplotlib=={EXPECTED_MATPLOTLIB_VERSION}); treating this as a "
+                "figure-generation regression"
             )
-
-        if any_pixel_fallback:
-            log(
-                "NOTE: at least one figure required the pixel-content fallback rather than "
-                "a byte-identical match. This is logged, not hidden -- matplotlib version "
-                "is pinned in the CI workflow to minimize this, but exact freetype/font "
-                "rendering can still vary by runner image."
-            )
-        else:
-            log("PASS: all committed figures reproduced byte-identically")
+        log("PASS: all committed figures reproduced byte-identically")
     finally:
         # Restore every removed file on EVERY path -- a non-zero generator
         # exit, a missing output, or a byte mismatch must not leave the tree
@@ -309,9 +275,8 @@ def check_figures(repo_root: Path) -> None:
         # "regenerated files are restored" claim in SOURCE-GATE.md held for
         # the tested path but not universally.)
         for _n, _old in committed_bytes.items():
-            _q = figures_dir / _n
-            if not _q.exists():
-                _q.write_bytes(_old)
+            (figures_dir / _n).write_bytes(_old)
+
 
 def check_citations(repo_root: Path) -> None:
     log("=== Check: citations (every CLAIM-REGISTER.md row_id resolves) ===")
@@ -330,9 +295,7 @@ def check_citations(repo_root: Path) -> None:
     for candidate in sorted(candidates):
         if candidate in existing_ids:
             continue
-        if "*" in candidate and any(
-            fnmatch.fnmatchcase(rid, candidate) for rid in existing_ids
-        ):
+        if "*" in candidate and any(fnmatch.fnmatchcase(rid, candidate) for rid in existing_ids):
             continue
         unresolved.append(candidate)
 
@@ -355,7 +318,10 @@ def check_no_rerun(repo_root: Path) -> None:
     for py_file in sorted(scripts_dir.glob("*.py")):
         text = py_file.read_text(encoding="utf-8")
         for forbidden in FORBIDDEN_SCRIPTS:
-            if re.search(rf"(subprocess\.\w+|os\.system|os\.popen|Popen)\s*\([^)]*{re.escape(forbidden)}", text):
+            if re.search(
+                rf"(subprocess\.\w+|os\.system|os\.popen|Popen)\s*\([^)]*{re.escape(forbidden)}",
+                text,
+            ):
                 offenders.append(f"{py_file.name} invokes {forbidden}")
     if offenders:
         raise CheckFailure(f"forbidden re-run invocation(s) found: {offenders}")
