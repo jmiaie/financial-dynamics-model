@@ -29,7 +29,6 @@ jobs:
     permissions:
       contents: write
     env:
-      RAW_DIR: ${{ runner.temp }}/ledger_raw
       TMP_DATASET: ledger_run_tmp
     steps:
       - uses: actions/checkout@v7
@@ -49,7 +48,7 @@ jobs:
         run: |
           end="$(date -u -d tomorrow +%Y-%m-%d)"
           python scripts/acquire_yf_fd_etfs_daily.py \
-            --dataset-id "$TMP_DATASET" --start 2015-01-01 --end "$end" --raw-dir "$RAW_DIR"
+            --dataset-id "$TMP_DATASET" --start 2015-01-01 --end "$end" --raw-dir "$RUNNER_TEMP/ledger_raw"
           # The acquisition script also writes a manifest for this throwaway id. It is not a
           # frozen dataset and must not be committed.
           rm -f "data/manifests/$TMP_DATASET.json"
@@ -57,7 +56,7 @@ jobs:
       - name: Dry run (pull requests)
         if: github.event_name == 'pull_request'
         run: |
-          python research/forecast_ledger/make_entry.py --raw-dir "$RAW_DIR" --trigger dry-run \
+          python research/forecast_ledger/make_entry.py --raw-dir "$RUNNER_TEMP/ledger_raw" --trigger dry-run \
             --entries "$RUNNER_TEMP/dry/entries" --ledger "$RUNNER_TEMP/dry/ledger.jsonl"
           python research/forecast_ledger/verify_ledger.py \
             --entries "$RUNNER_TEMP/dry/entries" --ledger "$RUNNER_TEMP/dry/ledger.jsonl"
@@ -68,7 +67,7 @@ jobs:
         run: |
           trigger=manual
           if [ "${{ github.event_name }}" = "schedule" ]; then trigger=schedule; fi
-          python research/forecast_ledger/make_entry.py --raw-dir "$RAW_DIR" --trigger "$trigger"
+          python research/forecast_ledger/make_entry.py --raw-dir "$RUNNER_TEMP/ledger_raw" --trigger "$trigger"
           python research/forecast_ledger/verify_ledger.py
 
       - name: Timestamp with OpenTimestamps
