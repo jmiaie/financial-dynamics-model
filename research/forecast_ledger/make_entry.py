@@ -16,6 +16,7 @@ import json
 import math
 import subprocess
 import sys
+import tempfile
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -110,7 +111,53 @@ def previous_entry(ledger: Path) -> dict[str, str] | None:
     return last
 
 
+OHLCV = ["open", "high", "low", "close", "volume"]
+
+
+def drop_incomplete_tail(raw_dir: Path, out_dir: Path) -> dict[str, int]:
+    """Copy the price files to ``out_dir`` without rows after the latest complete close.
+
+    Yahoo can return the newest bar with empty prices. The as-of date is the latest date on
+    which every asset has a complete row; later rows are dropped and counted. An incomplete
+    row on or before that date is an error, never filled or skipped.
+    """
+    frames: dict[str, pd.DataFrame] = {}
+    complete: dict[str, pd.Series] = {}
+    for symbol in SYMBOLS:
+        df = pd.read_csv(raw_dir / f"{symbol}.csv", index_col=0, parse_dates=True).sort_index()
+        cols = [c for c in df.columns if c.lower() in OHLCV]
+        if len(cols) != len(OHLCV):
+            raise ValueError(f"{symbol}.csv does not have the five OHLCV columns")
+        frames[symbol] = df
+        complete[symbol] = df[cols].notna().all(axis=1)
+        if not complete[symbol].any():
+            raise ValueError(f"{symbol}.csv has no complete row")
+    as_of = min(ok.index[ok][-1] for ok in complete.values())
+    dropped: dict[str, int] = {}
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for symbol, df in frames.items():
+        kept = df.loc[df.index <= as_of]
+        bad = kept.index[~complete[symbol].loc[kept.index]]
+        if len(bad):
+            dates = ", ".join(str(d.date()) for d in bad[:5])
+            raise ValueError(f"{symbol} has incomplete rows before the as-of date: {dates}")
+        dropped[symbol] = int(len(df) - len(kept))
+        kept.to_csv(out_dir / f"{symbol}.csv")
+    return dropped
+
+
 def build_entry(raw_dir: Path, trigger: str, created_utc: str) -> dict[str, Any]:
+    with tempfile.TemporaryDirectory() as tmp:
+        dropped = drop_incomplete_tail(raw_dir, Path(tmp))
+        entry = _build_entry(Path(tmp), trigger, created_utc)
+    entry["input_sha256"] = {
+        f"{s}.csv": sha256_bytes((raw_dir / f"{s}.csv").read_bytes()) for s in SYMBOLS
+    }
+    entry["dropped_incomplete_trailing_rows"] = dropped
+    return entry
+
+
+def _build_entry(raw_dir: Path, trigger: str, created_utc: str) -> dict[str, Any]:
     _, config = pipeline_config_from_experiment_yaml(CONFIG)
     per_symbol: dict[str, Any] = {}
     as_of: set[str] = set()

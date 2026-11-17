@@ -28,6 +28,11 @@ writes one entry dated by that latest close (`as_of_date`). For each asset the e
   `fdm`, `vol_bucket`, `unconditional` and `ewma`, computed exactly as in
   `research/vol_benchmark/vol_benchmark.py` with a minimum of 20 days per label.
 
+`as_of_date` is the latest date on which all five assets have a complete price row. Yahoo can
+return the newest bar with empty prices; such trailing rows are dropped and the entry records how
+many (`dropped_incomplete_trailing_rows`). An incomplete row on or before `as_of_date` stops the run:
+nothing is filled in.
+
 Every forecast uses only data dated on or before `as_of_date`. The entry also records the commit of
 the code that produced it, the sha256 of each input file, and the sha256 of the previous entry, so
 the entries form a chain.

@@ -116,3 +116,41 @@ def test_missing_label_on_as_of_date_raises() -> None:
     labels = pd.Series(["LOW"] * (len(panel) - 1) + [None], index=panel.index, dtype=object)
     with pytest.raises(ValueError, match="missing label"):
         me.symbol_forecasts(panel, labels)
+
+
+def _raw(tmp_path: Path, n: int = 6) -> Path:
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    index = pd.bdate_range("2026-01-05", periods=n, name="Date")
+    for symbol in me.SYMBOLS:
+        frame = pd.DataFrame(1.0, index=index, columns=["Open", "High", "Low", "Close", "Volume"])
+        frame.to_csv(raw / f"{symbol}.csv")
+    return raw
+
+
+def _blank(raw: Path, symbol: str, row: int) -> None:
+    frame = pd.read_csv(raw / f"{symbol}.csv", index_col=0)
+    frame.iloc[row, :4] = np.nan
+    frame.to_csv(raw / f"{symbol}.csv")
+
+
+def test_incomplete_newest_bar_is_dropped_for_every_asset(tmp_path: Path) -> None:
+    raw = _raw(tmp_path)
+    _blank(raw, "SPY", -1)
+    dropped = me.drop_incomplete_tail(raw, tmp_path / "out")
+    assert dropped == {symbol: 1 for symbol in me.SYMBOLS}
+    for symbol in me.SYMBOLS:
+        kept = pd.read_csv(tmp_path / "out" / f"{symbol}.csv", index_col=0)
+        assert len(kept) == 5 and kept.notna().all().all()
+
+
+def test_complete_files_lose_nothing(tmp_path: Path) -> None:
+    raw = _raw(tmp_path)
+    assert me.drop_incomplete_tail(raw, tmp_path / "out") == {s: 0 for s in me.SYMBOLS}
+
+
+def test_incomplete_row_before_the_as_of_date_is_an_error(tmp_path: Path) -> None:
+    raw = _raw(tmp_path)
+    _blank(raw, "TLT", 2)
+    with pytest.raises(ValueError, match="TLT has incomplete rows"):
+        me.drop_incomplete_tail(raw, tmp_path / "out")
