@@ -17,7 +17,7 @@ import math
 import subprocess
 import sys
 from copy import deepcopy
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -166,7 +166,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--ledger", type=Path, default=LEDGER)
     args = parser.parse_args(argv)
 
-    created = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    created = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     entry = build_entry(args.raw_dir, args.trigger, created)
     path = write_entry(entry, args.entries, args.ledger)
     print(f"wrote {path}")
