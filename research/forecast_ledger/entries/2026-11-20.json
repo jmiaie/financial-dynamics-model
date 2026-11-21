@@ -1,0 +1,118 @@
+{
+  "as_of_date": "2026-11-20",
+  "assets": {
+    "GLD": {
+      "forecasts": {
+        "1": {
+          "ewma": 0.0003694226635,
+          "fdm": 0.0001198357017,
+          "unconditional": 0.0001073792751,
+          "vol_bucket": 0.000187140744
+        },
+        "5": {
+          "ewma": 0.001847113318,
+          "fdm": 0.0005841787548,
+          "unconditional": 0.0005343441716,
+          "vol_bucket": 0.0009101129349
+        }
+      },
+      "regime_label": "VOLATILE_TREND",
+      "vol_bucket": "VOL_Q4"
+    },
+    "IWM": {
+      "forecasts": {
+        "1": {
+          "ewma": 0.0002624469518,
+          "fdm": 0.0003111301533,
+          "unconditional": 0.0001973511396,
+          "vol_bucket": 0.0003646158751
+        },
+        "5": {
+          "ewma": 0.001312234759,
+          "fdm": 0.001464425699,
+          "unconditional": 0.0009856699314,
+          "vol_bucket": 0.001805996195
+        }
+      },
+      "regime_label": "RISK_OFF",
+      "vol_bucket": "VOL_Q4"
+    },
+    "QQQ": {
+      "forecasts": {
+        "1": {
+          "ewma": 0.0005559555518,
+          "fdm": 0.0003834776009,
+          "unconditional": 0.0001936492954,
+          "vol_bucket": 0.0003985792938
+        },
+        "5": {
+          "ewma": 0.002779777759,
+          "fdm": 0.001904027173,
+          "unconditional": 0.0009640173985,
+          "vol_bucket": 0.001935077997
+        }
+      },
+      "regime_label": "RISK_OFF",
+      "vol_bucket": "VOL_Q4"
+    },
+    "SPY": {
+      "forecasts": {
+        "1": {
+          "ewma": 0.0002415273889,
+          "fdm": 0.0001457956155,
+          "unconditional": 0.0001228817463,
+          "vol_bucket": 0.0003140327598
+        },
+        "5": {
+          "ewma": 0.001207636944,
+          "fdm": 0.0006888982269,
+          "unconditional": 0.0006122926414,
+          "vol_bucket": 0.001544773024
+        }
+      },
+      "regime_label": "VOLATILE_TREND",
+      "vol_bucket": "VOL_Q4"
+    },
+    "TLT": {
+      "forecasts": {
+        "1": {
+          "ewma": 5.540846505e-05,
+          "fdm": 9.217285981e-05,
+          "unconditional": 8.59854892e-05,
+          "vol_bucket": 5.319352922e-05
+        },
+        "5": {
+          "ewma": 0.0002770423252,
+          "fdm": 0.0004666073855,
+          "unconditional": 0.0004294824275,
+          "vol_bucket": 0.000268553457
+        }
+      },
+      "regime_label": "VOLATILE_TREND",
+      "vol_bucket": "VOL_Q2"
+    }
+  },
+  "code_commit": "54c11deaff305fffec7fdd999adc41166ef2f5bf",
+  "config_sha256": "299b1ed0dffc77afc685721c27a261a61b6a7ef1d1a1734af2062cfba5001b16",
+  "created_utc": "2026-11-21T07:20:27Z",
+  "dropped_incomplete_trailing_rows": {
+    "GLD": 0,
+    "IWM": 0,
+    "QQQ": 0,
+    "SPY": 0,
+    "TLT": 0
+  },
+  "input_sha256": {
+    "GLD.csv": "a9b452d5f3f930a3826d1ff99f77d573918b60a44406ec0052882a7a28c0d245",
+    "IWM.csv": "7d7b313cb9590d26cd1de69081c0fcfc82b2ea7c781240eb7da5fb0e0db852f7",
+    "QQQ.csv": "a4f0deecad59620e5d7663af84f673498351989d859011c2b2f7421621efab7d",
+    "SPY.csv": "1f9fa31b02fddbd02444c9e9efb9600c385e911fc8483cd68343392e316ef144",
+    "TLT.csv": "1832acb0fbf7f0889adf14370c274bf21ceedd57d80cd19bc5157f11f0b3aca9"
+  },
+  "min_count": 20,
+  "previous_entry_sha256": null,
+  "protocol": "research/forecast_ledger/PROTOCOL.md",
+  "schema": 1,
+  "series_id": "fdm-vol-v1",
+  "trigger": "schedule"
+}
